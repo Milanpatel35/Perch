@@ -16,7 +16,7 @@ public extension Defaults.Keys {
     /// `docs/PLAN.md` §3.1 ships presets instead.
     static let enabledModules = Key<Set<ModuleID>>(
         "modules.enabled",
-        default: [.nowPlaying, .shelf, .hud, .battery]
+        default: [.nowPlaying, .shelf, .clipboard, .hud, .battery]
     )
 
     /// Which screen owns the island.

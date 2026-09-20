@@ -18,6 +18,7 @@ public enum PerchModuleRegistry {
     public static func registerAll(in host: ModuleHost, island: IslandController) {
         host.register(NowPlayingService(island: island))
         host.register(ShelfService(island: island))
+        host.register(ClipboardService(island: island))
     }
 
     /// The Preferences pane for a module, if it has one yet.
@@ -30,6 +31,18 @@ public enum PerchModuleRegistry {
         in host: ModuleHost
     ) -> AnyView? {
         switch module {
+        case .clipboard:
+            host.service(ClipboardService.self).map { clipboard in
+                AnyView(
+                    ClipboardSettingsView(
+                        entryCount: clipboard.history.count,
+                        pinnedCount: clipboard.history.pinned.count,
+                        excludedBundleIDs: clipboard.exclusions.bundleIDs.sorted(),
+                        onRetentionChange: { clipboard.setRetention($0) },
+                        onClear: { clipboard.clearUnpinned() }
+                    )
+                )
+            }
         case .shelf:
             host.service(ShelfService.self).map { shelf in
                 AnyView(

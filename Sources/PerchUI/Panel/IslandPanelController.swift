@@ -168,5 +168,14 @@ public final class IslandPanelController {
                 self?.panel?.ignoresMouseEvents = !enabled
             }
             .store(in: &cancellables)
+
+        // Key focus is opt-in and momentary. Only a module with a text field
+        // raises it, and the panel drops it again as soon as they lower it.
+        controller.$requiresKeyFocus
+            .removeDuplicates()
+            .sink { [weak self] required in
+                self?.panel?.allowsKeyFocus = required
+            }
+            .store(in: &cancellables)
     }
 }

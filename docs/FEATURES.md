@@ -136,6 +136,28 @@ entitlements file: no sandbox, no network, and the source is right there.
 
 NotchBay caps its tray at 60 clips. Ours is configurable and defaults to 200.
 
+**Status — shipped in 0.3.0.** Text, rich text, images, file paths and
+colours; a searchable picker on a global shortcut; pinning; configurable
+retention by count and age; the exclusion list, shipped populated; concealed
+pasteboard types honoured unconditionally; paste as plain text; and on-device
+OCR of copied images through Vision.
+
+**This module contains Perch's only polling loop.** `NSPasteboard` has no
+notification of any kind — no delegate, no `NSNotification`, no observable
+property — so the only way to know something was copied is to read
+`changeCount` and compare. Every clipboard manager on macOS does this.
+[ADR 0003](adr/0003-polling-the-pasteboard.md) records the decision and the
+constraints: 600ms, only while the module is on, suspended on screen lock and
+on sleep, and the pasteboard's *contents* read only when the count actually
+changed. Claiming to be purely event-driven while shipping a timer is the
+kind of small dishonesty this project cannot afford.
+
+**Two things are not settings and never will be.** A concealed pasteboard
+type is never recorded — no checkbox, no override, because the app that
+marked it knows better than a checkbox. And the shortcut has no default: a
+clipboard manager that claims a global hotkey without being asked will
+collide with something, and the collision will be silent.
+
 ## 4. Focus timer — P0
 
 | Capability | Comes from | Notes |
