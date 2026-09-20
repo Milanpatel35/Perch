@@ -1,0 +1,120 @@
+name: Perch
+
+options:
+  bundleIdPrefix: app.perch
+  deploymentTarget:
+    macOS: "13.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    ARCHS: "$(ARCHS_STANDARD)"        # arm64 + x86_64, universal
+    ONLY_ACTIVE_ARCH: NO
+    DEAD_CODE_STRIPPING: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    GCC_TREAT_WARNINGS_AS_ERRORS: YES
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+
+packages:
+  # The allowed list, and only this list. New entries need an issue first —
+  # see CLAUDE.md §9.
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    from: 2.6.0
+  KeyboardShortcuts:
+    url: https://github.com/sindresorhus/KeyboardShortcuts
+    from: 2.2.0
+  Defaults:
+    url: https://github.com/sindresorhus/Defaults
+    from: 9.0.0
+
+targets:
+
+  # ---------------------------------------------------------------- app ---
+  Perch:
+    type: application
+    platform: macOS
+    sources:
+      - path: App
+      - path: Resources
+        buildPhase: resources
+    dependencies:
+      - target: PerchUI
+      - target: PerchCore
+      - package: Sparkle
+      - package: KeyboardShortcuts
+      - package: Defaults
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.perch.Perch
+        INFOPLIST_FILE: Resources/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Resources/Perch.entitlements
+        ENABLE_HARDENED_RUNTIME: YES
+        COMBINE_HIDPI_IMAGES: YES
+
+  # --------------------------------------------------------------- core ---
+  # Pure logic. Must never import SwiftUI or AppKit — CLAUDE.md §3.
+  # That rule is enforced by test TC-ARC-001, not by convention.
+  PerchCore:
+    type: framework
+    platform: macOS
+    sources:
+      - Sources/PerchCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.perch.PerchCore
+
+  # ----------------------------------------------------------------- ui ---
+  PerchUI:
+    type: framework
+    platform: macOS
+    sources:
+      - Sources/PerchUI
+      - Sources/PerchModules
+    dependencies:
+      - target: PerchCore
+      - package: Defaults
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.perch.PerchUI
+
+  # -------------------------------------------------------------- tests ---
+  PerchCoreTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - Tests/PerchCoreTests
+      - Tests/Fixtures
+    dependencies:
+      - target: PerchCore
+
+  PerchUITests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - Tests/PerchUITests
+    dependencies:
+      - target: PerchUI
+      - target: PerchCore
+
+schemes:
+  Perch:
+    build:
+      targets:
+        Perch: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: true
+      targets:
+        - PerchCoreTests
+        - PerchUITests
+    archive:
+      config: Release
