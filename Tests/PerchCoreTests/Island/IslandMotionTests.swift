@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import PerchCore
 
 /// Covers the Reduce Motion path — `TEST-PLAN.md` TC-ISL-012 and TC-A11Y-004.

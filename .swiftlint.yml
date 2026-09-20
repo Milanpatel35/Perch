@@ -86,7 +86,9 @@ nesting:
 
 custom_rules:
   no_appkit_in_core:
-    include: ".*/Sources/PerchCore/.*\\.swift"
+    # `included`, not `include`. SwiftLint silently ignores the singular, and
+    # an unscoped rule here fails the whole UI layer for importing AppKit.
+    included: ".*/Sources/PerchCore/.*\\.swift"
     name: "PerchCore must stay UI-free"
     regex: "^\\s*import\\s+(SwiftUI|AppKit|Cocoa)\\b"
     message: "PerchCore must never import SwiftUI or AppKit — CLAUDE.md §3."
@@ -99,7 +101,7 @@ custom_rules:
     severity: error
 
   no_fixed_animation_duration:
-    include: ".*/Sources/PerchModules/.*\\.swift"
+    included: ".*/Sources/PerchModules/.*\\.swift"
     name: "Use the shared motion tokens"
     regex: "\\.(easeInOut|easeIn|easeOut|linear)\\(duration:"
     message: "Animate with IslandMotion tokens, not a fixed duration — CLAUDE.md §9."

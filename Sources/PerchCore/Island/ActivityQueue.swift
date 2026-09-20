@@ -109,12 +109,14 @@ public struct ActivityQueue<Activity: IslandActivity> {
     /// activities rather than being pushed out by it.
     private mutating func evictIfNeeded() {
         while entries.count > Self.capacity {
-            guard let victim = entries.min(by: { lhs, rhs in
-                if lhs.activity.priority != rhs.activity.priority {
-                    return lhs.activity.priority < rhs.activity.priority
-                }
-                return lhs.sequence < rhs.sequence
-            }) else { return }
+            guard
+                let victim = entries.min(by: { lhs, rhs in
+                    if lhs.activity.priority != rhs.activity.priority {
+                        return lhs.activity.priority < rhs.activity.priority
+                    }
+                    return lhs.sequence < rhs.sequence
+                })
+            else { return }
 
             entries.removeAll { $0.activity.id == victim.activity.id }
         }

@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import PerchCore
 
 /// Covers `TEST-PLAN.md` § ISL. Every test name carries its case ID.
@@ -210,10 +211,11 @@ final class IslandReducerTests: XCTestCase {
     func test_activityWithNoTTLStaysUntilWithdrawn() {
         let effects = submit(TestActivity("timer", timeToLive: nil))
 
-        XCTAssertFalse(effects.contains { effect in
-            if case .scheduleCollapse = effect { return true }
-            return false
-        })
+        XCTAssertFalse(
+            effects.contains { effect in
+                if case .scheduleCollapse = effect { return true }
+                return false
+            })
 
         send(.timeToLiveExpired("timer"))
         XCTAssertEqual(state.presentation, .peek("timer"))

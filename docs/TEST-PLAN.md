@@ -35,6 +35,8 @@ Levels:
 | TC-GEO-008 | E | Screen rotated (external portrait) | Island anchors to the top edge, does not clip |
 | TC-GEO-009 | U | Screen with zero-height safe area | Falls back to virtual mode rather than dividing by zero |
 | TC-GEO-010 | E | Sidecar / iPad as second display | No island drawn on the Sidecar screen unless enabled |
+| TC-GEO-011 | U | Panel on a display narrower than the island's maximum | Panel frame never exceeds the screen; nothing hangs off either edge |
+| TC-GEO-012 | U | Island inside the panel | Centred on the notch and flush with the top edge at every presentation size |
 
 ## ISL — island state machine
 
@@ -52,6 +54,9 @@ Levels:
 | TC-ISL-010 | E | Full-screen app active | Island still presents above the full-screen window |
 | TC-ISL-011 | E | Mission Control / Spaces switch | Island follows to the active Space |
 | TC-ISL-012 | U | Reduce Motion enabled | Transition uses cross-fade, spring tokens unused |
+| TC-ISL-013 | U | Type-erased activity | Identity, priority and TTL survive erasure; re-wrapping does not nest the box |
+| TC-ISL-014 | U | Home surface present when a module activity arrives | Anything above `ambient` pre-empts it; the home surface returns when that activity is withdrawn |
+| TC-ISL-015 | U | Runtime applies the reducer's effects | Exactly one collapse is ever pending; a new activity replaces it rather than adding a second |
 
 ## MED — Now Playing
 

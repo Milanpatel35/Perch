@@ -160,7 +160,7 @@ public struct IslandReducer<Activity: IslandActivity> {
     ) -> [IslandEffect] {
         queue.withdrawAll(from: module)
         guard let current = state.presentation.activityID,
-              queue.ordered.allSatisfy({ $0.id != current })
+            queue.ordered.allSatisfy({ $0.id != current })
         else { return [] }
         state.isUserPinned = false
         return advance(state: &state, queue: &queue)
@@ -192,10 +192,7 @@ public struct IslandReducer<Activity: IslandActivity> {
         if state.presentation.activityID == next.id { return [] }
 
         // A pinned expansion is only displaced by something that outranks it.
-        if state.isUserPinned,
-           let currentID = state.presentation.activityID,
-           let current = activity(currentID, in: queue),
-           next.priority <= current.priority {
+        if pinnedExpansionHoldsAgainst(next, state: state, queue: queue) {
             return []
         }
 
@@ -246,6 +243,24 @@ public struct IslandReducer<Activity: IslandActivity> {
         }
 
         return effects
+    }
+
+    /// Whether a user-pinned expansion should keep the island against an
+    /// arriving activity.
+    ///
+    /// A person who deliberately opened something outranks anything merely
+    /// equal to it. Only a strictly higher priority takes the island away.
+    private func pinnedExpansionHoldsAgainst(
+        _ next: Activity,
+        state: IslandState,
+        queue: ActivityQueue<Activity>
+    ) -> Bool {
+        guard state.isUserPinned,
+            let currentID = state.presentation.activityID,
+            let current = activity(currentID, in: queue)
+        else { return false }
+
+        return next.priority <= current.priority
     }
 
     private func rearmCollapse(

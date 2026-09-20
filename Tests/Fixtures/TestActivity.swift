@@ -1,4 +1,5 @@
 import Foundation
+
 @testable import PerchCore
 
 /// A minimal `IslandActivity` for testing the reducer and the queue without
@@ -22,12 +23,6 @@ struct TestActivity: IslandActivity {
         self.priority = priority
         self.timeToLive = timeToLive
         self.isExpandable = isExpandable
-    }
-}
-
-extension ActivityID: ExpressibleByStringLiteral {
-    public init(stringLiteral value: String) {
-        self.init(value)
     }
 }
 

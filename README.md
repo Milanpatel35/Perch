@@ -8,7 +8,7 @@ Media controls, a file shelf, clipboard history, a system monitor, your camera,
 timers, battery and meeting alerts — all living in the black cutout you already
 paid for.
 
-[![CI](https://github.com/<org>/perch/actions/workflows/ci.yml/badge.svg)](https://github.com/<org>/perch/actions/workflows/ci.yml)
+[![CI](https://github.com/Milanpatel35/Perch/actions/workflows/ci.yml/badge.svg)](https://github.com/Milanpatel35/Perch/actions/workflows/ci.yml)
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-black.svg)](LICENSE)
 [![macOS 13+](https://img.shields.io/badge/macOS-13%2B-black.svg)]()
 [![Universal](https://img.shields.io/badge/arch-Apple%20Silicon%20%2B%20Intel-black.svg)]()
@@ -69,13 +69,13 @@ brew install --cask perch
 **Direct download**
 
 Grab the latest signed and notarised `.dmg` from
-[Releases](https://github.com/<org>/perch/releases/latest), drag to
+[Releases](https://github.com/Milanpatel35/Perch/releases/latest), drag to
 Applications, launch.
 
 **Build from source**
 
 ```bash
-git clone https://github.com/<org>/perch.git
+git clone https://github.com/Milanpatel35/Perch.git
 cd perch
 make bootstrap
 make run

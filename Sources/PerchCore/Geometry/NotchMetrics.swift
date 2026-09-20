@@ -64,8 +64,8 @@ public struct NotchMetrics: Equatable, Sendable {
         let notchHeight = screen.safeAreaInsets.top
 
         guard notchHeight > Self.minimumNotchHeight,
-              screen.notchWidth > 0,
-              screen.notchWidth < screen.frame.width
+            screen.notchWidth > 0,
+            screen.notchWidth < screen.frame.width
         else {
             self.mode = .virtual
             self.collapsedSize = Self.virtualSize

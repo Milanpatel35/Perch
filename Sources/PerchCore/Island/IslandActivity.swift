@@ -48,6 +48,21 @@ public struct ActivityID: Hashable, Sendable {
     }
 }
 
+/// Module ids are constants written in source — `"nowplaying.current"`, not
+/// a value computed at runtime. Declaring the conformance here rather than in
+/// the test fixtures keeps it in one place; a conformance to an imported type
+/// declared in another module is a retroactive conformance, and Swift 6 is
+/// right to reject those.
+extension ActivityID: ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        self.init(value)
+    }
+}
+
+extension ActivityID: CustomStringConvertible {
+    public var description: String { rawValue }
+}
+
 /// One per module folder under `Sources/PerchModules/`.
 public enum ModuleID: String, CaseIterable, Sendable {
     case nowPlaying
@@ -67,6 +82,12 @@ public enum ModuleID: String, CaseIterable, Sendable {
     case voice
     case screenshot
     case hideNotch
+
+    /// Module 18 — appearance and gestures. The one module with no directory
+    /// under `Sources/PerchModules/`, because it is cross-cutting and every
+    /// other module depends on it (`docs/FEATURES.md` §18). It owns the
+    /// island's own home surface.
+    case appearance
 }
 
 /// Priority order from `CLAUDE.md` §3, highest first:

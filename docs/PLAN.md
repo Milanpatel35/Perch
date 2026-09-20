@@ -88,6 +88,13 @@ written against it. Get the protocol right before anything depends on it.
 on hover, on every display configuration you can find, at ~0% idle CPU, and
 with Reduce Motion on it cross-fades instead. Tag `v0.1.0`.
 
+**Status: done.** The panel sits at `.statusBar + 1`, centred on the notch,
+re-anchoring on every display change. The island's resting state is a real
+`ambient` activity — the home surface — rather than a special case in the
+reducer, which is what makes hover-to-open take the same path a module's
+activity takes. `.idle` keeps its honest meaning: every module off, nothing to
+show, panel inert.
+
 ---
 
 # Phase 2 — The modules (weeks 4–14)
