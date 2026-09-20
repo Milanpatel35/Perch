@@ -1,0 +1,58 @@
+{
+  "checked": "2026-09-20",
+  "note": "Prices and capabilities are checked against each vendor's own site. They go stale, and these go public — re-verify before any release. docs/COMPARISON.md is the long-form source.",
+  "capabilities": [
+    "Price", "Open source", "Minimum macOS", "Media controls", "File shelf",
+    "Clipboard history", "Focus timer", "Meeting join & controls",
+    "System HUDs", "System stats", "Camera beyond a mirror",
+    "Works without a notch", "Telemetry"
+  ],
+  "apps": [
+    {
+      "id": "perch", "name": "Perch", "us": true,
+      "values": ["Free", "Yes", "13", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "None"]
+    },
+    {
+      "id": "boring-notch", "name": "Boring Notch", "site": "https://theboring.name",
+      "values": ["Free", "Yes", "13", "Yes", "Basic", "—", "—", "—", "—", "—", "—", "Yes", "None"],
+      "credit": "Free, open source, and made by people doing the same thing for the same reason. If you only want music in the notch, it is a good answer and you should use it.",
+      "difference": "It stops at media. There is no clipboard history, no timer, no meeting controls and no system monitor — and those are most of what Perch is for."
+    },
+    {
+      "id": "seam", "name": "Seam", "site": "https://seam.so",
+      "values": ["$19.90", "—", "14", "Yes", "Yes", "—", "Yes", "Calendar", "Yes", "—", "—", "Yes", "None"],
+      "credit": "On-device voice-to-text, which Perch does not have at 1.0 and which is the hardest thing on our roadmap. If dictation is why you are here, Seam has it and we do not.",
+      "difference": "No clipboard history, and macOS 14 minimum. Perch runs on Ventura and is free."
+    },
+    {
+      "id": "alcove", "name": "Alcove", "site": "https://alcove.land",
+      "values": ["~$15–17", "—", "14", "Yes", "—", "—", "—", "—", "Yes", "—", "—", "—", "Not stated"],
+      "credit": "The best motion in the category. Its HUD replacements are the reference implementation and its animation is better than ours at launch — that is a matter of iteration, and we are iterating.",
+      "difference": "No shelf, no clipboard, no meeting controls, and nothing on a Mac without a notch. Perch does the HUDs too, and gives you the other fifteen modules."
+    },
+    {
+      "id": "notchnook", "name": "NotchNook", "site": "https://lo.cafe/notchnook",
+      "values": ["$25 or $3/mo", "—", "14", "Yes", "Yes", "—", "—", "Peek", "Yes", "—", "—", "—", "Not stated"],
+      "credit": "The most polished of the paid apps, and the widest feature set — shelf, lyrics, shortcuts, appearance controls. It earns its place.",
+      "difference": "$25, or $3 a month, and no clipboard history at that price. Perch has clipboard history, a system monitor and a real camera module, for nothing."
+    },
+    {
+      "id": "dynamiclake-pro", "name": "DynamicLake Pro", "site": "https://dynamiclake.com",
+      "values": ["$13.99", "—", "13–14", "Yes", "Yes", "Files only", "—", "Activities", "Yes", "—", "—", "Partial", "Not stated"],
+      "credit": "Window snapping from the notch is genuinely good, and its file shelf with AirDrop and format conversion is the one Perch's is measured against.",
+      "difference": "Its \"clipboard\" is file clips, not text history. Perch has both, plus the system monitor nobody in this list has."
+    },
+    {
+      "id": "notchbay", "name": "NotchBay", "site": "https://notchbay.com",
+      "values": ["$9", "—", "14", "Yes", "Yes", "60 clips", "Yes", "Yes", "Yes", "—", "—", "Yes", "Not stated"],
+      "credit": "The cheapest paid option, and its in-call mute, camera and leave controls are the stickiest feature in the category. Its tray reads text out of copied screenshots, which is where Perch's OCR idea came from.",
+      "difference": "Its tray caps at 60 clips and you cannot change it; Perch defaults to 200 and you can. macOS 14 minimum against our 13."
+    },
+    {
+      "id": "topnotch", "name": "TopNotch", "site": "https://topnotch.app",
+      "values": ["Free", "—", "12", "—", "—", "—", "—", "—", "—", "—", "—", "n/a", "None"],
+      "credit": "Solves the opposite problem, free, and does it perfectly: it blacks out the menu bar so the notch disappears. If that is what you want, it is the right tool.",
+      "difference": "It is not a notch app, it is an anti-notch app. Perch ships the same blackout as one setting, so you do not have to choose."
+    }
+  ]
+}

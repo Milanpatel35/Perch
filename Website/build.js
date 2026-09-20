@@ -82,6 +82,143 @@ if (issues !== undefined) {
 
 await writeFile(path, html)
 
+// ---------------------------------------------------------------------
+// The per-competitor pages (#18, WEBSITE-PLAN §9 step 9).
+//
+// Generated from data/comparison.json rather than written by hand, so the
+// matrix on the home page and seven separate pages cannot drift apart —
+// which they would, the first time a price changed.
+//
+// Every page names something the competitor does better. That is not
+// politeness, it is §8 rule 2: the audience for these pages can tell the
+// difference between an argument and a sales sheet, and the moment one of
+// these reads like a sales sheet nobody believes the rest of the site.
+// ---------------------------------------------------------------------
+
+const escape = (value) =>
+  String(value).replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c])
+
+async function comparison() {
+  try {
+    return JSON.parse(await readFile(join(here, 'data', 'comparison.json'), 'utf8'))
+  } catch {
+    return null
+  }
+}
+
+function comparePage(data, app) {
+  const perch = data.apps.find((a) => a.us)
+  const rows = data.capabilities
+    .map((capability, index) => {
+      const ours = perch.values[index]
+      const theirs = app.values[index]
+      return `        <tr>
+          <th scope="row">${escape(capability)}</th>
+          <td class="us">${escape(ours)}</td>
+          <td>${escape(theirs)}</td>
+        </tr>`
+    })
+    .join('\n')
+
+  const checked = new Date(data.checked).toLocaleDateString('en-GB', {
+    day: 'numeric', month: 'long', year: 'numeric',
+  })
+
+  return `<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f5f5f7">
+<title>Perch vs ${escape(app.name)} | Perch</title>
+<meta name="description" content="An honest, feature-by-feature comparison of Perch and ${escape(app.name)} — including what ${escape(app.name)} does better.">
+<link rel="canonical" href="https://milanpatel35.github.io/Perch/compare-${app.id}.html">
+<link rel="icon" type="image/svg+xml" href="assets/img/perch-mark.svg">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="navbar">
+      <a class="brand" href="index.html"><img src="assets/img/perch-mark.svg" alt="" width="28" height="28">Perch</a>
+      <nav class="navlinks">
+        <a href="index.html#features">Features</a>
+        <a href="index.html#compare">Compare</a>
+        <a href="index.html#source">Source</a>
+        <a href="index.html#price">Price</a>
+      </nav>
+      <a class="pillbtn" href="index.html#price">Download</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="sec">
+  <div class="wrap">
+    <p class="eyebrow">Compare</p>
+    <h1>Perch and ${escape(app.name)}</h1>
+    <p class="lead">
+      Checked against ${escape(app.name)}'s own site on ${escape(checked)}.
+      Prices move; if this page disagrees with theirs, theirs is right and
+      <a href="https://github.com/Milanpatel35/Perch/issues/new">this is a bug</a>.
+    </p>
+
+    <div class="grid3">
+      <div class="card">
+        <h2>What ${escape(app.name)} does better</h2>
+        <p>${escape(app.credit)}</p>
+      </div>
+      <div class="card">
+        <h2>Where Perch differs</h2>
+        <p>${escape(app.difference)}</p>
+      </div>
+      <div class="card">
+        <h2>The honest summary</h2>
+        <p>Perch is free and the source is public, so you can check every row of this table yourself. That is the whole argument.</p>
+      </div>
+    </div>
+
+    <div class="tablecard" style="margin-top:34px">
+      <div class="scroller" tabindex="0" role="region" aria-label="Perch compared with ${escape(app.name)}">
+      <table>
+        <thead><tr>
+          <th scope="col"><span class="sr-only">Capability</span></th>
+          <th scope="col" class="us">Perch</th>
+          <th scope="col">${escape(app.name)}</th>
+        </tr></thead>
+        <tbody>
+${rows}
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <p class="srcmeta">
+      <a href="index.html#compare">All eight compared</a> ·
+      ${app.site ? `<a href="${escape(app.site)}">${escape(app.name)}'s own site</a> · ` : ''}
+      <a href="https://github.com/Milanpatel35/Perch/blob/dev/docs/COMPARISON.md">The long version</a>
+    </p>
+  </div>
+</section>
+</main>
+
+</body>
+</html>
+`
+}
+
+const data = await comparison()
+if (data) {
+  const others = data.apps.filter((app) => !app.us)
+  await Promise.all(
+    others.map((app) =>
+      writeFile(join(here, `compare-${app.id}.html`), comparePage(data, app))),
+  )
+  console.log(`site: wrote ${others.length} comparison pages`)
+}
+
 console.log(
   `site: version=${tag ?? 'unchanged'} ` +
     `stars=${repo?.stargazers_count ?? 'unchanged'} ` +

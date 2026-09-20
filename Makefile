@@ -35,8 +35,11 @@ run: build
 release:
 	bash Scripts/release.sh
 
+# `build.js` first: the per-competitor pages are generated from
+# data/comparison.json, so without it the footer's "vs …" links 404 locally
+# while working perfectly in production, which is the worst way round.
 site:
-	cd Website && python3 -m http.server 8000
+	cd Website && node build.js && python3 -m http.server 8000
 
 # Re-render the website's screenshots from the app's own views.
 #

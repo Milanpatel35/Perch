@@ -519,7 +519,7 @@ Each step is shippable. Do not start the next one until the current one is at
 | 6 | Live demos: camera, then clipboard, then shelf drag-drop, then system | 4 |
 | 7 | `comparison.json` + build script + matrix + regenerate `COMPARISON.md` | 2 |
 | 8 | Privacy, how-it-works, open-source, FAQ, price, footer | 2 |
-| 9 | Seven `compare.html` pages, JSON-LD, OG images, sitemap | 2 |
+| 9 | Seven `compare.html` pages, JSON-LD, OG images, sitemap | 2 | **Pages done** (#18), generated from `data/comparison.json`. JSON-LD, OG images per page and the sitemap are still outstanding. |
 | 10 | New copy pass (§8), proofread, every price re-verified | 1 |
 | 11 | Perf + a11y pass against the §7 budgets; fix until green | 2 |
 | 12 | Press kit, 30-second loop, domain, deploy | 1 |
