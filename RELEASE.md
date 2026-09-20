@@ -108,6 +108,21 @@ Then:
 10. `.github/workflows/pages.yml` regenerates `appcast.xml` and deploys the
     site.
 
+### Steps 8–10 do not work yet
+
+Everything above step 8 runs today. The tag does not, and will not until
+Phase 3.2 of `docs/PLAN.md` — `Scripts/release.sh` has never been written,
+the repo holds no signing secrets, and Sparkle is not in the app. Pushing a
+`v*` tag now fails on the first step of `release.yml` and publishes a Release
+with nothing attached. The full gap is issue #25.
+
+Until that closes, a release stops at step 7: version bump and changelog on
+`dev`, release PR merged to `main`, and then a `build-X.Y.Z` **pre-release**
+carrying the unsigned universal app from CI's `build` job. That job is
+deliberately not a release — see the comment above it in `ci.yml` — and
+`README.md` says the same thing to users, which is the only reason shipping an
+unsigned build is acceptable at all.
+
 ## After every release
 
 - [ ] Release page shows the `.dmg`, and it downloads
