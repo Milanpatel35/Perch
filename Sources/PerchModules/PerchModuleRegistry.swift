@@ -20,6 +20,7 @@ public enum PerchModuleRegistry {
         host.register(ShelfService(island: island))
         host.register(ClipboardService(island: island))
         host.register(BatteryService(island: island))
+        host.register(HUDService(island: island))
     }
 
     /// The Preferences pane for a module, if it has one yet.
@@ -55,17 +56,10 @@ public enum PerchModuleRegistry {
                     )
                 )
             }
+        case .hud:
+            hudPane(in: host)
         case .battery:
-            host.service(BatteryService.self).map { battery in
-                AnyView(
-                    BatterySettingsView(
-                        power: battery.power,
-                        accessories: battery.roster.accessories,
-                        onThresholdChange: { battery.setLowThreshold($0) },
-                        onRefresh: { battery.refreshAccessories() }
-                    )
-                )
-            }
+            batteryPane(in: host)
         case .nowPlaying:
             AnyView(
                 NowPlayingSettingsView(
@@ -74,6 +68,39 @@ public enum PerchModuleRegistry {
             )
         default:
             nil
+        }
+    }
+
+    // One function per module rather than one growing switch: the switch is a
+    // dispatch table, and eighteen inline view constructions in it would be
+    // unreadable long before the eighteenth.
+
+    @MainActor
+    private static func hudPane(in host: ModuleHost) -> AnyView? {
+        host.service(HUDService.self).map { hud in
+            AnyView(
+                HUDSettingsView(
+                    enabled: hud.policy.enabled,
+                    isBrightnessAvailable: hud.isBrightnessAvailable,
+                    isSuppressing: hud.isSuppressingStockHUD,
+                    onToggle: { hud.setEnabled($0, $1) },
+                    onSuppressionChange: { hud.setSuppressesStockHUD($0) }
+                )
+            )
+        }
+    }
+
+    @MainActor
+    private static func batteryPane(in host: ModuleHost) -> AnyView? {
+        host.service(BatteryService.self).map { battery in
+            AnyView(
+                BatterySettingsView(
+                    power: battery.power,
+                    accessories: battery.roster.accessories,
+                    onThresholdChange: { battery.setLowThreshold($0) },
+                    onRefresh: { battery.refreshAccessories() }
+                )
+            )
         }
     }
 }

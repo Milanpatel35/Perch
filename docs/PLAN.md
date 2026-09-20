@@ -160,7 +160,15 @@ opens the island rather than sampled. [ADR 0004](adr/0004-ioregistry-for-accesso
 records why the accessory levels come from the IO registry. The permission
 table was wrong about this module: it needs none.
 
-**Still to do in 2.3:** the HUD set, and the focus timer.
+**Status: the HUDs done too.** Module 6 shipped in 0.5.0 — six of the eight
+HUDs, each individually switchable, with the stock overlay suspended while the
+module is on and restored the moment it is not.
+[ADR 0005](adr/0005-private-apis-for-the-hud.md) records the two private
+interfaces it needs and how each degrades. Keyboard backlight and AirDrop are
+recorded in `FEATURES.md` §6 as not done: macOS publishes no change
+notification for either, and a HUD that can never fire is not a feature.
+
+**Still to do in 2.3:** the focus timer.
 
 **Also starts here: the website.** It is 24 working days (`WEBSITE-PLAN.md`
 §9) and cannot be compressed into launch week. Run it in parallel from now on.

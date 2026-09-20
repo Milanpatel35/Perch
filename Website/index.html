@@ -86,6 +86,7 @@
       <button class="tab" aria-pressed="false" data-s="shelf">Shelf</button>
       <button class="tab" aria-pressed="false" data-s="clip">Clipboard</button>
       <button class="tab" aria-pressed="false" data-s="focus">Focus</button>
+      <button class="tab" aria-pressed="false" data-s="hud">HUDs</button>
       <button class="tab" aria-pressed="false" data-s="batt">Battery</button>
       <button class="tab" aria-pressed="false" data-s="cam">Camera</button>
       <button class="tab" aria-pressed="false" data-s="sys">System stats</button>
@@ -175,6 +176,19 @@
           <span class="tag" style="background:var(--bg);color:var(--ink);border:1px solid var(--line);font-size:.8rem;padding:8px 14px">Camera</span>
           <span class="tag r" style="font-size:.8rem;padding:8px 14px">Leave</span>
         </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="copy">
+        <p class="eyebrow">HUDs</p>
+        <h3>One overlay,<span class="soft">not two.</span></h3>
+        <p class="body">Volume, brightness, charging, Bluetooth, Focus and the camera-in-use dot, in the notch instead of stamped over whatever you were looking at. Perch suspends the macOS overlay while the module is on and puts it back the instant you switch it off or quit &mdash; nothing is killed, nothing is changed on disk. Each of the six is individually switchable.</p>
+      </div>
+      <div class="visual" style="min-height:200px">
+        <div class="clip"><span>🔊</span><div>Volume<div style="font-size:.78rem;color:var(--sub)">MacBook Pro Speakers</div></div><em style="font-weight:600">62%</em></div>
+        <div class="clip"><span>☀️</span><div>Brightness<div style="font-size:.78rem;color:var(--sub)">Built-in display</div></div><em style="font-weight:600">49%</em></div>
+        <div class="clip"><span>🌙</span><div>Do Not Disturb<div style="font-size:.78rem;color:var(--sub)">Focus on</div></div><em style="font-weight:600">On</em></div>
       </div>
     </div>
 
@@ -468,10 +482,10 @@
         <a href="https://github.com/Milanpatel35/Perch#install">build from source</a>
       </p>
       <p class="prerelease" style="margin-top:18px">
-        <strong>Four of eighteen modules are built so far</strong> — Now
-        Playing, the Shelf, the Clipboard and the Battery, plus the island
-        itself. The list below is what 1.0 is aiming at; the roadmap says
-        when.
+        <strong>Five of eighteen modules are built so far</strong> — Now
+        Playing, the Shelf, the Clipboard, the Battery and the HUDs, plus
+        the island itself. The list below is what 1.0 is aiming at; the
+        roadmap says when.
       </p>
       <ul>
         <li>Searchable clipboard history with pinning</li>

@@ -195,6 +195,48 @@ Alcove's whole personality. Replace every stock overlay.
 | Do Not Disturb state | AL | |
 | Per-HUD on/off switches | AL | Every one individually |
 
+**Status — shipped in 0.5.0, six of the eight rows.** Volume and mute
+(CoreAudio, entirely public), display brightness, charging, Bluetooth connect
+and disconnect, Focus — Do Not Disturb is a Focus, so the two rows above are
+one HUD — and a camera-and-microphone-in-use indicator. Every one is
+individually switchable, and the stock overlay is suspended while the module
+is on and restored the instant it is switched off or Perch quits.
+
+Brightness and the suppression both need private interfaces, and
+[ADR 0005](adr/0005-private-apis-for-the-hud.md) is the decision: what is
+used, how it is contained, and how each half degrades.
+
+**One thing it costs, stated plainly because the website says it too.**
+`OSDUIHelper` — the agent that draws the stock overlay — is started on demand,
+and macOS publishes no notification when it launches. (`NSWorkspace` does not
+report it at all; that was checked on hardware, both ways of launching it.)
+Perch catches it on its own next HUD event instead, and waits for the stock
+overlay to fade before suspending it, because suspending a process while its
+window is up freezes that window on screen. So **one** stock overlay appears
+after the agent starts, and none after that for the rest of the session.
+
+Two rows are **not** done, and are recorded here rather than quietly dropped:
+
+- **Keyboard backlight.** The level can be read —
+  `KeyboardBrightnessClient.brightnessForKeyboard:` works, and returned
+  0.237 on the machine this was written on — but nothing on macOS publishes a
+  *change* to it, at any level, public or private. A getter with no
+  notification can only be used by polling, and `CLAUDE.md` §5.1 says no. It
+  is not a switch in Preferences, because a switch for a HUD that can never
+  fire is worse than an honest gap.
+- **AirDrop received.** No property, no notification, no framework. Watching
+  `~/Downloads` would fire for every download, which is a different feature
+  wearing this one's name.
+
+And one row means something narrower than it sounds:
+
+- **"Screen recording / camera in use" is the camera and the microphone.**
+  Both are property listeners on `…DeviceIsRunningSomewhere`, need no Camera
+  or Microphone permission, and name the device in use. Screen recording has
+  no such interface, and the only route to detecting it is Screen Recording
+  permission — which Perch is not going to request in order to tell you that
+  something else has it.
+
 ## 7. Battery and accessories — P0
 
 | Capability | Comes from | Notes |
