@@ -110,6 +110,16 @@ final class NowPlayingService: ObservableObject, PerchModule {
     /// Coalesced into a single task: a source reports two or three changes
     /// for one track change, and answering each of them separately would
     /// decode the artwork three times.
+    /// Awaits whatever read is in flight.
+    ///
+    /// Exists for the tests, and is honest about it. Reads are coalesced
+    /// into one task, so "has the island caught up yet" has an exact answer;
+    /// a test that instead yields a few times and hopes is a test that fails
+    /// on a slow machine and passes on yours.
+    func awaitPendingRefresh() async {
+        await refreshTask?.value
+    }
+
     private func refresh() {
         guard isActive else { return }
         refreshTask?.cancel()

@@ -127,7 +127,7 @@ final class NowPlayingModuleTests: XCTestCase {
 
         source.snapshot = snapshot(title: "So What")
         service.activate()
-        await settle()
+        await service.awaitPendingRefresh()
 
         XCTAssertEqual(service.snapshot?.title, "So What")
         XCTAssertEqual(island.presented?.id, NowPlayingActivity.identifier)
@@ -140,10 +140,10 @@ final class NowPlayingModuleTests: XCTestCase {
 
         source.snapshot = snapshot(title: "So What")
         service.activate()
-        await settle()
+        await service.awaitPendingRefresh()
 
         source.emitChange(snapshot(title: "Blue in Green"))
-        await settle()
+        await service.awaitPendingRefresh()
 
         XCTAssertEqual(service.snapshot?.title, "Blue in Green")
         XCTAssertEqual(island.queued.filter { $0.source == .nowPlaying }.count, 1)
@@ -156,11 +156,11 @@ final class NowPlayingModuleTests: XCTestCase {
 
         source.snapshot = snapshot()
         service.activate()
-        await settle()
+        await service.awaitPendingRefresh()
         XCTAssertNotNil(island.presented)
 
         source.emitChange(nil)
-        await settle()
+        await service.awaitPendingRefresh()
 
         XCTAssertNil(service.snapshot)
         XCTAssertTrue(island.state.presentation.isIdle)
@@ -190,14 +190,6 @@ final class NowPlayingModuleTests: XCTestCase {
 
         XCTAssertTrue(service.isUnavailable)
         XCTAssertNil(island.presented)
-    }
-
-    /// Lets the service's coalescing read task run.
-    ///
-    /// Not a sleep on a duration — it yields until the task that `activate()`
-    /// or a change kicked off has had its turn.
-    private func settle() async {
-        for _ in 0..<6 { await Task.yield() }
     }
 
     func test_TC_MED_007_deactivatingTwiceIsSafe() {
