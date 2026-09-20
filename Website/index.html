@@ -13,6 +13,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="assets/img/perch-mark.svg">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/img/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/img/perch-mark.png">
+<meta property="og:image" content="https://milanpatel35.github.io/Perch/assets/img/perch-mark.png">
+<meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="assets/site.css">
 <script type="module" src="js/main.js" defer></script>
 </head>
@@ -22,7 +27,7 @@
 <header>
   <div class="wrap">
     <div class="navbar">
-      <a class="brand" href="#top"><i></i>Perch</a>
+      <a class="brand" href="#top"><img src="assets/img/perch-mark.svg" alt="" width="28" height="28">Perch</a>
       <nav class="navlinks">
         <a href="#features">Features</a>
         <a href="#compare">Compare</a>
@@ -43,7 +48,7 @@
   <div class="wrap">
     <p class="eyebrow">Free and open source, forever</p>
     <h1>Everyone else charges for your notch.<span class="soft">This one is the source code.</span></h1>
-    <p class="body" style="margin-top:22px">Perch turns the MacBook camera notch into a live, interactive surface: music, meetings, a file shelf, searchable clipboard history, your camera, and a real system monitor. <strong>Eighteen modules, every one free</strong> — no licence key, no account, no telemetry, and no network request beyond checking for updates.</p>
+    <p class="body" style="margin-top:22px">Perch turns the MacBook camera notch into a live, interactive surface. <strong>Three modules are built today</strong> — music, a file shelf and a searchable clipboard — <strong>and fifteen more are on the way, every one free</strong>. No licence key, no account, no telemetry, and no network request beyond checking for updates.</p>
     <div class="herocta">
       <a class="btn" href="#price">Download for macOS</a>
       <a class="btn sec" href="#demo">Try the island below</a>
@@ -386,13 +391,20 @@
       <div class="tier">Everything, always</div>
       <div class="fig">$0</div>
       <div class="per">MIT licensed · every feature · unlimited Macs</div>
-      <a class="btn" href="https://github.com/Milanpatel35/Perch/releases/latest" style="width:100%;justify-content:center">Download for macOS</a>
+      <a class="btn" href="https://github.com/Milanpatel35/Perch/releases/download/build-0.3.0/Perch-0.3.0-unsigned.zip" style="width:100%;justify-content:center">Download for macOS</a>
       <p class="prerelease">
-        <strong>Pre-1.0.</strong> There is no published build yet — the island
-        and the first module are done, the rest of the roadmap is not. The
-        button goes live with the first tagged release. Until then,
-        <a href="https://github.com/Milanpatel35/Perch#install">build it from source</a>
-        — it is three commands.
+        <strong>0.3.0, and not yet signed.</strong> Universal — Apple Silicon
+        and Intel. macOS will refuse it on a double-click, so
+        <strong>right-click the app &rarr; Open</strong> and confirm once;
+        you only do that the first time. That is Gatekeeper doing its job,
+        and it stops once there is a certificate to sign with.
+        <a href="https://github.com/Milanpatel35/Perch/releases">All builds</a> ·
+        <a href="https://github.com/Milanpatel35/Perch#install">build from source</a>
+      </p>
+      <p class="prerelease" style="margin-top:18px">
+        <strong>Three of eighteen modules are built so far</strong> — Now
+        Playing, the Shelf and the Clipboard, plus the island itself. The
+        list below is what 1.0 is aiming at; the roadmap says when.
       </p>
       <ul>
         <li>Searchable clipboard history with pinning</li>
@@ -411,6 +423,7 @@
 <!-- FINALE -->
 <div class="finale">
   <div class="wrap">
+    <img src="assets/img/perch-mark.svg" alt="" width="72" height="72" style="margin-bottom:18px">
     <h2>Look up.<span class="soft">It's all right there.</span></h2>
     <a class="btn" href="#price">Download for macOS</a>
   </div>

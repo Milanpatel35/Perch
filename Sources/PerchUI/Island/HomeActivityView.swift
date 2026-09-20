@@ -1,3 +1,4 @@
+import AppKit
 import PerchCore
 import SwiftUI
 
@@ -26,11 +27,22 @@ private struct HomeSurface: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
+    /// The monochrome mark, tinted white for the island's black background.
+    /// Loaded once — a view body runs often, and `NSImage(named:)` on every
+    /// pass is work for nothing.
+    private static let mark: NSImage = {
+        let image = NSImage(named: "MenuBarIcon") ?? NSImage()
+        image.isTemplate = false
+        return image.tinted(.white)
+    }()
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 8) {
-                Image(systemName: "bird.fill")
-                    .foregroundStyle(.white.opacity(0.9))
+                Image(nsImage: Self.mark)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 15, height: 15)
                 Text("Perch")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(.white)

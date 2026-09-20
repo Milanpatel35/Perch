@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Perch — the mark.
+
+  A peacock, perched, inside a medallion whose top edge is cut by the notch.
+  The traditional form and the product's one idea, in the same shape: the
+  cutout is not decoration on the frame, it is a bite taken out of it, which
+  is exactly what the notch is.
+
+  Drawn in the register of Indian folk painting — Madhubani and Pattachitra:
+  heavy outlines, flat fills, no gradients, no shading, and pattern used as
+  structure rather than as texture. Everything is built from circles, arcs
+  and teardrops, which is also what keeps it legible at 32 pixels.
+
+  Palette: indigo, peacock teal, marigold, vermilion, cream.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+     width="512" height="512" role="img" aria-labelledby="title desc">
+  <title id="title">Perch</title>
+  <desc id="desc">A peacock perched inside a medallion cut by a notch.</desc>
+
+  <defs>
+    <!-- The notch, taken out of the medallion rather than drawn on it. -->
+    <mask id="notch">
+      <rect width="512" height="512" fill="#fff"/>
+      <path d="M186 0h140v34a22 22 0 0 1-22 22H208a22 22 0 0 1-22-22V0z" fill="#000"/>
+    </mask>
+
+    <!-- One feather eye, reused. -->
+    <g id="eye">
+      <circle r="21" fill="#1B3A6B"/>
+      <circle r="14" fill="#0E7C7B"/>
+      <circle r="7.5" fill="#F4A300"/>
+      <circle r="3" fill="#D64545"/>
+    </g>
+  </defs>
+
+  <g mask="url(#notch)">
+    <circle cx="256" cy="256" r="244" fill="#FDF6E3"/>
+    <circle cx="256" cy="256" r="244" fill="none" stroke="#1B3A6B" stroke-width="16"/>
+    <circle cx="256" cy="256" r="214" fill="none" stroke="#D64545" stroke-width="7"/>
+  </g>
+
+  <!-- The scalloped ring. Twenty-four dots, the way a border is counted out
+       on a painted panel rather than measured. -->
+  <g fill="#1B3A6B" mask="url(#notch)">
+    <circle cx="256" cy="60" r="7"/>
+    <circle cx="306" cy="66" r="7"/>
+    <circle cx="354" cy="86" r="7"/>
+    <circle cx="395" cy="117" r="7"/>
+    <circle cx="426" cy="158" r="7"/>
+    <circle cx="446" cy="206" r="7"/>
+    <circle cx="452" cy="256" r="7"/>
+    <circle cx="446" cy="306" r="7"/>
+    <circle cx="426" cy="354" r="7"/>
+    <circle cx="395" cy="395" r="7"/>
+    <circle cx="354" cy="426" r="7"/>
+    <circle cx="306" cy="446" r="7"/>
+    <circle cx="256" cy="452" r="7"/>
+    <circle cx="206" cy="446" r="7"/>
+    <circle cx="158" cy="426" r="7"/>
+    <circle cx="117" cy="395" r="7"/>
+    <circle cx="86" cy="354" r="7"/>
+    <circle cx="66" cy="306" r="7"/>
+    <circle cx="60" cy="256" r="7"/>
+    <circle cx="66" cy="206" r="7"/>
+    <circle cx="86" cy="158" r="7"/>
+    <circle cx="117" cy="117" r="7"/>
+    <circle cx="158" cy="86" r="7"/>
+    <circle cx="206" cy="66" r="7"/>
+  </g>
+
+  <!-- Tail. Three plumes, fanned left and up, each ending in an eye. -->
+  <g fill="none" stroke="#0E7C7B" stroke-width="13" stroke-linecap="round">
+    <path d="M268 322C214 318 158 286 133 232"/>
+    <path d="M272 308C226 284 186 236 174 176"/>
+    <path d="M280 296C252 258 238 206 246 148"/>
+  </g>
+  <use href="#eye" x="128" y="222"/>
+  <use href="#eye" x="171" y="164"/>
+  <use href="#eye" x="248" y="136"/>
+
+  <!-- Body: a teardrop, the folk-painting shorthand for a bird. -->
+  <path d="M300 200c46 0 74 42 74 90 0 52-34 90-78 90-42 0-72-34-72-80
+           0-56 32-100 76-100z"
+        fill="#1B3A6B"/>
+  <path d="M300 200c46 0 74 42 74 90 0 52-34 90-78 90-42 0-72-34-72-80
+           0-56 32-100 76-100z"
+        fill="none" stroke="#12284A" stroke-width="9"/>
+
+  <!-- Wing, patterned rather than shaded. -->
+  <path d="M292 258c34 0 54 28 54 60 0 30-20 52-48 52-26 0-44-22-44-52
+           0-34 18-60 38-60z" fill="#0E7C7B"/>
+  <g fill="#F4A300">
+    <circle cx="300" cy="300" r="9"/>
+    <circle cx="300" cy="332" r="9"/>
+    <circle cx="322" cy="316" r="9"/>
+    <circle cx="278" cy="316" r="9"/>
+  </g>
+
+  <!-- Head, beak and crest. -->
+  <circle cx="334" cy="186" r="40" fill="#1B3A6B"/>
+  <circle cx="334" cy="186" r="40" fill="none" stroke="#12284A" stroke-width="9"/>
+  <circle cx="348" cy="178" r="9" fill="#FDF6E3"/>
+  <circle cx="350" cy="178" r="4.5" fill="#12284A"/>
+  <path d="M370 192l34 12-34 14z" fill="#F4A300"
+        stroke="#12284A" stroke-width="7" stroke-linejoin="round"/>
+
+  <g stroke="#0E7C7B" stroke-width="8" stroke-linecap="round" fill="none">
+    <path d="M320 150v-26"/>
+    <path d="M336 146v-30"/>
+    <path d="M352 150v-26"/>
+  </g>
+  <g fill="#D64545">
+    <circle cx="320" cy="118" r="9"/>
+    <circle cx="336" cy="110" r="9"/>
+    <circle cx="352" cy="118" r="9"/>
+  </g>
+
+  <!-- The perch. -->
+  <rect x="196" y="396" width="176" height="20" rx="10" fill="#8A5A2B"/>
+  <g stroke="#F4A300" stroke-width="9" stroke-linecap="round">
+    <path d="M292 380v18"/>
+    <path d="M316 380v18"/>
+  </g>
+</svg>

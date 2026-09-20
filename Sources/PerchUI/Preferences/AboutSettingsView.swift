@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 /// What Perch is, and the promise it makes.
@@ -18,9 +19,13 @@ struct AboutSettingsView: View {
 
     var body: some View {
         VStack(spacing: 14) {
-            Image(systemName: "bird.fill")
-                .font(.system(size: 42))
-                .foregroundStyle(.primary)
+            // The mark itself. An SF Symbol here would be the one place in
+            // the app that showed a different bird.
+            Image(nsImage: NSImage(named: "AppIcon") ?? NSImage())
+                .resizable()
+                .scaledToFit()
+                .frame(width: 84, height: 84)
+                .accessibilityHidden(true)
 
             Text("Perch")
                 .font(.title2.weight(.semibold))

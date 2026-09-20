@@ -20,11 +20,14 @@ final class MenuBarController: NSObject {
         )
         super.init()
 
-        statusItem.button?.image = NSImage(
-            systemSymbolName: "bird.fill",
-            accessibilityDescription: "Perch"
-        )
-        statusItem.button?.image?.isTemplate = true
+        // The mark, drawn for this size rather than an SF Symbol standing
+        // in for it. It is a template image, so macOS tints it to match the
+        // menu bar in either appearance.
+        let mark = NSImage(named: "MenuBarIcon")
+        mark?.isTemplate = true
+        mark?.size = NSSize(width: 18, height: 18)
+        statusItem.button?.image = mark
+        statusItem.button?.image?.accessibilityDescription = "Perch"
         statusItem.menu = makeMenu()
     }
 

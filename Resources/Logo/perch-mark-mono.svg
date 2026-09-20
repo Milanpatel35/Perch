@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Perch — the monochrome mark, for the menu bar.
+
+  Not the colour logo with the colour taken out. A template image is one flat
+  shade at 18 points, so the medallion, the dot ring and the wing pattern all
+  turn to mud and none of them are here.
+
+  Two attempts got thrown away before this one. The first gave the tail equal
+  weight to the bird and read as a splayed hand. The second fixed the weight
+  but not the real problem: filled black shapes that touch become one blob,
+  and a blob is not a silhouette.
+
+  What separates them is a mask. The tail is cut by a slightly grown copy of
+  the body, so there is genuine transparent space between the plumes and the
+  bird. In a template image that gap is the only thing doing the work an
+  outline would do in colour.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+     width="512" height="512" role="img" aria-label="Perch">
+
+  <defs>
+    <!-- The body, and the same body grown by the stroke width. The grown one
+         is what carves the gap. -->
+    <path id="body"
+          d="M300 228c48 0 76 44 76 96 0 54-36 94-84 94-44 0-74-36-74-84
+             0-60 34-106 82-106z"/>
+    <mask id="clear-of-body">
+      <rect width="512" height="512" fill="#fff"/>
+      <use href="#body" fill="#000" stroke="#000" stroke-width="44"/>
+      <circle cx="336" cy="188" r="76" fill="#000"/>
+    </mask>
+  </defs>
+
+  <!-- Tail, cut clear of the bird. -->
+  <g mask="url(#clear-of-body)">
+    <g fill="none" stroke="#000" stroke-width="19" stroke-linecap="round">
+      <path d="M268 342C214 334 168 300 146 248"/>
+      <path d="M262 310C226 276 204 226 204 172"/>
+      <path d="M272 288C258 244 260 194 284 148"/>
+    </g>
+    <g fill="#000">
+      <circle cx="140" cy="240" r="24"/>
+      <circle cx="203" cy="162" r="24"/>
+      <circle cx="288" cy="138" r="24"/>
+    </g>
+  </g>
+
+  <!-- The bird. -->
+  <use href="#body" fill="#000"/>
+  <circle cx="336" cy="188" r="50" fill="#000"/>
+  <path d="M382 192l60 20-60 26z" fill="#000"/>
+
+  <!-- Crest, clear of the head by the same logic. -->
+  <g fill="none" stroke="#000" stroke-width="15" stroke-linecap="round">
+    <path d="M310 142v-20"/>
+    <path d="M336 134v-28"/>
+    <path d="M362 142v-20"/>
+  </g>
+  <g fill="#000">
+    <circle cx="310" cy="108" r="16"/>
+    <circle cx="336" cy="92" r="16"/>
+    <circle cx="362" cy="108" r="16"/>
+  </g>
+
+  <!-- The perch. Narrower than the first cut, and closer: a bar as wide as
+       the medallion read as an underline rather than as something the bird
+       is standing on. -->
+  <rect x="218" y="436" width="160" height="24" rx="12" fill="#000"/>
+</svg>

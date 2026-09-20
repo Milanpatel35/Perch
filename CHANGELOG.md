@@ -8,7 +8,19 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Nothing yet. Next up is Phase 2.3 — HUDs, battery and the focus timer.
+### Added
+- **A logo.** A peacock perched inside a medallion whose top edge is cut by
+  the notch — drawn in the register of Indian folk painting: heavy outlines,
+  flat fills, no gradients, and pattern used as structure. It is the app
+  icon, the menu-bar item, the island's home surface and the website's
+  brand mark, all from the same two SVGs in `Resources/Logo`.
+- A downloadable build. `build-0.3.0` is published as a pre-release with a
+  universal, unsigned app attached, and the download buttons now point at
+  the file rather than at an empty Releases page.
+
+### Changed
+- The website's hero said "eighteen modules" when three are built. It says
+  three, and names the fifteen as on the way.
 
 ## [0.3.0] — 2026-09-20
 
