@@ -117,6 +117,12 @@ change, swipe to skip. **Tests:** MED.
 
 **Done when:** you would rather use Perch than the stock Now Playing widget.
 
+**Status: done**, apart from Up Next and lyrics, which no local API exposes
+for an arbitrary source — see the status note in `FEATURES.md` §1 and
+[ADR 0002](adr/0002-mediaremote-for-now-playing.md). The module also proved
+what it was picked first to prove: the panel and the motion tokens carry a
+real module without changes to either.
+
 ## 2.2 — Shelf and clipboard (weeks 5–7)
 
 The two features that turn this from a toy into a tool. Clipboard history is

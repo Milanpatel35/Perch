@@ -10,16 +10,19 @@ public struct IslandRootView: View {
 
     @ObservedObject private var controller: IslandController
     @ObservedObject private var motion: MotionPreferences
+    @ObservedObject private var modules: ModuleHost
 
     private let layout: IslandLayout
 
     public init(
         controller: IslandController,
         motion: MotionPreferences,
+        modules: ModuleHost,
         layout: IslandLayout
     ) {
         self.controller = controller
         self.motion = motion
+        self.modules = modules
         self.layout = layout
     }
 
@@ -32,6 +35,11 @@ public struct IslandRootView: View {
         // The panel is mostly empty space. Without this the hosting view
         // would swallow clicks meant for the app underneath.
         .allowsHitTesting(controller.acceptsMouseEvents)
+        // Two things every module's view needs, and neither of which may be
+        // a global: the geometry it is being drawn in, and the way back to
+        // the service that owns its resources.
+        .environment(\.notchMetrics, layout.metrics)
+        .environmentObject(modules)
     }
 
     private var island: some View {
