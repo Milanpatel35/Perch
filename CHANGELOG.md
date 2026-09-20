@@ -9,6 +9,17 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 ## [Unreleased]
 
 ### Added
+- **An open-source section on the website**, and a GitHub link in the header
+  — `WEBSITE-PLAN.md` §1 listed one and it was never built. Buttons to the
+  repository, to `CONTRIBUTING.md` and to the good-first-issue list, plus
+  what a contributor actually wants to know: no CLA, the roadmap is public,
+  the awkward decisions have records, and bug reports from unusual display
+  arrangements are the most useful thing anyone can send.
+- `Website/build.js` — injects the version and the repository's issue count
+  at **build** time. Fetching them from the visitor's browser would have the
+  page contacting GitHub while claiming nothing leaves your Mac.
+- Five good first issues, so the link leads somewhere. One of them is a real
+  bug spotted in our own screenshot: a shelved folder draws a document icon.
 - **Real screenshots on the website.** `IslandSnapshots` renders the app's
   own `IslandRootView` into PNGs — the shelf and the clipboard pictures on
   the site are the running UI, not mockups, and they cannot drift from what
