@@ -76,6 +76,13 @@ and nobody has built the camera out past a plain mirror.
 Signed, notarised and stapled `.dmg`. Drag to Applications and launch;
 Gatekeeper opens it without a warning.
 
+**Latest build, right now** — every commit on `dev` produces a universal
+(Apple Silicon + Intel) build you can download from the
+[CI run's artifacts](https://github.com/Milanpatel35/Perch/actions/workflows/ci.yml?query=branch%3Adev).
+It is **unsigned**, so macOS will want a right-click → Open the first time.
+It is a build, not a release: artifacts expire after 30 days, and the signed,
+notarised `.dmg` arrives with the certificate.
+
 **Homebrew** (recommended once released)
 
 ```bash
