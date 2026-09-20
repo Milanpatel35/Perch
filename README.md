@@ -8,12 +8,17 @@ Media controls, a file shelf, clipboard history, a system monitor, your camera,
 timers, battery and meeting alerts — all living in the black cutout you already
 paid for.
 
-[![CI](https://github.com/<org>/perch/actions/workflows/ci.yml/badge.svg)](https://github.com/<org>/perch/actions/workflows/ci.yml)
+### [**perch — see it running →**](https://milanpatel35.github.io/Perch/)
+
+The site has a live island you can actually use: hover it, click it, switch it
+between states. No video, no install.
+
+[![CI](https://github.com/Milanpatel35/Perch/actions/workflows/ci.yml/badge.svg)](https://github.com/Milanpatel35/Perch/actions/workflows/ci.yml)
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-black.svg)](LICENSE)
 [![macOS 13+](https://img.shields.io/badge/macOS-13%2B-black.svg)]()
 [![Universal](https://img.shields.io/badge/arch-Apple%20Silicon%20%2B%20Intel-black.svg)]()
 
-[Download](#install) · [Features](#what-it-does) · [Why Perch](#how-it-compares) · [Contributing](CONTRIBUTING.md) · [Roadmap](docs/PLAN.md) · [Full feature list](docs/FEATURES.md)
+[**Website**](https://milanpatel35.github.io/Perch/) · [**Download**](https://github.com/Milanpatel35/Perch/releases/download/build-0.4.0/Perch-0.4.0-unsigned.zip) · [Features](#what-it-does) · [Why Perch](#how-it-compares) · [Contributing](CONTRIBUTING.md) · [Roadmap](docs/PLAN.md) · [Full feature list](docs/FEATURES.md)
 
 </div>
 
@@ -60,28 +65,50 @@ and nobody has built the camera out past a plain mirror.
 
 ## Install
 
-**Homebrew** (recommended)
+> **Pre-1.0.** Three of the eighteen modules are built — Now Playing, the
+> Shelf and the Clipboard — plus the island itself. The rest of
+> `docs/PLAN.md` is not done, and the Homebrew cask goes live with the first
+> signed release. The feature table below is what 1.0 is aiming at.
+
+**Download the app** — [Perch 0.4.0, universal](https://github.com/Milanpatel35/Perch/releases/download/build-0.4.0/Perch-0.4.0-unsigned.zip)
+
+Apple Silicon and Intel, macOS 13+. **Not yet signed**: macOS will refuse it
+on a double-click, so right-click the app → Open and confirm once. You only
+do that the first time, and it stops once there is a Developer ID certificate
+to sign with — at which point this becomes a notarised `.dmg` that Gatekeeper
+opens without a word.
+
+[All builds](https://github.com/Milanpatel35/Perch/releases).
+
+**Latest build, right now** — every commit on `dev` produces a universal
+(Apple Silicon + Intel) build you can download from the
+[CI run's artifacts](https://github.com/Milanpatel35/Perch/actions/workflows/ci.yml?query=branch%3Adev).
+It is **unsigned**, so macOS will want a right-click → Open the first time.
+It is a build, not a release: artifacts expire after 30 days, and the signed,
+notarised `.dmg` arrives with the certificate.
+
+**Homebrew** (recommended once released)
 
 ```bash
 brew install --cask perch
 ```
 
-**Direct download**
-
-Grab the latest signed and notarised `.dmg` from
-[Releases](https://github.com/<org>/perch/releases/latest), drag to
-Applications, launch.
-
 **Build from source**
 
 ```bash
-git clone https://github.com/<org>/perch.git
+git clone https://github.com/Milanpatel35/Perch.git
 cd perch
 make bootstrap
 make run
 ```
 
 Requires macOS 13.0 or later and Xcode 16+.
+
+**The website** lives in [`Website/`](Website/) and deploys to
+<https://milanpatel35.github.io/Perch/>. Run it locally with `make site`,
+which serves it on <http://localhost:8000>. It is a hand-written static site
+— no framework, no bundler — so anyone who can write HTML can fix a typo in
+it. The plan for it is [docs/WEBSITE-PLAN.md](docs/WEBSITE-PLAN.md).
 
 ## How it compares
 

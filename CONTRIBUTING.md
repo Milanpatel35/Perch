@@ -99,6 +99,34 @@ bug report. Sign it accordingly.
 
 `Co-Authored-By:` for a **human** pair is welcome and encouraged.
 
+## On localisable text
+
+Issue #16 audited this, and the finding is worth keeping because the obvious
+grep is misleading.
+
+**`Text("Shelf")` is already localisable.** SwiftUI's `Text` takes a
+`LocalizedStringKey`, so a literal in a view is looked up, not hardcoded. The
+same is true of `Toggle`, `Button`, `Picker` and `Label` titles. Searching
+for `Text("` and "fixing" the results achieves nothing.
+
+The three places that genuinely need care:
+
+1. **A plain `String` that a person reads.** An `NSMenuItem` title, an
+   accessibility label built as a `String`, anything handed to AppKit. Those
+   need `String(localized:)` — nothing does it for you.
+2. **`Text(someVariable)`.** Not localised, and usually correct: a file name,
+   a song title and a pasted string must not be translated. Leave them.
+3. **Anything user-facing in `PerchCore`.** Don't. `String(localized:)`
+   resolves against the bundle of the module it is written in, and Core is a
+   framework with no string catalog — English held there can never be
+   translated, however correctly it is spelled. Core owns what a thing *is*;
+   the interface owns what it is *called*. `ShelfConversion` and
+   `ShelfConversionError` are the worked example.
+
+And what must **never** be localised: bundle identifiers, notification names,
+pasteboard types, defaults keys, and `ActivityID`s. They look like strings
+and they are protocol.
+
 ## Pull requests
 
 Before you open one:
@@ -106,6 +134,15 @@ Before you open one:
 ```bash
 make lint             # must pass
 make test             # must pass
+```
+
+If you changed anything the island draws, re-render the website's
+screenshots too — they are rendered from the app's own views, so they go
+stale the moment a view changes:
+
+```bash
+make screenshots      # writes Website/assets/img/shots/
+make site             # serve the site on :8000 and look at it
 ```
 
 Then:
