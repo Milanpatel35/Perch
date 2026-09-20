@@ -323,3 +323,12 @@ p a:not(.btn):not(.pillbtn),
 .ans a,
 .legal a,
 td a{text-decoration:underline;text-underline-offset:2px}
+
+/* The pre-1.0 notice under the download button.
+   A dead download button with nothing said about it is the one thing that
+   would make the "honest one" position look like a pose. */
+.prerelease{
+  margin:14px 0 0;font-size:.84rem;line-height:1.55;
+  color:var(--sub);text-align:left;
+}
+.prerelease a{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
