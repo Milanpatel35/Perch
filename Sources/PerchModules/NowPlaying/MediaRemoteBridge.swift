@@ -86,9 +86,10 @@ final class MediaRemoteBridge {
     /// Opens the framework and resolves the symbols. Called on activation,
     /// never at launch.
     func open() {
-        guard handle == nil else { return }
-        guard let handle = dlopen(Self.frameworkPath, RTLD_LAZY) else { return }
-        self.handle = handle
+        if handle == nil {
+            handle = dlopen(Self.frameworkPath, RTLD_LAZY)
+        }
+        guard handle != nil else { return }
 
         getInfo = symbol("MRMediaRemoteGetNowPlayingInfo")
         register = symbol("MRMediaRemoteRegisterForNowPlayingNotifications")
@@ -113,8 +114,22 @@ final class MediaRemoteBridge {
         isRegistered = false
     }
 
-    /// Closes the framework handle. After this the bridge is inert and
-    /// `isAvailable` is false until `open()` is called again.
+    /// Makes the bridge inert. After this `isAvailable` is false until
+    /// `open()` is called again.
+    ///
+    /// **The handle is deliberately not `dlclose`d.** MediaRemote installs
+    /// process-wide state when it is registered for notifications, and
+    /// unloading the image out from under that crashes on a second
+    /// enable/disable cycle — which is a thing a person does by flicking a
+    /// switch in Preferences twice, and which macOS 14 does reliably enough
+    /// for CI to catch it.
+    ///
+    /// Keeping one handle to a system framework for the life of the process
+    /// costs nothing: the image is shared, it is already resident for every
+    /// other process using it, and none of it runs. What actually matters for
+    /// "an off module costs nothing" is below — the registration is dropped
+    /// and every function pointer goes, so there is no path back into the
+    /// framework at all (TC-MED-007).
     func close() {
         stopListening()
         getInfo = nil
@@ -124,11 +139,6 @@ final class MediaRemoteBridge {
         setElapsed = nil
         getClient = nil
         clientBundleID = nil
-
-        if let handle {
-            dlclose(handle)
-            self.handle = nil
-        }
     }
 
     // MARK: - Reading
