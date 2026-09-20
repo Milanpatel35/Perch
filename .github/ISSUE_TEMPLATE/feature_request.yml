@@ -1,0 +1,33 @@
+name: Feature request
+description: Suggest something new
+labels: ["enhancement", "needs triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve
+      description: Describe the situation, not the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you have in mind
+  - type: dropdown
+    id: competitors
+    attributes:
+      label: Do other notch apps have this?
+      options:
+        - "Yes, several"
+        - "Yes, one"
+        - "No, this would be new"
+        - "Not sure"
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I read docs/PLAN.md and this is not already on the roadmap
+          required: true
+        - label: This can be switched off and would cost nothing when off
+          required: true

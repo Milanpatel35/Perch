@@ -1,0 +1,27 @@
+# Generated project — edit project.yml instead
+*.xcodeproj
+*.xcworkspace
+!*.xcodeproj/project.xcworkspace
+
+# Build
+build/
+DerivedData/
+.build/
+*.dmg
+*.zip
+
+# SPM
+.swiftpm/
+Package.resolved
+
+# macOS
+.DS_Store
+
+# Secrets
+.env
+*.p12
+*.provisionprofile
+Scripts/notarize.local.sh
+
+# Snapshot failures
+Tests/**/__Snapshots__/**/*.failure.png

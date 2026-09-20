@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - run: brew install swiftlint swift-format
+      - run: make lint
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-14, macos-15]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: .build
+          key: spm-${{ matrix.os }}-${{ hashFiles('project.yml') }}
+      - run: brew install xcodegen
+      - run: make bootstrap
+      - run: make test
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: snapshot-failures-${{ matrix.os }}
+          path: Tests/**/__Snapshots__/**/*.failure.png

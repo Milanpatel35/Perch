@@ -1,0 +1,11 @@
+/* Island */
+"island.collapsed.accessibilityLabel" = "Perch island";
+"island.expanded.accessibilityLabel" = "Perch island, expanded";
+
+/* Permissions */
+"permission.calendar.reason" = "Perch needs calendar access to show your next meeting in the notch. Nothing leaves your Mac.";
+"permission.accessibility.reason" = "Perch needs accessibility access to replace the system volume and brightness overlays.";
+
+/* Empty states */
+"shelf.empty" = "Drag a file to the top of the screen to park it here.";
+"clipboard.empty" = "Anything you copy will show up here.";
