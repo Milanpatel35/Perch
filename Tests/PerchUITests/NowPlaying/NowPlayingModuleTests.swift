@@ -93,6 +93,26 @@ final class NowPlayingModuleTests: XCTestCase {
         XCTAssertTrue(island.state.presentation.isIdle)
     }
 
+    func test_TC_MED_007_theModuleSurvivesBeingSwitchedOnAndOffRepeatedly() {
+        // Somebody flicking the switch in Preferences. This used to crash on
+        // the second cycle: the bridge `dlclose`d MediaRemote, and unloading
+        // that image out from under its process-wide registration takes the
+        // app with it. Cheap to test, and the kind of bug a user finds in
+        // about ten seconds.
+        let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
+        let service = NowPlayingService(island: island)
+
+        for _ in 0..<4 {
+            service.activate()
+            XCTAssertTrue(service.isActive)
+            service.deactivate()
+            XCTAssertFalse(service.isActive)
+        }
+
+        XCTAssertNil(service.snapshot)
+        XCTAssertTrue(island.state.presentation.isIdle)
+    }
+
     func test_TC_MED_007_deactivatingTwiceIsSafe() {
         let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
         let service = NowPlayingService(island: island)

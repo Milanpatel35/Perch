@@ -50,6 +50,11 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
   AppKit imports inside `PerchCore` and tool attribution anywhere.
 
 ### Fixed
+- Switching the Now Playing module off and on twice crashed the app. The
+  MediaRemote bridge `dlclose`d the framework, and unloading that image out
+  from under its process-wide notification registration is not survivable.
+  The handle is now kept for the life of the process; what teardown actually
+  needs — dropping the registration and every function pointer — is unchanged.
 - `.swiftlint.yml` custom rules used `include:` where SwiftLint expects
   `included:`, so the "PerchCore must stay UI-free" rule silently applied to
   every file in the repository instead of to Core.
