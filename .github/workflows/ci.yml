@@ -48,3 +48,61 @@ jobs:
         with:
           name: snapshot-failures-${{ matrix.os }}
           path: Tests/**/__Snapshots__/**/*.failure.png
+
+  # ---------------------------------------------------------------------
+  # A downloadable build for every commit.
+  #
+  # Perch has no Developer ID certificate yet, so `release.yml` — which
+  # signs, notarises and staples — cannot run. That is not a reason to have
+  # nothing to download: an unsigned build is still testable by anyone
+  # willing to right-click → Open once, and it means a bug report can say
+  # "build 143" rather than "the version I cloned on Tuesday".
+  #
+  # This is deliberately NOT a release. It is an artifact, it expires, and
+  # the README and the website both say plainly that the signed download
+  # arrives with the certificate.
+  # ---------------------------------------------------------------------
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use the newest Xcode on the runner
+        run: |
+          latest=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
+          sudo xcode-select -s "$latest"
+          xcodebuild -version
+      - run: brew install xcodegen
+      - run: xcodegen generate
+
+      - name: Build Release
+        run: |
+          set -o pipefail
+          xcodebuild -project Perch.xcodeproj -scheme Perch \
+            -configuration Release -destination 'platform=macOS' \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO ENABLE_HARDENED_RUNTIME=NO \
+            build
+
+      - name: Check it is a universal binary
+        run: |
+          binary=build/DerivedData/Build/Products/Release/Perch.app/Contents/MacOS/Perch
+          lipo -info "$binary"
+          # Release builds both slices; a single-architecture release build
+          # means ONLY_ACTIVE_ARCH leaked out of the Debug configuration.
+          lipo -info "$binary" | grep -q "arm64" || exit 1
+
+      - name: Zip it
+        run: |
+          cd build/DerivedData/Build/Products/Release
+          version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" \
+            Perch.app/Contents/Info.plist)
+          ditto -c -k --keepParent Perch.app \
+            "$GITHUB_WORKSPACE/Perch-$version-unsigned.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Perch-unsigned-${{ github.sha }}
+          path: Perch-*-unsigned.zip
+          if-no-files-found: error
+          retention-days: 30
