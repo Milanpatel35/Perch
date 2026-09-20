@@ -94,6 +94,22 @@ loud in its own source:
 | Clear-on-quit toggle | DL | Off by default |
 | Stack badge with count when collapsed | DL NN | |
 
+**Status — shipped in 0.3.0.** Drag-to-the-notch drop target, holding across
+app switches and relaunches, drag back out to any app, folders as single
+items, text and image clippings, the share sheet (which is where AirDrop
+lives — there is no separate AirDrop API and there does not need to be),
+HEIC/PNG/TIFF/WebP → JPEG/PNG/HEIC and MOV → MP4 conversion, clear-on-quit
+(off by default), and the stack badge.
+
+Conversion uses ImageIO and AVFoundation only. No ffmpeg, no bundled binary,
+nothing extra to notarise — which is why the conversion list stops where it
+does, and why the feature costs the download nothing. There is a test that
+asserts no ffmpeg-shaped library is linked into the process.
+
+Files are **copied** into Perch's own folder, never moved. The original stays
+where you dragged it from. That is `TC-SHF-002`, and it is checked at the one
+place that could break it.
+
 ## 3. Clipboard history — P0 ★
 
 The single biggest gap in the paid field. NotchNook is $25 and does not have
@@ -110,6 +126,13 @@ this. DynamicLake's "clipboard" is file clips, not text history.
 | Paste as plain text modifier | ★ | ⌥ on select |
 | **OCR on copied images** | NB | NotchBay's tray reads text out of a copied screenshot. On-device Vision framework, no network |
 | Storage inside the app container only | ★ | See `TEST-PLAN.md` TC-PRV-003 |
+
+**Where "the container" is.** Perch is not sandboxed — it reads pasteboard
+changes, drives the Accessibility API and reads IOKit sensors, none of which
+is possible inside the App Sandbox. So the container is
+`~/Library/Application Support/app.perch.Perch/`, and everything the shelf and
+the clipboard keep stays inside it. The trade is stated plainly in the
+entitlements file: no sandbox, no network, and the source is right there.
 
 NotchBay caps its tray at 60 clips. Ours is configurable and defaults to 200.
 

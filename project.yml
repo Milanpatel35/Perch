@@ -124,6 +124,9 @@ targets:
     dependencies:
       - target: PerchUI
       - target: PerchCore
+      # Module tests set and reset preferences, so the test bundle links the
+      # same defaults library the modules do.
+      - package: Defaults
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
