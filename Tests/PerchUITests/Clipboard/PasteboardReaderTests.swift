@@ -22,7 +22,10 @@ final class PasteboardReaderTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
-        pasteboard.releaseGlobally()
+        // Built inline rather than through the `pasteboard` property:
+        // teardown is not main-actor isolated on every toolchain, and the
+        // property is.
+        NSPasteboard(name: .init(boardName)).releaseGlobally()
         try super.tearDownWithError()
     }
 
