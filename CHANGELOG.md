@@ -8,6 +8,13 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
+Nothing yet. Next up is Phase 2.2 — the shelf and the clipboard.
+
+## [0.2.0] — 2026-09-20
+
+First release with something on screen. The island exists, it moves, and one
+of the eighteen modules is in it.
+
 ### Added
 - **Now Playing** (module 1). Artwork, title and artist beside the notch, a
   visualiser that stops dead on pause, expanded transport with a working seek
@@ -86,6 +93,8 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 - **Phase 1 of `docs/PLAN.md` is complete.** The island is on screen, at
   `.statusBar + 1`, centred on the notch, and collapses and expands with the
   shared motion tokens.
+
+[0.2.0]: https://github.com/Milanpatel35/Perch/releases/tag/v0.2.0
 
 [Keep a Changelog]: https://keepachangelog.com/en/1.1.0/
 [Semantic Versioning]: https://semver.org/spec/v2.0.0.html
