@@ -12,8 +12,12 @@ import XCTest
 @MainActor
 final class ShelfServiceTests: XCTestCase {
 
-    private var directory = URL(fileURLWithPath: NSTemporaryDirectory())
-    private var desktop = URL(fileURLWithPath: NSTemporaryDirectory())
+    // `nonisolated(unsafe)` because `setUpWithError` is not main-actor
+    // isolated, and the current compiler infers an isolation for the override
+    // that the macOS 14 one does not. Safe in fact: XCTest runs a test case's
+    // setup, body and teardown serially, and nothing else can see these.
+    nonisolated(unsafe) private var directory = URL(fileURLWithPath: NSTemporaryDirectory())
+    nonisolated(unsafe) private var desktop = URL(fileURLWithPath: NSTemporaryDirectory())
 
     override func setUpWithError() throws {
         try super.setUpWithError()
