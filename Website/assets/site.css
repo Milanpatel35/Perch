@@ -86,7 +86,11 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:100;padding:10px
   -webkit-backdrop-filter:saturate(180%) blur(20px);
 }
 .brand{display:flex;align-items:center;gap:9px;font-weight:600;letter-spacing:-.02em}
-.brand i{display:block;width:26px;height:12px;background:var(--ink);border-radius:0 0 7px 7px}
+/* The mark. Was a CSS rectangle pretending to be a notch; it is the real
+   logo now — a peacock on a perch, inside a medallion whose top edge is cut
+   by the notch. Drawn in Resources/Logo and shared with the app icon, so the
+   site and the menu bar wear the same bird. */
+.brand img{display:block;width:28px;height:28px}
 .navlinks{display:flex;gap:24px;margin-left:auto;font-size:.9rem;color:var(--sub)}
 .navlinks a:hover{color:var(--ink)}
 @media(max-width:780px){.navlinks{display:none}}

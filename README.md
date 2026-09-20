@@ -18,7 +18,7 @@ between states. No video, no install.
 [![macOS 13+](https://img.shields.io/badge/macOS-13%2B-black.svg)]()
 [![Universal](https://img.shields.io/badge/arch-Apple%20Silicon%20%2B%20Intel-black.svg)]()
 
-[**Website**](https://milanpatel35.github.io/Perch/) · [**Download**](https://github.com/Milanpatel35/Perch/releases/latest) · [Features](#what-it-does) · [Why Perch](#how-it-compares) · [Contributing](CONTRIBUTING.md) · [Roadmap](docs/PLAN.md) · [Full feature list](docs/FEATURES.md)
+[**Website**](https://milanpatel35.github.io/Perch/) · [**Download**](https://github.com/Milanpatel35/Perch/releases/download/build-0.3.0/Perch-0.3.0-unsigned.zip) · [Features](#what-it-does) · [Why Perch](#how-it-compares) · [Contributing](CONTRIBUTING.md) · [Roadmap](docs/PLAN.md) · [Full feature list](docs/FEATURES.md)
 
 </div>
 
@@ -65,16 +65,20 @@ and nobody has built the camera out past a plain mirror.
 
 ## Install
 
-> **Pre-1.0.** There is no published release yet — Phase 1 and the first
-> module are done, the rest of `docs/PLAN.md` is not. The Homebrew cask and
-> the `.dmg` below go live with the first tagged release; until then, build
-> from source. The site says the same thing rather than offering a download
-> that is not there.
+> **Pre-1.0.** Three of the eighteen modules are built — Now Playing, the
+> Shelf and the Clipboard — plus the island itself. The rest of
+> `docs/PLAN.md` is not done, and the Homebrew cask goes live with the first
+> signed release. The feature table below is what 1.0 is aiming at.
 
-**Download the app** — [latest release](https://github.com/Milanpatel35/Perch/releases/latest)
+**Download the app** — [Perch 0.3.0, universal](https://github.com/Milanpatel35/Perch/releases/download/build-0.3.0/Perch-0.3.0-unsigned.zip)
 
-Signed, notarised and stapled `.dmg`. Drag to Applications and launch;
-Gatekeeper opens it without a warning.
+Apple Silicon and Intel, macOS 13+. **Not yet signed**: macOS will refuse it
+on a double-click, so right-click the app → Open and confirm once. You only
+do that the first time, and it stops once there is a Developer ID certificate
+to sign with — at which point this becomes a notarised `.dmg` that Gatekeeper
+opens without a word.
+
+[All builds](https://github.com/Milanpatel35/Perch/releases).
 
 **Latest build, right now** — every commit on `dev` produces a universal
 (Apple Silicon + Intel) build you can download from the
