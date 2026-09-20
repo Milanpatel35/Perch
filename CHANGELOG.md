@@ -9,6 +9,11 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 ## [Unreleased]
 
 ### Added
+- **Real screenshots on the website.** `IslandSnapshots` renders the app's
+  own `IslandRootView` into PNGs — the shelf and the clipboard pictures on
+  the site are the running UI, not mockups, and they cannot drift from what
+  ships. It doubles as the groundwork for the snapshot cases in the test
+  plan.
 - **A logo.** A peacock perched inside a medallion whose top edge is cut by
   the notch — drawn in the register of Indian folk painting: heavy outlines,
   flat fills, no gradients, and pattern used as structure. It is the app
