@@ -40,7 +40,7 @@ final class FileConverterTests: XCTestCase {
     // MARK: - TC-SHF-011
 
     func test_TC_SHF_011_heicBecomesAValidJpeg() async throws {
-        let source = try makeImage(named: "photo", type: .heic)
+        let source = try Self.makeImage(named: "photo", type: .heic, in: directory)
 
         let output = try await FileConverter.convert(
             source,
@@ -59,7 +59,7 @@ final class FileConverterTests: XCTestCase {
     }
 
     func test_TC_SHF_011_theOriginalIsUntouched() async throws {
-        let source = try makeImage(named: "keepme", type: .png)
+        let source = try Self.makeImage(named: "keepme", type: .png, in: directory)
         let before = try Data(contentsOf: source)
 
         _ = try await FileConverter.convert(source, using: .toJPEG, into: directory)
@@ -71,7 +71,8 @@ final class FileConverterTests: XCTestCase {
     }
 
     func test_TC_SHF_011_exifOrientationSurvivesTheConversion() async throws {
-        let source = try makeImage(named: "sideways", type: .png, orientation: 6)
+        let source = try Self.makeImage(
+            named: "sideways", type: .png, orientation: 6, in: directory)
 
         let output = try await FileConverter.convert(
             source,
@@ -87,7 +88,7 @@ final class FileConverterTests: XCTestCase {
     }
 
     func test_convertingTwiceNeverOverwritesTheFirstResult() async throws {
-        let source = try makeImage(named: "twice", type: .png)
+        let source = try Self.makeImage(named: "twice", type: .png, in: directory)
 
         let first = try await FileConverter.convert(source, using: .toJPEG, into: directory)
         let second = try await FileConverter.convert(source, using: .toJPEG, into: directory)
@@ -100,7 +101,7 @@ final class FileConverterTests: XCTestCase {
     // MARK: - TC-SHF-012
 
     func test_TC_SHF_012_movBecomesAPlayableMp4() async throws {
-        let source = try await makeSilentMovie(named: "clip")
+        let source = try await Self.makeSilentMovie(named: "clip", in: directory)
 
         let output = try await FileConverter.convert(
             source,
@@ -110,12 +111,24 @@ final class FileConverterTests: XCTestCase {
 
         XCTAssertEqual(output.pathExtension, "mp4")
 
-        let asset = AVURLAsset(url: output)
-        let tracks = try await asset.loadTracks(withMediaType: .video)
-        XCTAssertFalse(tracks.isEmpty, "the MP4 has no video track")
+        let (videoTracks, seconds) = try await Self.inspect(output)
+        XCTAssertGreaterThan(videoTracks, 0, "the MP4 has no video track")
+        XCTAssertGreaterThan(seconds, 0)
+    }
 
+    /// Reads what the MP4 turned out to be.
+    ///
+    /// `nonisolated`, and returning numbers rather than the tracks, on
+    /// purpose: `[AVAssetTrack]` is not `Sendable`, so handing it back to a
+    /// main-actor test is a boundary crossing the compiler is right to
+    /// refuse. Only the counts come out.
+    nonisolated private static func inspect(
+        _ url: URL
+    ) async throws -> (videoTracks: Int, seconds: Double) {
+        let asset = AVURLAsset(url: url)
+        let tracks = try await asset.loadTracks(withMediaType: .video).count
         let duration = try await asset.load(.duration)
-        XCTAssertGreaterThan(duration.seconds, 0)
+        return (tracks, duration.seconds)
     }
 
     func test_TC_SHF_012_noFfmpegIsLinked() {
@@ -151,10 +164,15 @@ final class FileConverterTests: XCTestCase {
 
     // MARK: - Fixtures
 
-    private func makeImage(
+    /// `static` and `nonisolated`: these hold non-Sendable CoreGraphics and
+    /// AVFoundation objects, and an instance method would send `self` — a
+    /// main-actor `XCTestCase` — across the boundary with them. Only the
+    /// directory goes in and only a URL comes out, and both are `Sendable`.
+    nonisolated private static func makeImage(
         named name: String,
         type: UTType,
-        orientation: Int? = nil
+        orientation: Int? = nil,
+        in directory: URL
     ) throws -> URL {
         let width = 64
         let height = 48
@@ -192,7 +210,10 @@ final class FileConverterTests: XCTestCase {
     /// Silent on purpose — writing an audio track here would test
     /// `AVAssetWriter` rather than the converter. "Audio track intact" is on
     /// the manual checklist, where a real recording can be used.
-    private func makeSilentMovie(named name: String) async throws -> URL {
+    nonisolated private static func makeSilentMovie(
+        named name: String,
+        in directory: URL
+    ) async throws -> URL {
         let url = directory.appendingPathComponent("\(name).mov")
         let writer = try AVAssetWriter(outputURL: url, fileType: .mov)
 
