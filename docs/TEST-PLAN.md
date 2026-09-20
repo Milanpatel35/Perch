@@ -102,6 +102,13 @@ is playing something.
 | TC-SHF-012 | U | Convert MOV to MP4 | Output plays, audio track intact, no ffmpeg dependency linked |
 | TC-SHF-013 | U | Convert an unsupported type | Refused with a readable message, not a silent no-op |
 | TC-SHF-014 | E | Conversion of a 2GB video | Runs off the main thread, island stays responsive, progress shown |
+| TC-SHF-015 | U | No ffmpeg-shaped library is linked | Nothing matching ffmpeg / libav / avcodec / x264 is loaded into the process |
+
+**On TC-SHF-012.** The automated half converts a generated, video-only
+QuickTime file and checks the output has a video track and a duration.
+"Audio track intact" needs a real recording and is on the manual checklist
+below — writing an audio track in the fixture would test `AVAssetWriter`
+rather than the converter.
 
 ## CLP — clipboard history
 
@@ -335,4 +342,8 @@ the two features the launch rests on:
 - [ ] System stats checked against Activity Monitor side by side for ten
       minutes — numbers must agree, not merely look plausible
 - [ ] Network counters checked across a VPN connect/disconnect
+- [ ] A real screen recording with sound converted MOV → MP4, and the audio
+      track plays in the output (the automated half of TC-SHF-012 is silent)
+- [ ] A 2GB video converted: island stays responsive, progress moves,
+      the file plays (TC-SHF-014)
 - [ ] Weather and public-IP confirmed off in a fresh install (TC-PRV-005)

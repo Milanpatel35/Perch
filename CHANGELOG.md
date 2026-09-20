@@ -8,7 +8,23 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Nothing yet. Next up is Phase 2.2 — the shelf and the clipboard.
+### Added
+- **Shelf** (module 2). Drag a file to the notch and it waits there: across
+  app switches, Space changes and relaunches. Drag it back out to anywhere.
+  Folders count as one item, text and image selections become clippings, and
+  the share sheet — which is where AirDrop lives — is one click away.
+- **File conversion in the shelf.** HEIC, PNG, TIFF and WebP to JPEG, PNG or
+  HEIC; MOV to MP4. ImageIO and AVFoundation only: no ffmpeg, no bundled
+  binary, nothing extra to notarise. There is a test that asserts no
+  ffmpeg-shaped library is linked into the process.
+- The island is a drop target whatever is currently on it, so dragging a file
+  to the notch works while music is playing.
+
+### Notes
+- Files are **copied** into Perch's own folder, never moved. The original
+  stays where you dragged it from.
+- Clear-on-quit is **off** by default. A shelf that empties itself without
+  being asked has lost somebody's file.
 
 ## [0.2.0] — 2026-09-20
 

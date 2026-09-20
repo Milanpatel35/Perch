@@ -1,5 +1,6 @@
 import PerchCore
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// Everything the panel draws.
 ///
@@ -64,6 +65,16 @@ public struct IslandRootView: View {
         .onTapGesture {
             controller.send(.clicked)
         }
+        // The island is a drop target whatever is currently on it. Dragging
+        // a file to the notch has to work while music is playing, which
+        // means the handler belongs here rather than inside the shelf's own
+        // view — that view does not exist until the shelf is presented
+        // (TC-SHF-001).
+        .onDrop(of: Self.acceptedDropTypes, isTargeted: dropTargeted) { providers in
+            guard let shelf = modules.shelf else { return false }
+            Task { await shelf.accept(providers) }
+            return true
+        }
         .animation(motion.animation(for: controller.transition), value: size)
         .animation(
             motion.animation(for: controller.transition),
@@ -71,6 +82,29 @@ public struct IslandRootView: View {
         )
         .accessibilityElement(children: .contain)
         .accessibilityLabel(accessibilityLabel)
+    }
+
+    /// What the island will take from a drag. Files first: a drag out of
+    /// Finder carries a file URL *and* a plain-text copy of its path, and
+    /// accepting the text would turn every dropped file into a clipping.
+    private static let acceptedDropTypes: [UTType] = [.fileURL, .image, .text]
+
+    /// Reports drag-hover straight to the shelf, which is what opens the drop
+    /// target. Written as a binding rather than an `onChange` because
+    /// `onChange(of:perform:)` is deprecated on newer SDKs and its
+    /// replacement does not exist on the macOS 13 floor this app builds for.
+    private var dropTargeted: Binding<Bool> {
+        Binding(
+            get: { modules.shelf?.isDropTarget ?? false },
+            set: { isTargeted in
+                guard let shelf = modules.shelf else { return }
+                if isTargeted {
+                    shelf.beginDrag()
+                } else {
+                    shelf.endDrag()
+                }
+            }
+        )
     }
 
     private var shape: NotchShape {

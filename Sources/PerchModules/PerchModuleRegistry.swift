@@ -17,6 +17,7 @@ public enum PerchModuleRegistry {
     @MainActor
     public static func registerAll(in host: ModuleHost, island: IslandController) {
         host.register(NowPlayingService(island: island))
+        host.register(ShelfService(island: island))
     }
 
     /// The Preferences pane for a module, if it has one yet.
@@ -29,6 +30,17 @@ public enum PerchModuleRegistry {
         in host: ModuleHost
     ) -> AnyView? {
         switch module {
+        case .shelf:
+            host.service(ShelfService.self).map { shelf in
+                AnyView(
+                    ShelfSettingsView(
+                        itemCount: shelf.store.count,
+                        byteCount: shelf.store.byteCount,
+                        directory: ShelfService.defaultDirectory,
+                        onClear: { shelf.clearAll() }
+                    )
+                )
+            }
         case .nowPlaying:
             AnyView(
                 NowPlayingSettingsView(
