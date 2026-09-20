@@ -75,7 +75,8 @@ final class NowPlayingModuleTests: XCTestCase {
 
     func test_TC_MED_007_switchingTheModuleOffLeavesNothingBehind() {
         let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
-        let service = NowPlayingService(island: island)
+        let source = FakeNowPlayingSource()
+        let service = NowPlayingService(island: island, source: source)
 
         service.activate()
         // Whether MediaRemote is available on this machine or not, switching
@@ -89,6 +90,7 @@ final class NowPlayingModuleTests: XCTestCase {
 
         XCTAssertFalse(service.isActive)
         XCTAssertNil(service.snapshot)
+        XCTAssertFalse(source.isRunning, "the source was left watching")
         XCTAssertTrue(island.queued.allSatisfy { $0.source != .nowPlaying })
         XCTAssertTrue(island.state.presentation.isIdle)
     }
@@ -100,7 +102,8 @@ final class NowPlayingModuleTests: XCTestCase {
         // app with it. Cheap to test, and the kind of bug a user finds in
         // about ten seconds.
         let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
-        let service = NowPlayingService(island: island)
+        let source = FakeNowPlayingSource()
+        let service = NowPlayingService(island: island, source: source)
 
         for _ in 0..<4 {
             service.activate()
@@ -110,12 +113,97 @@ final class NowPlayingModuleTests: XCTestCase {
         }
 
         XCTAssertNil(service.snapshot)
+        XCTAssertFalse(source.isRunning)
+        XCTAssertEqual(source.startCount, 4)
+        XCTAssertEqual(source.stopCount, 4)
         XCTAssertTrue(island.state.presentation.isIdle)
+    }
+
+    /// The module's whole job, end to end, with a source it can be given.
+    func test_TC_MED_001_playbackStartingPutsTheTrackOnTheIsland() async {
+        let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
+        let source = FakeNowPlayingSource()
+        let service = NowPlayingService(island: island, source: source)
+
+        source.snapshot = snapshot(title: "So What")
+        service.activate()
+        await settle()
+
+        XCTAssertEqual(service.snapshot?.title, "So What")
+        XCTAssertEqual(island.presented?.id, NowPlayingActivity.identifier)
+    }
+
+    func test_TC_MED_003_aTrackChangeUpdatesInPlaceRatherThanQueueingASecond() async {
+        let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
+        let source = FakeNowPlayingSource()
+        let service = NowPlayingService(island: island, source: source)
+
+        source.snapshot = snapshot(title: "So What")
+        service.activate()
+        await settle()
+
+        source.emitChange(snapshot(title: "Blue in Green"))
+        await settle()
+
+        XCTAssertEqual(service.snapshot?.title, "Blue in Green")
+        XCTAssertEqual(island.queued.filter { $0.source == .nowPlaying }.count, 1)
+    }
+
+    func test_playbackStoppingTakesTheIslandBack() async {
+        let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
+        let source = FakeNowPlayingSource()
+        let service = NowPlayingService(island: island, source: source)
+
+        source.snapshot = snapshot()
+        service.activate()
+        await settle()
+        XCTAssertNotNil(island.presented)
+
+        source.emitChange(nil)
+        await settle()
+
+        XCTAssertNil(service.snapshot)
+        XCTAssertTrue(island.state.presentation.isIdle)
+    }
+
+    func test_transportButtonsReachTheSource() {
+        let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
+        let source = FakeNowPlayingSource()
+        let service = NowPlayingService(island: island, source: source)
+
+        service.togglePlayPause()
+        service.nextTrack()
+        service.previousTrack()
+        service.seek(to: .seconds(42))
+
+        XCTAssertEqual(source.commands, [.togglePlayPause, .nextTrack, .previousTrack])
+        XCTAssertEqual(source.seeks, [.seconds(42)])
+    }
+
+    func test_aSourceThatIsUnavailableSaysSoRatherThanShowingAnEmptyIsland() {
+        let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
+        let source = FakeNowPlayingSource()
+        source.isAvailable = false
+        let service = NowPlayingService(island: island, source: source)
+
+        service.activate()
+
+        XCTAssertTrue(service.isUnavailable)
+        XCTAssertNil(island.presented)
+    }
+
+    /// Lets the service's coalescing read task run.
+    ///
+    /// Not a sleep on a duration — it yields until the task that `activate()`
+    /// or a change kicked off has had its turn.
+    private func settle() async {
+        for _ in 0..<6 { await Task.yield() }
     }
 
     func test_TC_MED_007_deactivatingTwiceIsSafe() {
         let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
-        let service = NowPlayingService(island: island)
+        let source = FakeNowPlayingSource()
+        let service = NowPlayingService(island: island, source: source)
 
         service.activate()
         service.deactivate()
@@ -128,7 +216,8 @@ final class NowPlayingModuleTests: XCTestCase {
         let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
         let switchboard = ModuleSwitchboard()
         let host = ModuleHost(switchboard: switchboard, island: island)
-        let service = NowPlayingService(island: island)
+        let source = FakeNowPlayingSource()
+        let service = NowPlayingService(island: island, source: source)
 
         switchboard.setEnabled(.nowPlaying, false)
         host.register(service)

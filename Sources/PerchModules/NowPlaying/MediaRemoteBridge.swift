@@ -22,15 +22,24 @@ import PerchCore
 /// module reports itself unavailable, and the rest of Perch is unaffected.
 /// Nothing here can fail at launch, because nothing here runs at launch.
 @MainActor
-final class MediaRemoteBridge {
+final class MediaRemoteBridge: NowPlayingSourcing {
 
-    /// Commands, as `MRMediaRemoteSendCommand` numbers them.
-    enum Command: Int {
+    /// Commands, as `MRMediaRemoteSendCommand` numbers them. The rest of the
+    /// app speaks `NowPlayingCommand`; only this file knows what `4` means.
+    private enum RawCommand: Int {
         case play = 0
         case pause = 1
         case togglePlayPause = 2
         case nextTrack = 4
         case previousTrack = 5
+
+        init(_ command: NowPlayingCommand) {
+            switch command {
+            case .togglePlayPause: self = .togglePlayPause
+            case .nextTrack: self = .nextTrack
+            case .previousTrack: self = .previousTrack
+            }
+        }
     }
 
     // The callback parameters are `@Sendable` deliberately. Without it, a
@@ -75,6 +84,7 @@ final class MediaRemoteBridge {
     private var clientBundleID: ClientBundleID?
 
     private var isRegistered = false
+    private var observers: [NSObjectProtocol] = []
 
     /// How long to wait for MediaRemote before giving up on one read.
     ///
@@ -100,7 +110,7 @@ final class MediaRemoteBridge {
 
     /// Opens the framework and resolves the symbols. Called on activation,
     /// never at launch.
-    func open() {
+    private func open() {
         if handle == nil {
             handle = dlopen(Self.frameworkPath, RTLD_LAZY)
         }
@@ -115,18 +125,78 @@ final class MediaRemoteBridge {
         clientBundleID = symbol("MRNowPlayingClientGetBundleIdentifier")
     }
 
-    /// Starts MediaRemote posting notifications. Idempotent.
-    func startListening() {
-        guard !isRegistered, let register else { return }
-        register(callbackQueue)
-        isRegistered = true
+    /// Opens the framework, registers for notifications, and calls back on
+    /// every change. Idempotent.
+    func start(onChange: @escaping @MainActor () -> Void) {
+        open()
+        guard isAvailable else { return }
+
+        if !isRegistered, let register {
+            register(callbackQueue)
+            isRegistered = true
+        }
+
+        // Event-driven. MediaRemote tells us; nothing here polls
+        // (`CLAUDE.md` §5.1). Three notifications arrive for one track
+        // change, which is why the service coalesces rather than trusting
+        // each one.
+        for name in [Self.infoDidChange, Self.isPlayingDidChange, Self.applicationDidChange] {
+            let observer = NotificationCenter.default.addObserver(
+                forName: name,
+                object: nil,
+                queue: .main
+            ) { _ in
+                MainActor.assumeIsolated { onChange() }
+            }
+            observers.append(observer)
+        }
     }
 
-    /// Stops them. Part of costing nothing when off (TC-MED-007).
-    func stopListening() {
-        guard isRegistered else { return }
-        unregister?()
-        isRegistered = false
+    /// Releases everything the module holds while it is on. Safe twice.
+    func stop() {
+        for observer in observers {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        observers.removeAll()
+
+        if isRegistered {
+            unregister?()
+            isRegistered = false
+        }
+
+        close()
+    }
+
+    /// The current state, or `nil` if nothing is playing.
+    func readSnapshot() async -> NowPlayingSnapshot? {
+        let bundleID = await withCheckedContinuation { continuation in
+            readOwningBundleID { continuation.resume(returning: $0) }
+        }
+
+        var snapshot = await withCheckedContinuation { continuation in
+            readNowPlaying(sourceBundleID: bundleID) {
+                continuation.resume(returning: $0)
+            }
+        }
+
+        // The display name is an AppKit question, so it is answered here on
+        // the main actor rather than on MediaRemote's callback queue.
+        snapshot?.sourceName = bundleID.flatMap { Self.appName(for: $0) }
+        return snapshot
+    }
+
+    private static func appName(for bundleID: String) -> String? {
+        if let running = NSRunningApplication.runningApplications(
+            withBundleIdentifier: bundleID
+        ).first {
+            return running.localizedName
+        }
+        guard
+            let url = NSWorkspace.shared.urlForApplication(
+                withBundleIdentifier: bundleID
+            )
+        else { return nil }
+        return FileManager.default.displayName(atPath: url.path)
     }
 
     /// Makes the bridge inert. After this `isAvailable` is false until
@@ -145,8 +215,7 @@ final class MediaRemoteBridge {
     /// "an off module costs nothing" is below — the registration is dropped
     /// and every function pointer goes, so there is no path back into the
     /// framework at all (TC-MED-007).
-    func close() {
-        stopListening()
+    private func close() {
         getInfo = nil
         register = nil
         unregister = nil
@@ -234,9 +303,8 @@ final class MediaRemoteBridge {
 
     // MARK: - Writing
 
-    @discardableResult
-    func perform(_ command: Command) -> Bool {
-        send?(command.rawValue, nil) ?? false
+    func perform(_ command: NowPlayingCommand) {
+        _ = send?(RawCommand(command).rawValue, nil)
     }
 
     /// Seeks. The scrubber's drag ends here.

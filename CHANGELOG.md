@@ -49,6 +49,13 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 - `project.yml` and `.swiftlint.yml`, including custom rules that block
   AppKit imports inside `PerchCore` and tool attribution anywhere.
 
+### Changed
+- Now Playing takes its source as a parameter (`NowPlayingSourcing`) rather
+  than reaching for MediaRemote directly. The module's rules are tested
+  against a fake, deterministically; the private-framework path is verified
+  on a Mac that is playing something (TC-MED-011). A unit test that opens a
+  private system framework is an integration test wearing a unit test's name.
+
 ### Fixed
 - Reading from MediaRemote could trap the process. Closures written inside
   the `@MainActor` bridge were *inferred* to be main-actor isolated, so Swift
