@@ -139,6 +139,10 @@ rather than the converter.
 | TC-FOC-003 | U | Pause and resume | Remaining time preserved exactly |
 | TC-FOC-004 | E | Mac sleeps mid-session | Elapsed wall-clock time accounted for on wake |
 | TC-FOC-005 | U | Session count across days | Streak increments once per day, not per session |
+| TC-FOC-006 | U | Module disabled mid-session | Scheduled wake-up cancelled; nothing on the island; streak kept on disk |
+| TC-FOC-007 | U | Perch relaunched with a session that was running | Not resumed silently — the timer is started on purpose |
+| TC-FOC-008 | U | Wall clock jumps backwards | No early finish, and the countdown never shows more than a whole phase |
+| TC-FOC-009 | U | Phase ends while asleep **and** the scheduled wake-up fires | Reported exactly once, not twice |
 
 ## BAT — battery and accessories
 
@@ -397,3 +401,15 @@ in response to a key, so most of it can only be judged by eye:
       stops (TC-HUD-008)
 - [ ] Second display attached: a brightness change on the *other* screen does
       not draw a HUD on the island's screen
+
+Added for the Focus module:
+
+- [ ] Start a 25-minute session and leave it: the countdown in the collapsed
+      island is smooth and correct, and Activity Monitor shows Perch using
+      effectively nothing while it runs (TC-FOC-001)
+- [ ] Close the lid mid-session for longer than the session has left: on
+      waking, the finished alert is there (TC-FOC-004)
+- [ ] Close the lid for *less* than the remaining time: the countdown is
+      correct on waking, not frozen where it was (TC-FOC-004)
+- [ ] A session finishing while music is playing takes the island (TC-FOC-002)
+- [ ] Four sessions in a row produce one day of streak, not four (TC-FOC-005)

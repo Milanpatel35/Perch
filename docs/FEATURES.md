@@ -169,6 +169,42 @@ collide with something, and the collision will be silent.
 | Survives sleep | ★ | Wall-clock accounting on wake |
 | Auto-enable macOS Focus mode during a session | ★ | Optional |
 
+**Status — shipped in 0.5.0, five of the six rows.** Configurable work and
+break lengths (25/5/15 and four sessions to the long break by default), the
+countdown in the collapsed island, session and streak counts, the finished
+alert pre-empting Now Playing, and survival of sleep.
+
+**There is no ticking anywhere in this module**, which is worth saying because
+a Pomodoro timer is the most obvious place in the whole app to put a
+one-second repeating timer. Three things make it unnecessary:
+
+- `PomodoroTimer` is wall-clock: a running phase is the `Date` it ends at, and
+  the time left is computed on demand. That *is* TC-FOC-004 — a Mac asleep for
+  forty minutes wakes to a session that is simply over, with no accounting,
+  because nothing was ever counting.
+- The countdown is drawn with `Text(timerInterval:)`, which macOS renders
+  itself. It does not exist while the island is not showing it.
+- Completion is one `Task.sleep` to the moment the phase ends, cancelled the
+  instant anything changes.
+
+One row is **not** done:
+
+- **Auto-enabling a macOS Focus during a session.** There is no interface for
+  *setting* a Focus at any level — the entitlement belongs to Apple's own apps
+  — so Perch can read which Focus is on and show it (module 6 does), but not
+  turn one on. The route that does exist is a user-written Shortcut, which
+  belongs to module 13 rather than here. Preferences says so in the pane
+  rather than leaving somebody hunting for the switch.
+
+Two decisions the table left open:
+
+- **The next phase is queued, not started.** A break that begins by itself
+  while you are still typing is a break you do not take, and a work session
+  that begins by itself is worse. The finished alert offers to start it.
+- **A session running when Perch quits is not resumed.** The timer is a thing
+  you start on purpose, and silently resuming one from yesterday is worse than
+  forgetting it.
+
 ## 5. Calendar and meetings — P0
 
 | Capability | Comes from | Notes |
