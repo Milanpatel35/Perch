@@ -63,6 +63,22 @@ final class IslandControllerTests: XCTestCase {
 
     func test_TC_ISL_015_onlyOneCollapseIsEverPending() async {
         let recorder = SleepRecorder()
+
+        // The callbacks are detached before this test returns, and that is
+        // not tidiness. The controller's pending sleep is cancelled when the
+        // controller deallocates, which happens at some point *after* the
+        // test has finished — and a callback still holding an expectation
+        // then calls `fulfill()` on a finished test. XCTest raises
+        // NSInternalInconsistencyException from whatever thread that lands
+        // on, which kills the test process and takes an unrelated test's
+        // suite down with it. That is the whole explanation for a string of
+        // "crashes" in NowPlayingModuleTests and NowPlayingViewTests that
+        // had nothing to do with either.
+        defer {
+            recorder.onBegin = nil
+            recorder.onCancel = nil
+        }
+
         let first = expectation(description: "first collapse scheduled")
         let second = expectation(description: "second collapse scheduled")
         let cancelled = expectation(description: "first collapse cancelled")
@@ -85,6 +101,11 @@ final class IslandControllerTests: XCTestCase {
 
         XCTAssertEqual(recorder.begun, 2)
         XCTAssertEqual(recorder.cancellations, 1)
+
+        // Collapse the island so the last pending sleep is cancelled here,
+        // while the callbacks above are still the ones listening, rather
+        // than at some unpredictable moment after the test has gone.
+        controller.send(.collapseRequested)
     }
 
     func test_TC_ISL_015_anActivityWithNoTimeToLiveSchedulesNothing() {
@@ -137,8 +158,20 @@ private final class SleepRecorder: @unchecked Sendable {
     private var _begun = 0
     private var _cancellations = 0
 
-    var onBegin: ((Int) -> Void)?
-    var onCancel: ((Int) -> Void)?
+    /// Cleared by the test before it returns. A recorder that keeps calling
+    /// back after its test has finished is how one test crashes another.
+    var onBegin: ((Int) -> Void)? {
+        get { lock.withLock { _onBegin } }
+        set { lock.withLock { _onBegin = newValue } }
+    }
+
+    var onCancel: ((Int) -> Void)? {
+        get { lock.withLock { _onCancel } }
+        set { lock.withLock { _onCancel = newValue } }
+    }
+
+    private var _onBegin: ((Int) -> Void)?
+    private var _onCancel: ((Int) -> Void)?
 
     var begun: Int { lock.withLock { _begun } }
     var cancellations: Int { lock.withLock { _cancellations } }
