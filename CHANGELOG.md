@@ -8,7 +8,27 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Nothing yet. Next up is Phase 2.3 — HUDs, battery and the focus timer.
+### Added
+- **Battery and accessories** (module 7). The Mac's charge, power source and
+  time remaining; AirPods left, right and case; every mouse, keyboard and
+  trackpad that reports a level. A low warning once per discharge cycle, a
+  charging-complete announcement, and a tile on the island's home surface
+  that is where the module actually lives — the alerts are rare by design.
+  Each announcement is individually switchable, and the warning threshold is
+  configurable.
+
+  There is no timer in this module. `IOPSNotificationCreateRunLoopSource`
+  pushes the Mac's battery and `IOServiceAddMatchingNotification` pushes
+  accessory connects; the one thing nothing publishes — a level moving while
+  a device stays connected — is re-read when the island is opened rather
+  than sampled. [ADR 0004](docs/adr/0004-ioregistry-for-accessory-levels.md)
+  records why the accessory levels come from the IO registry, and what
+  happens when Apple renames the keys.
+
+### Changed
+- The Battery module needs **no permission**. `FEATURES.md` listed Bluetooth,
+  which was wrong: `CoreBluetooth` and `IOBluetooth` are what require it, and
+  this module uses neither.
 
 ## [0.4.0] — 2026-09-20
 

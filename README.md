@@ -45,7 +45,7 @@ updates.
 | **Focus** | Pomodoro timer that lives in the notch instead of stealing a window |
 | **Calendar** | Next meeting, countdown, one-click join — then mute, camera and leave without finding the window |
 | **HUDs** | Replaces the stock volume, brightness, backlight, charging and Bluetooth overlays |
-| **Battery** | Mac, AirPods, mouse, keyboard, trackpad — charge state and low alerts |
+| **Battery** | Mac, AirPods, mouse, keyboard, trackpad — charge state, time remaining, and one low warning per discharge cycle rather than one per wobble |
 | **Notifications** | Mirrored into the island, with inline reply |
 | **Camera** | Live preview under the notch. Fires automatically before a meeting so you see yourself before they do. Pin it while presenting |
 | **System stats** | CPU, GPU, memory, disk, network, temperature and fans — with alert thresholds |
@@ -65,8 +65,8 @@ and nobody has built the camera out past a plain mirror.
 
 ## Install
 
-> **Pre-1.0.** Three of the eighteen modules are built — Now Playing, the
-> Shelf and the Clipboard — plus the island itself. The rest of
+> **Pre-1.0.** Four of the eighteen modules are built — Now Playing, the
+> Shelf, the Clipboard and the Battery — plus the island itself. The rest of
 > `docs/PLAN.md` is not done, and the Homebrew cask goes live with the first
 > signed release. The feature table below is what 1.0 is aiming at.
 

@@ -80,6 +80,47 @@ if (issues !== undefined) {
     )
 }
 
+// Shared by the home page's matrix and the seven per-competitor pages, and
+// declared up here because `const` does not hoist — the matrix below is
+// written before the pages are, and would otherwise reach it in its
+// temporal dead zone.
+const escape = (value) =>
+  String(value).replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c])
+
+// ---------------------------------------------------------------------
+// The home page's matrix, from the same file the seven pages use.
+//
+// It used to be hand-written HTML sitting next to a JSON file that claimed
+// to be its source. They agreed, but only because somebody kept them
+// agreeing — and the first row added to one and not the other would have
+// been the end of that. Adding the battery row is what found it.
+// ---------------------------------------------------------------------
+
+function matrixRows(data) {
+  return data.capabilities
+    .map((capability, index) => {
+      const cells = data.apps
+        .map((app) => {
+          const value = app.values[index]
+          const classes = [app.us ? 'us' : '', value === '\u2014' ? 'n' : app.us ? 'y' : '']
+          const attribute = classes.filter(Boolean).join(' ')
+          return `<td${attribute ? ` class="${attribute}"` : ''}>${escape(value)}</td>`
+        })
+        .join('')
+      return `            <tr><th scope="row">${escape(capability)}</th>${cells}</tr>`
+    })
+    .join('\n')
+}
+
+const matrix = await comparison()
+if (matrix) {
+  html = html.replace(
+    /(<tbody data-comparison>)[\s\S]*?(<\/tbody>)/,
+    (_, open, close) => `${open}\n${matrixRows(matrix)}\n          ${close}`,
+  )
+}
+
 await writeFile(path, html)
 
 // ---------------------------------------------------------------------
@@ -94,10 +135,6 @@ await writeFile(path, html)
 // difference between an argument and a sales sheet, and the moment one of
 // these reads like a sales sheet nobody believes the rest of the site.
 // ---------------------------------------------------------------------
-
-const escape = (value) =>
-  String(value).replace(/[&<>"']/g, (c) =>
-    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c])
 
 async function comparison() {
   try {

@@ -150,6 +150,18 @@ island. **Tests:** HUD, BAT, FOC.
 
 **Done when:** the stock macOS HUD never appears again.
 
+**Status: battery done.** Module 7 shipped in 0.5.0 — the Mac's battery,
+charge state and time remaining, AirPods left/right/case, every BLE device
+that reports a level, the low warning once per discharge cycle and the
+charging-complete alert. No timer anywhere in it: IOKit pushes the Mac's
+battery and pushes accessory connects, and the one thing nothing publishes —
+a level moving while a device stays connected — is re-read when somebody
+opens the island rather than sampled. [ADR 0004](adr/0004-ioregistry-for-accessory-levels.md)
+records why the accessory levels come from the IO registry. The permission
+table was wrong about this module: it needs none.
+
+**Still to do in 2.3:** the HUD set, and the focus timer.
+
 **Also starts here: the website.** It is 24 working days (`WEBSITE-PLAN.md`
 §9) and cannot be compressed into launch week. Run it in parallel from now on.
 

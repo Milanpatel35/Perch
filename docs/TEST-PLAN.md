@@ -149,6 +149,9 @@ rather than the converter.
 | TC-BAT-003 | U | AirPods connected | Both buds plus case levels shown |
 | TC-BAT-004 | U | Accessory disconnected | Entry removed; no stale level displayed |
 | TC-BAT-005 | E | Desktop Mac with no battery | Mac battery row hidden, accessories still shown |
+| TC-BAT-006 | U | Module disabled | Power and accessory notifications removed; roster empty; nothing on the island |
+| TC-BAT-007 | U | Charger attached but not charging (battery-health hold at 80%) | No repeated announcement — the alert is keyed on the power source, not on `isCharging` |
+| TC-BAT-008 | U | Accessory reports a level of 0 | Treated as "not reporting"; the device is not listed at 0% |
 
 ## CAL — calendar and meetings
 
@@ -347,3 +350,21 @@ the two features the launch rests on:
 - [ ] A 2GB video converted: island stays responsive, progress moves,
       the file plays (TC-SHF-014)
 - [ ] Weather and public-IP confirmed off in a fresh install (TC-PRV-005)
+
+Added for the Battery module. CI runners have no battery and no Bluetooth
+accessories, so every row below is only ever checked by a person:
+
+- [ ] AirPods connected: left, right and case all shown, and the number the
+      island leads with is the lowest of the three (TC-BAT-003)
+- [ ] AirPods put back in the case: the row disappears rather than freezing
+      at its last level (TC-BAT-004)
+- [ ] Magic Mouse, Magic Keyboard and Magic Trackpad each report and are
+      classified correctly
+- [ ] Charger unplugged and replugged: one announcement each way, and none at
+      all while it sits at the battery-health hold (TC-BAT-007)
+- [ ] Run down past the threshold: one warning, and no second one when the
+      level wobbles back across it (TC-BAT-002)
+- [ ] Desktop Mac: no battery row, accessories still listed (TC-BAT-005)
+- [ ] A macOS version bump: confirm `AppleDeviceManagementHIDEventService`
+      and the `BatteryPercent*` keys still exist. If they do not, the list
+      goes empty rather than wrong — ADR 0004
