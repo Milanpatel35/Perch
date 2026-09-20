@@ -108,7 +108,9 @@ final class NowPlayingService: ObservableObject, PerchModule {
         let running = NSRunningApplication.runningApplications(
             withBundleIdentifier: bundleID
         )
-        running.first?.activate()
+        // `activate(options:)` rather than `activate()`: the no-argument
+        // spelling is newer than the macOS 13 floor this app builds against.
+        running.first?.activate(options: [.activateAllWindows])
     }
 
     // MARK: - Observation

@@ -42,9 +42,12 @@ enum AudioOutputService {
 
     /// Every device that can play sound, in the order CoreAudio reports them.
     static func outputDevices() -> [Device] {
+        // Written as closures rather than as `.filter(hasOutput)`: passing a
+        // main-actor-isolated method as a function value is inferred in the
+        // current compiler and rejected by the one on the macOS 14 runner.
         deviceIDs()
-            .filter(hasOutput)
-            .compactMap { id in
+            .filter { hasOutput($0) }
+            .compactMap { id -> Device? in
                 guard let name = name(of: id) else { return nil }
                 return Device(id: id, name: name, transport: transport(of: id))
             }
