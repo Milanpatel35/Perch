@@ -34,8 +34,10 @@
         <a href="#how">How it works</a>
         <a href="#notyet">Not yet</a>
         <a href="#faq">FAQ</a>
+        <a href="#source">Source</a>
         <a href="#price">Price</a>
       </nav>
+      <a class="ghbtn" href="https://github.com/Milanpatel35/Perch" aria-label="Perch on GitHub" title="Perch on GitHub"><svg viewBox="0 0 16 16" width="17" height="17" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg></a>
       <a class="pillbtn" href="#price">Download</a>
     </div>
   </div>
@@ -379,6 +381,59 @@
   </div>
 </section>
 
+<!-- OPEN SOURCE -->
+<section class="sec" id="source">
+  <div class="wrap">
+    <p class="eyebrow">Open source</p>
+    <h2>Don't take our word for it.<span class="soft">Read it.</span></h2>
+    <p class="lead">
+      Every claim on this page is checkable, because the whole thing is on
+      GitHub under an MIT licence — the clipboard code, the camera teardown,
+      the list of what each module is allowed to touch. There is no second
+      repository with the real version in it.
+    </p>
+
+    <div class="srcrow">
+      <a class="btn" href="https://github.com/Milanpatel35/Perch"><svg viewBox="0 0 16 16" width="17" height="17" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>Open on GitHub</span></a>
+      <a class="btn sec2" href="https://github.com/Milanpatel35/Perch/blob/dev/CONTRIBUTING.md">How to contribute</a>
+      <a class="btn sec2" href="https://github.com/Milanpatel35/Perch/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22">Good first issues</a>
+    </div>
+
+    <div class="grid3" style="margin-top:34px">
+      <div class="card">
+        <h3>Your copyright stays yours</h3>
+        <p>No contributor licence agreement to sign. You keep your copyright, and nobody can relicense the project out from under the people who built it.</p>
+      </div>
+      <div class="card">
+        <h3>The roadmap is public</h3>
+        <p><a href="https://github.com/Milanpatel35/Perch/blob/dev/docs/PLAN.md">docs/PLAN.md</a> says what is being built and in what order. <a href="https://github.com/Milanpatel35/Perch/blob/dev/docs/FEATURES.md">docs/FEATURES.md</a> records what each module does <em>and what it doesn't</em>, including the parts macOS makes impossible.</p>
+      </div>
+      <div class="card">
+        <h3>Decisions are written down</h3>
+        <p>Every awkward choice has a record in <a href="https://github.com/Milanpatel35/Perch/tree/dev/docs/adr">docs/adr</a> — why the media data comes from a private framework, why the clipboard is the one thing in the app that polls.</p>
+      </div>
+      <div class="card">
+        <h3>Build it yourself</h3>
+        <p>Three commands: clone, <span class="mono">make bootstrap</span>, <span class="mono">make run</span>. If the build you download ever disagrees with the source, the source is the one that is right.</p>
+      </div>
+      <div class="card">
+        <h3>Every commit is tested</h3>
+        <p>Lint, the full suite on two macOS versions, and a universal build — all four have to pass before anything merges. The build artefacts are downloadable from <a href="https://github.com/Milanpatel35/Perch/actions">Actions</a>.</p>
+      </div>
+      <div class="card">
+        <h3>Bug reports from odd setups</h3>
+        <p>The most useful thing you can send is a display arrangement we have never seen. Two externals with the lid shut, a rotated portrait monitor, Sidecar — that is where notch apps break.</p>
+      </div>
+    </div>
+
+    <p class="srcmeta">
+      MIT licence · version <span data-gh="version">0.3.0</span> ·
+      <span data-gh="issues">5</span> open issues ·
+      <a href="https://github.com/Milanpatel35/Perch/blob/dev/LICENSE">Read the licence</a>
+    </p>
+  </div>
+</section>
+
 <!-- PRICING -->
 <section id="price">
   <div class="wrap center">
@@ -437,7 +492,7 @@
   <div class="wrap">
     <div class="fgrid">
       <div>
-        <a class="brand" href="#top" style="margin-bottom:14px"><i></i>Perch</a>
+        <a class="brand" href="#top" style="margin-bottom:14px"><img src="assets/img/perch-mark.svg" alt="" width="28" height="28">Perch</a>
         <p style="max-width:34ch">The notch, put to work. Live activities, your clipboard, your files and your meetings — right where your eyes already are.</p>
       </div>
       <div>
