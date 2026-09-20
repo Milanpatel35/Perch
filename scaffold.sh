@@ -68,6 +68,15 @@ mkdir -p \
   .github/workflows \
   .github/ISSUE_TEMPLATE
 
+# Git does not track directories, only files. Without these, a module folder
+# that has not been filled in yet simply does not exist on a fresh clone —
+# and XcodeGen refuses to generate against a source path that is missing.
+for dir in Sources/PerchModules/*/ Sources/PerchCore/Services \
+           Tests/PerchUITests/__Snapshots__ Tests/Fixtures Website/press \
+           Website/assets Website/js/demos; do
+  [ -d "$dir" ] && touch "$dir/.gitkeep"
+done
+
 touch Sources/PerchCore/Island/.gitkeep \
       Tests/Fixtures/.gitkeep \
       Website/assets/.gitkeep \
