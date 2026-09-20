@@ -59,11 +59,15 @@ struct ShelfRow: View {
 
     private var icon: some View {
         Group {
-            if let url = item.storedURL, item.isAvailable {
-                Image(nsImage: NSWorkspace.shared.icon(forFile: url.path))
+            switch Self.icon(
+                for: item,
+                fileExists: { FileManager.default.fileExists(atPath: $0) }
+            ) {
+            case .file(let path):
+                Image(nsImage: NSWorkspace.shared.icon(forFile: path))
                     .resizable()
-            } else {
-                Image(systemName: symbolName)
+            case .symbol(let name):
+                Image(systemName: name)
                     .font(.system(size: 14))
                     .foregroundStyle(.white.opacity(0.5))
             }
@@ -71,8 +75,35 @@ struct ShelfRow: View {
         .frame(width: 22, height: 22)
     }
 
-    private var symbolName: String {
-        switch item.kind {
+    /// Which icon a row should draw.
+    ///
+    /// `NSWorkspace.icon(forFile:)` is the right answer whenever the file is
+    /// really there — it gives the document's own icon, the folder's, the
+    /// app's. Asked about a path that does **not** exist it does not fail; it
+    /// hands back a generic document icon, cheerfully, for anything. That is
+    /// how a folder on the shelf ended up looking like a file (#14).
+    ///
+    /// Takes the existence check as a parameter so the decision is testable
+    /// without a filesystem.
+    static func icon(
+        for item: ShelfItem,
+        fileExists: (String) -> Bool
+    ) -> Icon {
+        guard item.isAvailable, let path = item.storedPath, fileExists(path) else {
+            return .symbol(symbolName(for: item.kind))
+        }
+        return .file(path)
+    }
+
+    enum Icon: Equatable {
+        /// Ask the workspace for this path's own icon.
+        case file(String)
+        /// Draw this SF Symbol instead.
+        case symbol(String)
+    }
+
+    static func symbolName(for kind: ShelfItem.Kind) -> String {
+        switch kind {
         case .file: "doc"
         case .folder: "folder"
         case .text: "text.alignleft"

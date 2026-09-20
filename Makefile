@@ -1,4 +1,4 @@
-.PHONY: bootstrap build test lint fmt run release site clean
+.PHONY: bootstrap build test lint fmt run release site screenshots clean
 
 # Pretty output if xcbeautify is around, raw xcodebuild if it is not. CI
 # runners do not all ship it, and a missing formatter must not read as a
@@ -37,6 +37,22 @@ release:
 
 site:
 	cd Website && python3 -m http.server 8000
+
+# Re-render the website's screenshots from the app's own views.
+#
+# The TEST_RUNNER_ prefix is not decoration: it is how xcodebuild passes an
+# environment variable into the test process rather than into itself, and
+# without it the capture runs and writes nothing. Nobody would guess that,
+# which is why this target exists (#15).
+SHOTS ?= Website/assets/img/shots
+
+screenshots:
+	@mkdir -p $(SHOTS)
+	set -o pipefail && TEST_RUNNER_PERCH_CAPTURE_DIR="$(CURDIR)/$(SHOTS)" \
+		xcodebuild -project Perch.xcodeproj -scheme Perch \
+		-destination 'platform=macOS' \
+		test -only-testing:PerchUITests/IslandSnapshots | $(PRETTY)
+	@echo "wrote:" && ls -1 $(SHOTS)
 
 clean:
 	rm -rf build DerivedData .build Perch.xcodeproj

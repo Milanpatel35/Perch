@@ -8,6 +8,21 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
+### Fixed
+- A folder on the shelf drew a document icon (#14). `NSWorkspace` hands back
+  a generic icon for a path that is not there, cheerfully, for anything —
+  and `TC-SHF-006` only checked the model, which was right all along.
+
+### Changed
+- User-facing text moved out of `PerchCore` (#16). `String(localized:)`
+  resolves against the bundle of the module it is written in, and Core is a
+  framework with no string catalog, so English held there could never be
+  translated. Core owns what a conversion *is*; the interface owns what it is
+  *called*.
+- `make screenshots` re-renders the website's images from the app's own views
+  (#15). The `TEST_RUNNER_` prefix that makes the capture work is not
+  something anyone would guess.
+
 ### Added
 - **An open-source section on the website**, and a GitHub link in the header
   — `WEBSITE-PLAN.md` §1 listed one and it was never built. Buttons to the

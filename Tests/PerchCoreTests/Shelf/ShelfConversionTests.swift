@@ -41,21 +41,18 @@ final class ShelfConversionTests: XCTestCase {
         XCTAssertTrue(ShelfConversion.available(forFileNamed: "").isEmpty)
     }
 
-    func test_TC_SHF_013_everyRefusalHasSomethingReadableToSay() {
-        let errors: [ShelfConversionError] = [
-            .unsupportedType("archive.zip"),
-            .unreadable("half-downloaded.heic"),
-            .writeFailed("out.jpg"),
-            .cancelled
-        ]
+    func test_TC_SHF_013_everyRefusalNamesTheFileItRefused() {
+        // What a refusal *says* moved to the interface layer (issue #16) and
+        // is checked there — `String(localized:)` in a framework resolves
+        // against that framework's bundle, so English held in Core could
+        // never be translated. What Core still owes is the fact a person with
+        // four files on the shelf needs: which one it was.
+        XCTAssertEqual(ShelfConversionError.unsupportedType("archive.zip").fileName, "archive.zip")
+        XCTAssertEqual(ShelfConversionError.unreadable("broken.heic").fileName, "broken.heic")
+        XCTAssertEqual(ShelfConversionError.writeFailed("out.jpg").fileName, "out.jpg")
 
-        for error in errors {
-            XCTAssertFalse(
-                error.message.isEmpty,
-                "a silent no-op is the failure TC-SHF-013 exists to catch"
-            )
-            XCTAssertFalse(error.message.contains("Error Domain"))
-        }
+        // Cancelling is the one refusal that is not about a file.
+        XCTAssertNil(ShelfConversionError.cancelled.fileName)
     }
 
     // MARK: - The menu itself
