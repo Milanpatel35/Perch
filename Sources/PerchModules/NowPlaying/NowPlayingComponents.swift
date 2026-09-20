@@ -186,7 +186,7 @@ struct OutputDeviceButton: View {
         .menuStyle(.borderlessButton)
         .menuIndicator(.hidden)
         .fixedSize()
-        .onAppear(perform: reload)
+        .onAppear { reload() }
         .accessibilityLabel(Text("Audio output device"))
     }
 

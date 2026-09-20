@@ -163,7 +163,7 @@ final class NowPlayingService: ObservableObject, PerchModule {
 
         // The display name is an AppKit question, so it is answered here on
         // the main actor rather than on MediaRemote's callback queue.
-        snapshot?.sourceName = bundleID.flatMap(Self.appName(for:))
+        snapshot?.sourceName = bundleID.flatMap { Self.appName(for: $0) }
         return snapshot
     }
 
