@@ -143,3 +143,85 @@ final class ShelfViewTests: XCTestCase {
         )
     }
 }
+
+/// Issue #14 — a shelved folder drew a document icon.
+///
+/// `TC-SHF-006` already checked that a dropped folder is recorded with
+/// `kind == .folder`. It was, and the row still looked like a file: the model
+/// was right and the picture was wrong, which is a gap a model test cannot
+/// see. This one looks at what the row will actually draw.
+@MainActor
+final class ShelfRowIconTests: XCTestCase {
+
+    private func item(
+        kind: ShelfItem.Kind,
+        path: String? = "/container/thing",
+        available: Bool = true
+    ) -> ShelfItem {
+        ShelfItem(
+            kind: kind,
+            name: "thing",
+            storedPath: path,
+            originalPath: "/Users/someone/thing",
+            isAvailable: available
+        )
+    }
+
+    func test_issue14_aFolderWhoseCopyIsMissingDrawsAFolderNotADocument() {
+        let icon = ShelfRow.icon(for: item(kind: .folder), fileExists: { _ in false })
+
+        XCTAssertEqual(icon, .symbol("folder"))
+        XCTAssertNotEqual(
+            icon,
+            .symbol("doc"),
+            "NSWorkspace hands back a generic document icon for a path that is "
+                + "not there, which is what made a folder look like a file"
+        )
+    }
+
+    func test_issue14_everyKindFallsBackToItsOwnSymbol() {
+        let expected: [ShelfItem.Kind: String] = [
+            .file: "doc",
+            .folder: "folder",
+            .text: "text.alignleft",
+            .image: "photo"
+        ]
+
+        for (kind, symbol) in expected {
+            XCTAssertEqual(
+                ShelfRow.icon(for: item(kind: kind), fileExists: { _ in false }),
+                .symbol(symbol),
+                "\(kind) fell back to the wrong symbol"
+            )
+        }
+    }
+
+    func test_issue14_aFileThatIsReallyThereStillGetsItsOwnIcon() {
+        // The fix must not throw away the good case: a real file on disk
+        // should show the document's own icon, not a generic glyph.
+        XCTAssertEqual(
+            ShelfRow.icon(for: item(kind: .file), fileExists: { _ in true }),
+            .file("/container/thing")
+        )
+    }
+
+    func test_issue14_anUnavailableItemNeverAsksTheWorkspace() {
+        // Marked unavailable means the copy has gone. Asking the workspace
+        // about it is how the generic icon got in.
+        XCTAssertEqual(
+            ShelfRow.icon(
+                for: item(kind: .file, available: false),
+                fileExists: { _ in true }
+            ),
+            .symbol("doc")
+        )
+    }
+
+    func test_issue14_anItemWithNoStoredCopyFallsBackToItsSymbol() {
+        // A text clipping has no file until it is dragged out.
+        XCTAssertEqual(
+            ShelfRow.icon(for: item(kind: .text, path: nil), fileExists: { _ in true }),
+            .symbol("text.alignleft")
+        )
+    }
+}

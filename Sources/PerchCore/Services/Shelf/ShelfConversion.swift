@@ -20,17 +20,6 @@ public enum ShelfConversion: String, CaseIterable, Sendable, Identifiable {
 
     public var id: String { rawValue }
 
-    /// What the menu item says.
-    public var title: String {
-        switch self {
-        case .heicToJPEG: "Convert to JPEG"
-        case .toJPEG: "Convert to JPEG"
-        case .toPNG: "Convert to PNG"
-        case .toHEIC: "Convert to HEIC"
-        case .movToMP4: "Convert to MP4"
-        }
-    }
-
     /// The extension the output gets.
     public var outputExtension: String {
         switch self {
@@ -94,24 +83,30 @@ public enum ShelfConversion: String, CaseIterable, Sendable, Identifiable {
 
 /// Why a conversion could not be done.
 ///
-/// A refusal has to be readable — "not a silent no-op" is the whole of
-/// TC-SHF-013.
+/// The cases, and nothing a person reads. What the refusal *says* is in
+/// `ShelfConversion+Text.swift` alongside the views, for the reason issue #16
+/// turned up: `String(localized:)` resolves against the bundle of the module
+/// it is written in, and `PerchCore` is a framework with no string catalog of
+/// its own. English held here could never be translated.
+///
+/// It is also the rule from `CLAUDE.md` §3, applied honestly — user-facing
+/// copy is user interface.
+///
+/// A refusal still has to be readable; "not a silent no-op" is the whole of
+/// TC-SHF-013. That is now checked where the words are.
 public enum ShelfConversionError: Error, Equatable, Sendable {
     case unsupportedType(String)
     case unreadable(String)
     case writeFailed(String)
     case cancelled
 
-    public var message: String {
+    /// The name of whatever could not be converted, when there is one.
+    public var fileName: String? {
         switch self {
-        case .unsupportedType(let name):
-            "Perch can't convert \(name). macOS has no converter for that format."
-        case .unreadable(let name):
-            "\(name) couldn't be read. It may be damaged or still downloading."
-        case .writeFailed(let name):
-            "\(name) couldn't be written. Check there is free space."
+        case .unsupportedType(let name), .unreadable(let name), .writeFailed(let name):
+            name
         case .cancelled:
-            "Conversion cancelled."
+            nil
         }
     }
 }

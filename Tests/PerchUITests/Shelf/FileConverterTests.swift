@@ -257,3 +257,87 @@ final class FileConverterTests: XCTestCase {
         return url
     }
 }
+
+/// Issue #16 — the words a refusal uses, now that they live in the interface
+/// rather than in `PerchCore`.
+///
+/// `TC-SHF-013` says a conversion that cannot be done is "refused with a
+/// readable message, not a silent no-op". This is where that is checked.
+@MainActor
+final class ShelfConversionTextTests: XCTestCase {
+
+    func test_TC_SHF_013_everyRefusalHasSomethingReadableToSay() {
+        let errors: [ShelfConversionError] = [
+            .unsupportedType("archive.zip"),
+            .unreadable("half-downloaded.heic"),
+            .writeFailed("out.jpg"),
+            .cancelled
+        ]
+
+        for error in errors {
+            XCTAssertFalse(
+                error.message.isEmpty,
+                "a silent no-op is the failure TC-SHF-013 exists to catch"
+            )
+            // A message that says `Error Domain=NSCocoaErrorDomain Code=260`
+            // is a silent no-op with extra steps.
+            XCTAssertFalse(error.message.contains("Error Domain"))
+            XCTAssertFalse(error.message.contains("Code="))
+        }
+    }
+
+    func test_TC_SHF_013_aRefusalNamesTheFile() {
+        for error in [
+            ShelfConversionError.unsupportedType("archive.zip"),
+            .unreadable("archive.zip"),
+            .writeFailed("archive.zip")
+        ] {
+            XCTAssertTrue(
+                error.message.contains("archive.zip"),
+                "a person with four files on the shelf needs to know which one"
+            )
+        }
+    }
+
+    func test_issue16_everyConversionSaysWhatItConvertsTo() {
+        // The menu item says the *format*, which is not always the file
+        // extension: a .jpg is a JPEG, and "Convert to JPG" is the wrong
+        // word for it. So the check is against the format the extension
+        // belongs to, not against the extension.
+        let format = [
+            "jpg": "JPEG",
+            "png": "PNG",
+            "heic": "HEIC",
+            "mp4": "MP4"
+        ]
+
+        for conversion in ShelfConversion.allCases {
+            let expected = try? XCTUnwrap(
+                format[conversion.outputExtension],
+                "no expected wording for .\(conversion.outputExtension)"
+            )
+            XCTAssertFalse(conversion.title.isEmpty)
+            XCTAssertTrue(
+                conversion.title.contains(expected ?? "\u{0}"),
+                "\(conversion) is titled '\(conversion.title)', which does not "
+                    + "say it produces \(expected ?? "?")"
+            )
+        }
+    }
+
+    func test_issue16_conversionsToTheSameFormatReadTheSame() {
+        // `heicToJPEG` and `toJPEG` both land on JPEG. Two different menu
+        // items saying different things for the same outcome would be a
+        // wording bug the type system cannot catch.
+        let byOutput = Dictionary(grouping: ShelfConversion.allCases, by: \.outputExtension)
+
+        for (output, conversions) in byOutput {
+            let titles = Set(conversions.map(\.title))
+            XCTAssertEqual(
+                titles.count,
+                1,
+                "conversions to .\(output) are called \(titles.sorted())"
+            )
+        }
+    }
+}
