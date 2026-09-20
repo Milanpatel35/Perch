@@ -182,6 +182,10 @@ rather than the converter.
 | TC-HUD-006 | E | AirPods connected | Connect animation with the device name and battery levels |
 | TC-HUD-007 | E | Focus mode changed | HUD reflects the new mode; no HUD when the change came from Perch itself |
 | TC-HUD-008 | U | Individual HUD disabled, module still on | Only that HUD stops; the others are unaffected |
+| TC-HUD-009 | U | Module disabled | Every watcher stopped, stock overlay resumed, nothing on the island |
+| TC-HUD-010 | E | `OSDUIHelper` starts after the module is already on | Caught on the next HUD event; exactly one stock overlay appears, and none after it |
+| TC-HUD-011 | E | `DisplayServices` unavailable | Brightness switch disabled with an explanation; the other five HUDs unaffected |
+| TC-HUD-012 | U | Camera or microphone in use | Reported with the device name, without requesting either permission |
 
 ## CAM — camera
 
@@ -368,3 +372,28 @@ accessories, so every row below is only ever checked by a person:
 - [ ] A macOS version bump: confirm `AppleDeviceManagementHIDEventService`
       and the `BatteryPercent*` keys still exist. If they do not, the list
       goes empty rather than wrong — ADR 0004
+
+Added for the HUD module. The whole module is about what appears on a screen
+in response to a key, so most of it can only be judged by eye:
+
+- [ ] Volume, mute and brightness keys each show one HUD and only one — no
+      stock overlay alongside (TC-HUD-001)
+- [ ] Hold a brightness key: the bar moves continuously, does not flicker, and
+      the HUD leaves the screen when the finger comes off (TC-HUD-002)
+- [ ] Switch the module off: the stock overlay is back on the very next key
+      press (TC-HUD-003)
+- [ ] Quit Perch outright: the overlay is back. `ps -o stat` on `OSDUIHelper`
+      shows `S`, not `T`
+- [ ] Change the volume while the island is expanded: the HUD composes rather
+      than fighting (TC-HUD-004)
+- [ ] Plug and unplug the charger: one HUD each way, and none at all while the
+      Mac sits at the battery-health hold (TC-HUD-005)
+- [ ] Connect and disconnect AirPods: one HUD each way, with the device name
+      (TC-HUD-006)
+- [ ] Change a Focus from Control Centre: the HUD names it (TC-HUD-007)
+- [ ] Start a video call: the camera HUD names the device, and no Camera
+      permission prompt appears (TC-HUD-012)
+- [ ] Switch each of the six HUDs off individually and confirm only that one
+      stops (TC-HUD-008)
+- [ ] Second display attached: a brightness change on the *other* screen does
+      not draw a HUD on the island's screen

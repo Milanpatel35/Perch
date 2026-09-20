@@ -101,6 +101,16 @@ enum AccessoryScanner {
         AccessoryBattery.Levels.reported((value as? NSNumber)?.intValue)
     }
 
+    /// The marketing name of one registry entry.
+    ///
+    /// Module 6's Bluetooth HUD needs a name for a device that has just
+    /// connected, and at that moment it has no level to report yet — so it
+    /// cannot go through `accessory(from:)`, which correctly skips anything
+    /// that is not reporting one.
+    static func productName(of entry: io_registry_entry_t) -> String? {
+        properties(of: entry)["Product"] as? String
+    }
+
     private static func properties(of entry: io_registry_entry_t) -> [String: Any] {
         var unmanaged: Unmanaged<CFMutableDictionary>?
         guard

@@ -25,6 +25,28 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
   records why the accessory levels come from the IO registry, and what
   happens when Apple renames the keys.
 
+- **HUD replacement** (module 6). Six overlays in the notch instead of
+  stamped over the screen: volume and mute, display brightness, charging,
+  Bluetooth connect and disconnect, Focus — Do Not Disturb is a Focus — and a
+  camera-and-microphone-in-use indicator that needs neither permission. Each
+  is individually switchable. The macOS overlay is suspended while the module
+  is on and restored the instant it is switched off or Perch quits; nothing is
+  killed and nothing is changed on disk.
+
+  Every rule about what reaches the island lives in `HUDPolicy`, which is pure
+  — a held brightness key coalescing into one smooth HUD, a change Perch made
+  itself not being announced back, and one HUD switched off leaving the others
+  alone are all unit tests rather than things to check by eye.
+
+  Brightness and the suppression need private interfaces;
+  [ADR 0005](docs/adr/0005-private-apis-for-the-hud.md) records what is used,
+  how each half degrades, and the one cost: after the macOS overlay agent
+  starts, one stock overlay appears before Perch catches it, and none after.
+
+  **Keyboard backlight and AirDrop are not included.** macOS publishes no
+  change notification for either, at any level, so a switch for them would be
+  a switch that never does anything. Both are recorded in `FEATURES.md` §6.
+
 ### Changed
 - The Battery module needs **no permission**. `FEATURES.md` listed Bluetooth,
   which was wrong: `CoreBluetooth` and `IOBluetooth` are what require it, and
