@@ -16,10 +16,13 @@
   --bg:#f5f5f7;
   --card:#ffffff;
   --ink:#1d1d1f;
-  --sub:#86868b;
+  --sub:#6e6e73;   /* 5.07:1 on white, 4.66:1 on --bg. WCAG AA. */
   --line:#d2d2d7;
-  --blue:#0071e3;
-  --green:#30a14e;
+  --blue:#0066cc;  /* 5.57:1 on white, 5.11:1 on --bg. #0071e3 was 4.31. */
+  --blue-fill:#0066cc;  /* white text on this: 5.57:1 */
+  --red:#c00010;   /* 5.49:1 on the tinted pill. #ff453a was 2.89. */
+  --green:#1a7f37;  /* 5.08:1 on white. #30a14e was 3.32 — the ticks
+                       in the comparison table are text, not decoration. */
   --amber:#ff9f0a;
   --radius:28px;
   --shadow:0 2px 6px rgba(0,0,0,.04), 0 24px 60px -30px rgba(0,0,0,.28);
@@ -30,12 +33,12 @@
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
     --bg:#000000; --card:#151517; --ink:#f5f5f7; --sub:#86868b; --line:#2a2a2d;
-    --blue:#2997ff; --green:#32d74b;
+    --blue:#2997ff; --blue-fill:#0b62c9; --green:#32d74b; --red:#ff453a;
     --shadow:0 24px 60px -30px rgba(0,0,0,.9);
   }
 }
 :root[data-theme="dark"]{
-  --bg:#000; --card:#151517; --ink:#f5f5f7; --sub:#86868b; --line:#2a2a2d; --blue:#2997ff; --green:#32d74b;
+  --bg:#000; --card:#151517; --ink:#f5f5f7; --sub:#86868b; --line:#2a2a2d; --blue:#2997ff; --blue-fill:#0b62c9; --green:#32d74b; --red:#ff453a;
 }
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:calc(86px + env(safe-area-inset-top,0px));-webkit-text-size-adjust:100%}
@@ -88,13 +91,13 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:100;padding:10px
 .navlinks a:hover{color:var(--ink)}
 @media(max-width:780px){.navlinks{display:none}}
 .pillbtn{
-  background:var(--blue);color:#fff;border-radius:999px;padding:9px 18px;
+  background:var(--blue-fill);color:#fff;border-radius:999px;padding:9px 18px;
   font-size:.88rem;font-weight:500;white-space:nowrap;
 }
 @media(max-width:780px){.pillbtn{margin-left:auto}}
 
 /* ---------- buttons ---------- */
-.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;background:var(--blue);color:#fff;font-size:1rem;font-weight:500;transition:opacity .2s}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;background:var(--blue-fill);color:#fff;font-size:1rem;font-weight:500;transition:opacity .2s}
 .btn:hover{opacity:.86}
 .btn.sec{background:transparent;color:var(--blue);padding-left:6px;padding-right:6px}
 .btn.sec::after{content:"›";font-size:1.25em;line-height:0}
@@ -124,7 +127,17 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:100;padding:10px
   background:radial-gradient(100% 70% at 20% 0%,rgba(90,120,220,.30),transparent 60%),
              radial-gradient(90% 70% at 85% 30%,rgba(220,90,140,.22),transparent 58%);
 }
-.mb{position:absolute;top:0;left:0;right:0;height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:11px;color:rgba(255,255,255,.72);z-index:3}
+/* The mock menu bar.
+   Given a solid strip rather than sitting straight on the wallpaper
+   gradient. It reads closer to a real menu bar, and it means a contrast
+   checker can actually resolve the background underneath the text —
+   over a gradient it cannot, and reports white-on-white. */
+.mb{
+  position:absolute;top:0;left:0;right:0;height:26px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 14px;font-size:11px;
+  color:rgba(255,255,255,.92);background:#1b2432;z-index:3;
+}
 .mb .l{display:flex;gap:14px}
 .mb .l b{font-weight:600}
 .base{height:11px;background:linear-gradient(180deg,#1c1c1e,#3a3a3e);border-radius:0 0 4px 4px}
@@ -187,7 +200,7 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:100;padding:10px
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,4vw,44px)}
 @media(max-width:760px){.stats{grid-template-columns:1fr;gap:34px}}
 .stat .n{font-size:clamp(3rem,7vw,4.6rem);font-weight:700;letter-spacing:-.05em;line-height:1}
-.stat h4{margin:10px 0 8px}
+.stat h3{margin:10px 0 8px}
 .stat p{font-size:.97rem;color:var(--sub)}
 
 /* ---------- feature blocks ---------- */
@@ -209,6 +222,7 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:100;padding:10px
 /* ---------- table ---------- */
 .tablecard{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow)}
 .scroller{overflow-x:auto}
+.scroller:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 table{border-collapse:collapse;width:100%;min-width:800px;font-size:.9rem}
 th,td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
 thead th{font-weight:600;font-size:.86rem;letter-spacing:-.01em}
@@ -216,7 +230,7 @@ tbody th{font-weight:400;color:var(--sub)}
 .us{background:color-mix(in srgb,var(--blue) 7%,transparent)}
 thead .us{border-bottom:2px solid var(--blue);color:var(--blue)}
 .y{color:var(--green);font-weight:600}
-.n{color:var(--line)}
+.n{color:var(--sub)}   /* was --line: a border colour, unreadable as text */
 tbody tr:last-child th,tbody tr:last-child td{border-bottom:0}
 
 /* ---------- steps ---------- */
@@ -260,7 +274,7 @@ details .ans a{color:var(--blue)}
 footer{padding:64px 0 80px;color:var(--sub);font-size:.9rem}
 .fgrid{display:grid;grid-template-columns:1.6fr repeat(3,1fr);gap:clamp(22px,4vw,44px);margin-bottom:44px}
 @media(max-width:760px){.fgrid{grid-template-columns:1fr 1fr}.fgrid > div:first-child{grid-column:1/-1}}
-footer h5{margin:0 0 14px;font-size:.88rem;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+footer h3{margin:0 0 14px;font-size:.88rem;font-weight:600;color:var(--ink);letter-spacing:-.01em}
 footer ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
 footer a:hover{color:var(--ink)}
 .legal{border-top:1px solid var(--line);padding-top:24px;font-size:.82rem;line-height:1.6}
@@ -295,3 +309,17 @@ footer a:hover{color:var(--ink)}
   position:absolute;width:1px;height:1px;padding:0;margin:-1px;
   overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
 }
+
+/* The "Leave a call" pill. Its colour is a token so the light theme gets a
+   red that survives a contrast check and the dark theme keeps the bright
+   one, instead of one hardcoded value failing in whichever theme it was not
+   picked for. */
+.tag.r{background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--red)}
+
+/* Links inside running text carry an underline, because colour alone is not
+   a distinction (WCAG 1.4.1). Nav links, buttons and card links are
+   distinguishable by shape and position and are left alone. */
+p a:not(.btn):not(.pillbtn),
+.ans a,
+.legal a,
+td a{text-decoration:underline;text-underline-offset:2px}
