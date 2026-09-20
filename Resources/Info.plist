@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+
+	<!-- Menu-bar app: no Dock icon, no window on launch. -->
+	<key>LSUIElement</key>
+	<true/>
+
+	<key>NSHumanReadableCopyright</key>
+	<string>MIT licensed. Free forever.</string>
+
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+
+	<!--
+	  Permission strings.
+
+	  Every one of these is requested lazily, when the module that needs it is
+	  switched on, never at launch (CLAUDE.md §5.3, TC-PRV-002). The wording
+	  is the same wording the website uses — if one changes, both change.
+	-->
+	<key>NSCameraUsageDescription</key>
+	<string>Perch shows a live camera preview under the notch. No frame is ever written to disk unless you press snapshot, and the camera is released — green light off — within half a second of the island closing.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Perch transcribes speech on your Mac, never in the cloud. Audio is not recorded, stored or sent anywhere.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Perch shows your next event in the island and gives you a one-click join button. Your calendar is read on your Mac and never leaves it.</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Perch shows your next event in the island and gives you a one-click join button. Your calendar is read on your Mac and never leaves it.</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>Perch lets you complete reminders from the island.</string>
+	<key>NSRemindersFullAccessUsageDescription</key>
+	<string>Perch lets you complete reminders from the island.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Perch reads the battery level of your AirPods, mouse, keyboard and trackpad so it can show them in the island.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Perch uses your location only to show local weather, and only if you switch the Weather module on. It is off by default.</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Perch controls your meeting app so you can mute, stop video and leave a call from the island.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Perch transcribes speech entirely on your Mac. Nothing is sent to a server.</string>
+
+	<!-- perch:// — module 13, for scripters. TC-SHC-003. -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>app.perch.Perch</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>perch</string>
+			</array>
+		</dict>
+	</array>
+
+	<!--
+	  Sparkle. The only network request Perch ever makes by default
+	  (CLAUDE.md §5.2, TC-PRV-001).
+	-->
+	<key>SUFeedURL</key>
+	<string>https://milanpatel35.github.io/Perch/appcast.xml</string>
+	<key>SUEnableInstallerLauncherService</key>
+	<false/>
+	<key>SUAutomaticallyUpdate</key>
+	<false/>
+</dict>
+</plist>

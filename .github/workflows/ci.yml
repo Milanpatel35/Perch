@@ -15,7 +15,12 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
-      - run: brew install swiftlint swift-format
+      - name: Use the newest Xcode on the runner
+        run: |
+          latest=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
+          sudo xcode-select -s "$latest"
+          xcodebuild -version
+      - run: brew install swiftlint
       - run: make lint
 
   test:
@@ -30,7 +35,12 @@ jobs:
         with:
           path: .build
           key: spm-${{ matrix.os }}-${{ hashFiles('project.yml') }}
-      - run: brew install xcodegen
+      - name: Use the newest Xcode on the runner
+        run: |
+          latest=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
+          sudo xcode-select -s "$latest"
+          xcodebuild -version
+      - run: brew install xcodegen xcbeautify
       - run: make bootstrap
       - run: make test
       - uses: actions/upload-artifact@v4
