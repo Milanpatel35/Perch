@@ -205,6 +205,38 @@ Alcove's whole personality. Replace every stock overlay.
 | Low-battery alert once per discharge cycle | DL SE | Not repeating |
 | Charging-complete alert | AL | |
 
+**Status — shipped in 0.5.0.** All five rows. The Mac's battery, charge state
+and time remaining come from `IOPSNotificationCreateRunLoopSource`, which is
+a genuine push notification — there is no timer anywhere in this module. The
+accessory levels come from the IO registry, which is where every Mac battery
+utility gets them because there is no public API; that decision, and what
+happens when Apple renames the keys, is
+[ADR 0004](adr/0004-ioregistry-for-accessory-levels.md).
+
+Two things the implementation settled that the table above left open:
+
+- **The alerts are keyed on the power *source*, never on `isCharging`.** A
+  charger that is attached but not currently taking charge — a full battery,
+  or macOS holding at 80% for battery health — flips `isCharging` on and off
+  by itself. Keying the announcement on that would repeat it all day. This is
+  the same rule TC-HUD-005 asks of the charging HUD, and the reason the
+  machine that built this module, sitting at 80% on the wall with
+  `isCharging` false, was a useful thing to have.
+- **The low warning rearms on plugging in, not on the level recovering.** A
+  battery under load crosses the threshold, recovers a point when a core
+  parks, and crosses it again. Rearming on the level would warn every time.
+
+**This module needs no permission.** The permission table below said
+Bluetooth, and that was wrong: `CoreBluetooth` and `IOBluetooth` are what
+require it, and this module uses neither. Reading the IO registry needs no
+entitlement and shows no prompt.
+
+The readable state — every level, all the time — is a tile on the island's
+home surface rather than an alert, because the alerts are rare by design and
+a battery read-out is a thing you glance at. The tile re-reads the
+accessories when it appears and at no other time: the levels are only stale
+when nobody is looking at them.
+
 ## 8. Notifications — P1
 
 | Capability | Comes from | Notes |
@@ -355,7 +387,7 @@ Shipping it costs almost nothing and removes a reason to install a second app.
 | 4 | Focus timer | P0 | — |
 | 5 | Calendar & meetings | P0 | Calendar, Accessibility (call controls) |
 | 6 | HUD replacement | P0 | — |
-| 7 | Battery | P0 | Bluetooth |
+| 7 | Battery | P0 | — |
 | 8 | Notifications | P1 | Accessibility |
 | 9 | **Camera** | P0 | Camera |
 | 10 | **System stats** | P0 | — |

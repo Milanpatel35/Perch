@@ -19,6 +19,7 @@ public enum PerchModuleRegistry {
         host.register(NowPlayingService(island: island))
         host.register(ShelfService(island: island))
         host.register(ClipboardService(island: island))
+        host.register(BatteryService(island: island))
     }
 
     /// The Preferences pane for a module, if it has one yet.
@@ -51,6 +52,17 @@ public enum PerchModuleRegistry {
                         byteCount: shelf.store.byteCount,
                         directory: ShelfService.defaultDirectory,
                         onClear: { shelf.clearAll() }
+                    )
+                )
+            }
+        case .battery:
+            host.service(BatteryService.self).map { battery in
+                AnyView(
+                    BatterySettingsView(
+                        power: battery.power,
+                        accessories: battery.roster.accessories,
+                        onThresholdChange: { battery.setLowThreshold($0) },
+                        onRefresh: { battery.refreshAccessories() }
                     )
                 )
             }

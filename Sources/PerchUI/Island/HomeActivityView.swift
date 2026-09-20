@@ -26,6 +26,7 @@ extension HomeActivity: IslandActivityPresenting {
 private struct HomeSurface: View {
 
     @Environment(\.colorScheme) private var colorScheme
+    @EnvironmentObject private var modules: ModuleHost
 
     /// The monochrome mark, tinted white for the island's black background.
     /// Loaded once — a view body runs often, and `NSImage(named:)` on every
@@ -54,10 +55,14 @@ private struct HomeSurface: View {
 
             Divider().overlay(Color.white.opacity(0.12))
 
-            Text("Every module you switch on appears here.")
-                .font(.system(size: 12))
-                .foregroundStyle(.white.opacity(0.55))
-                .fixedSize(horizontal: false, vertical: true)
+            if let batteryTile = modules.batteryTile() {
+                batteryTile
+            } else {
+                Text("Every module you switch on appears here.")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.white.opacity(0.55))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
 
             Spacer(minLength: 0)
         }
