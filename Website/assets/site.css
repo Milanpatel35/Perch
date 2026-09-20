@@ -304,7 +304,7 @@ footer a:hover{color:var(--ink)}
   background:var(--card);border:1px solid var(--line);
   border-radius:20px;padding:22px 22px 24px;
 }
-.card h3{margin:0 0 8px;font-size:1rem;font-weight:600;letter-spacing:-.01em}
+.card h2,.card h3{margin:0 0 8px;font-size:1rem;font-weight:600;letter-spacing:-.01em}
 .card p{margin:0;color:var(--sub);font-size:.92rem;line-height:1.58}
 
 /* Visible to screen readers, to nobody else. Used by the island's
