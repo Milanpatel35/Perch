@@ -18,7 +18,7 @@ between states. No video, no install.
 [![macOS 13+](https://img.shields.io/badge/macOS-13%2B-black.svg)]()
 [![Universal](https://img.shields.io/badge/arch-Apple%20Silicon%20%2B%20Intel-black.svg)]()
 
-[**Website**](https://milanpatel35.github.io/Perch/) · [**Download**](https://github.com/Milanpatel35/Perch/releases/download/build-0.3.0/Perch-0.3.0-unsigned.zip) · [Features](#what-it-does) · [Why Perch](#how-it-compares) · [Contributing](CONTRIBUTING.md) · [Roadmap](docs/PLAN.md) · [Full feature list](docs/FEATURES.md)
+[**Website**](https://milanpatel35.github.io/Perch/) · [**Download**](https://github.com/Milanpatel35/Perch/releases/download/build-0.4.0/Perch-0.4.0-unsigned.zip) · [Features](#what-it-does) · [Why Perch](#how-it-compares) · [Contributing](CONTRIBUTING.md) · [Roadmap](docs/PLAN.md) · [Full feature list](docs/FEATURES.md)
 
 </div>
 
@@ -70,7 +70,7 @@ and nobody has built the camera out past a plain mirror.
 > `docs/PLAN.md` is not done, and the Homebrew cask goes live with the first
 > signed release. The feature table below is what 1.0 is aiming at.
 
-**Download the app** — [Perch 0.3.0, universal](https://github.com/Milanpatel35/Perch/releases/download/build-0.3.0/Perch-0.3.0-unsigned.zip)
+**Download the app** — [Perch 0.4.0, universal](https://github.com/Milanpatel35/Perch/releases/download/build-0.4.0/Perch-0.4.0-unsigned.zip)
 
 Apple Silicon and Intel, macOS 13+. **Not yet signed**: macOS will refuse it
 on a double-click, so right-click the app → Open and confirm once. You only
