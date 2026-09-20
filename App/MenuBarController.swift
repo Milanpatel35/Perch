@@ -28,10 +28,15 @@ final class MenuBarController: NSObject {
         statusItem.menu = makeMenu()
     }
 
-    deinit {
-        MainActor.assumeIsolated {
-            NSStatusBar.system.removeStatusItem(statusItem)
-        }
+    /// Removes the menu-bar item.
+    ///
+    /// Explicit rather than a `deinit`, because tidying up main-actor state
+    /// from a deinitialiser means `MainActor.assumeIsolated`, and that traps
+    /// outright if the last reference is released on another thread.
+    /// `AppDelegate` calls this on termination (TC-UPD-004).
+    func teardown() {
+        statusItem.menu = nil
+        NSStatusBar.system.removeStatusItem(statusItem)
     }
 
     private func makeMenu() -> NSMenu {

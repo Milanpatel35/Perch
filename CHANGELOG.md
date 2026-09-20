@@ -50,6 +50,18 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
   AppKit imports inside `PerchCore` and tool attribution anywhere.
 
 ### Fixed
+- Reading from MediaRemote could trap the process. Closures written inside
+  the `@MainActor` bridge were *inferred* to be main-actor isolated, so Swift
+  put an isolation assertion at the top of each one — and MediaRemote invokes
+  them on its own XPC reply queue, where that assertion fires. They are
+  `@Sendable` now, which says the true thing.
+- A MediaRemote read that never came back left its continuation suspended
+  forever, holding everything the awaiting task had captured. Every read now
+  answers exactly once, with a one-shot watchdog behind it.
+- `deinit` no longer uses `MainActor.assumeIsolated` anywhere. It traps if the
+  last reference is released on another thread, which with modules handing
+  references to background callbacks is a matter of timing. Teardown is
+  explicit and called from `applicationWillTerminate`.
 - Switching the Now Playing module off and on twice crashed the app. The
   MediaRemote bridge `dlclose`d the framework, and unloading that image out
   from under its process-wide notification registration is not survivable.

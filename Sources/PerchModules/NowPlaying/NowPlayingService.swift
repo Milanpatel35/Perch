@@ -42,12 +42,6 @@ final class NowPlayingService: ObservableObject, PerchModule {
         self.island = island
     }
 
-    deinit {
-        // `deactivate()` is the supported path; this is the backstop for a
-        // host that is torn down without being told.
-        MainActor.assumeIsolated { self.deactivate() }
-    }
-
     // MARK: - PerchModule
 
     func activate() {

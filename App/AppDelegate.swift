@@ -54,6 +54,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillTerminate(_ notification: Notification) {
         // Panel torn down explicitly: no orphan window, no orphan process
         // (TC-UPD-004).
+        menuBar?.teardown()
         menuBar = nil
         modules.deactivateAll()
         panel.teardown()

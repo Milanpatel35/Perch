@@ -33,14 +33,21 @@ final class MediaRemoteBridge {
         case previousTrack = 5
     }
 
+    // The callback parameters are `@Sendable` deliberately. Without it, a
+    // closure written inside this `@MainActor` type is *inferred* to be
+    // main-actor isolated, and Swift emits an isolation assertion at the top
+    // of it. MediaRemote invokes these on its own XPC reply queue, so that
+    // assertion fires and traps — which is precisely what it is there to
+    // catch. Marking them `@Sendable` says the true thing: these run
+    // wherever MediaRemote says, and touch nothing that belongs to an actor.
     private typealias GetInfo =
-        @convention(c) (DispatchQueue, @escaping ([String: Any]) -> Void) -> Void
+        @convention(c) (DispatchQueue, @escaping @Sendable ([String: Any]) -> Void) -> Void
     private typealias Register = @convention(c) (DispatchQueue) -> Void
     private typealias Unregister = @convention(c) () -> Void
     private typealias Send = @convention(c) (Int, [String: Any]?) -> Bool
     private typealias SetElapsed = @convention(c) (Double) -> Void
     private typealias GetClient =
-        @convention(c) (DispatchQueue, @escaping (AnyObject?) -> Void) -> Void
+        @convention(c) (DispatchQueue, @escaping @Sendable (AnyObject?) -> Void) -> Void
     private typealias ClientBundleID = @convention(c) (AnyObject) -> String?
 
     private static let frameworkPath =
@@ -68,6 +75,14 @@ final class MediaRemoteBridge {
     private var clientBundleID: ClientBundleID?
 
     private var isRegistered = false
+
+    /// How long to wait for MediaRemote before giving up on one read.
+    ///
+    /// MediaRemote answers by calling back, and there are situations where it
+    /// simply does not: no session at all, a headless machine, a wedged
+    /// media daemon. A caller awaiting that reply would then wait forever —
+    /// see `guaranteeingOneReply`.
+    private static let replyTimeout: DispatchTimeInterval = .seconds(2)
 
     /// The queue MediaRemote calls back on. Its own, so a slow decode of a
     /// megabyte of artwork never lands on the main thread.
@@ -162,8 +177,9 @@ final class MediaRemoteBridge {
             completion(nil)
             return
         }
+        let reply = guaranteeingOneReply(completion, otherwise: nil)
         getInfo(callbackQueue) { info in
-            completion(
+            reply(
                 NowPlayingSnapshot(
                     mediaRemoteInfo: info,
                     sourceBundleID: sourceBundleID
@@ -182,9 +198,38 @@ final class MediaRemoteBridge {
             completion(nil)
             return
         }
+        let reply = guaranteeingOneReply(completion, otherwise: nil)
+        // `clientBundleID` is bound to a local by the guard above, so the
+        // closure captures a function pointer rather than `self`. Reaching
+        // back through `self` here would be a main-actor access from
+        // MediaRemote's queue.
+        let bundleIDOf = clientBundleID
         getClient(callbackQueue) { client in
-            completion(client.flatMap { clientBundleID($0) })
+            reply(client.flatMap { bundleIDOf($0) })
         }
+    }
+
+    /// Wraps a completion so it runs exactly once, and always.
+    ///
+    /// Both of the reads above are bridged to `async` with a checked
+    /// continuation, and a continuation that is never resumed is not a
+    /// tolerable outcome: the awaiting task stays suspended forever holding
+    /// everything it captured, and Swift traps on the leak. MediaRemote does
+    /// not guarantee a callback — on a machine with no media session it can
+    /// stay silent indefinitely — so the guarantee is made here instead.
+    ///
+    /// The watchdog is a single one-shot item per read, not a repeating
+    /// timer: it fires once, finds the reply already made, and does nothing
+    /// (`CLAUDE.md` §5.1).
+    private func guaranteeingOneReply<T: Sendable>(
+        _ completion: @escaping @Sendable (T?) -> Void,
+        otherwise fallback: T?
+    ) -> @Sendable (T?) -> Void {
+        let once = OneShot(completion)
+        callbackQueue.asyncAfter(deadline: .now() + Self.replyTimeout) {
+            once.fire(fallback)
+        }
+        return { once.fire($0) }
     }
 
     // MARK: - Writing
@@ -258,5 +303,29 @@ extension NowPlayingSnapshot {
             // `NowPlayingService` fills it in on the main actor.
             sourceName: nil
         )
+    }
+}
+
+/// Runs a completion exactly once, whichever caller gets there first.
+///
+/// Small enough to live here rather than becoming shared machinery: the only
+/// thing in Perch that needs it is a callback from a framework that does not
+/// promise to call back.
+private final class OneShot<Value: Sendable>: @unchecked Sendable {
+
+    private let lock = NSLock()
+    private var completion: (@Sendable (Value?) -> Void)?
+
+    init(_ completion: @escaping @Sendable (Value?) -> Void) {
+        self.completion = completion
+    }
+
+    func fire(_ value: Value?) {
+        lock.lock()
+        let completion = self.completion
+        self.completion = nil
+        lock.unlock()
+
+        completion?(value)
     }
 }
