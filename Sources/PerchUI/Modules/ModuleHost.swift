@@ -28,14 +28,6 @@ public final class ModuleHost: ObservableObject {
             .store(in: &cancellables)
     }
 
-    deinit {
-        MainActor.assumeIsolated {
-            for module in modules.values {
-                module.deactivate()
-            }
-        }
-    }
-
     /// Registers a module. Activates it immediately if its switch is already
     /// on, which is the launch path for a returning user.
     public func register(_ module: any PerchModule) {
@@ -59,6 +51,13 @@ public final class ModuleHost: ObservableObject {
     }
 
     /// Tears every module down. Called on quit so nothing outlives the app.
+    ///
+    /// Explicit, and deliberately not a `deinit`. Cleaning up main-actor
+    /// state from a deinitialiser means `MainActor.assumeIsolated`, which
+    /// **traps** if the last reference happens to be released on another
+    /// thread — and with modules handing references to background callbacks,
+    /// that is a question of timing rather than of design. `AppDelegate`
+    /// calls this on termination.
     public func deactivateAll() {
         for module in modules.values {
             module.deactivate()

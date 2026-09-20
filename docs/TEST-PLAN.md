@@ -70,6 +70,19 @@ Levels:
 | TC-MED-006 | U | Long title and artist | Truncated with a marquee, no layout overflow |
 | TC-MED-007 | U | Module disabled | All observers removed; zero notifications received |
 | TC-MED-008 | E | Two media apps playing at once | Only the system's active source is shown |
+| TC-MED-009 | U | Source reports itself unavailable | Module says so in its pane; no empty island, no crash |
+| TC-MED-010 | U | Module switched on and off four times | Source started and stopped the same number of times; nothing left watching |
+| TC-MED-011 | M | The real MediaRemote path, on a Mac that is playing something | Live playback appears, survives repeated enable/disable and repeated play/pause, and the app quits with no orphan process |
+
+**On TC-MED-011 being manual.** The module takes its source as a parameter
+(`NowPlayingSourcing`), and every case above it runs against a fake. That is
+not a convenience — a level **U** test is defined at the top of this file as
+having "no real system services", and a unit test that opens a private system
+framework is an integration test wearing a unit test's name. It behaves like
+one, too: the first version of these tests passed on the machine they were
+written on and crashed on a headless CI runner with no media session. The
+framework path is verified where it can honestly be verified, on a Mac that
+is playing something.
 
 ## SHF — file shelf
 

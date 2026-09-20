@@ -34,18 +34,14 @@ final class NowPlayingService: ObservableObject, PerchModule {
     private(set) var isActive = false
 
     private let island: IslandController
-    private let bridge = MediaRemoteBridge()
-    private var observers: [NSObjectProtocol] = []
+    private let source: any NowPlayingSourcing
     private var refreshTask: Task<Void, Never>?
 
-    init(island: IslandController) {
+    /// The source is injected so the module's rules can be tested without a
+    /// private system framework in the loop — see `NowPlayingSourcing`.
+    init(island: IslandController, source: (any NowPlayingSourcing)? = nil) {
         self.island = island
-    }
-
-    deinit {
-        // `deactivate()` is the supported path; this is the backstop for a
-        // host that is torn down without being told.
-        MainActor.assumeIsolated { self.deactivate() }
+        self.source = source ?? MediaRemoteBridge()
     }
 
     // MARK: - PerchModule
@@ -54,15 +50,14 @@ final class NowPlayingService: ObservableObject, PerchModule {
         guard !isActive else { return }
         isActive = true
 
-        bridge.open()
-        guard bridge.isAvailable else {
+        source.start { [weak self] in self?.refresh() }
+
+        guard source.isAvailable else {
             isUnavailable = true
             return
         }
 
         isUnavailable = false
-        bridge.startListening()
-        observe()
         refresh()
     }
 
@@ -73,12 +68,7 @@ final class NowPlayingService: ObservableObject, PerchModule {
         refreshTask?.cancel()
         refreshTask = nil
 
-        for observer in observers {
-            NotificationCenter.default.removeObserver(observer)
-        }
-        observers.removeAll()
-
-        bridge.close()
+        source.stop()
 
         snapshot = nil
         island.withdraw(NowPlayingActivity.identifier)
@@ -91,13 +81,13 @@ final class NowPlayingService: ObservableObject, PerchModule {
     // updates the island. Optimistically updating here would make the island
     // disagree with the player whenever a command was refused.
 
-    func togglePlayPause() { bridge.perform(.togglePlayPause) }
-    func nextTrack() { bridge.perform(.nextTrack) }
-    func previousTrack() { bridge.perform(.previousTrack) }
+    func togglePlayPause() { source.perform(.togglePlayPause) }
+    func nextTrack() { source.perform(.nextTrack) }
+    func previousTrack() { source.perform(.previousTrack) }
 
     /// Seeks. The scrubber's drag ends here.
     func seek(to position: Duration) {
-        bridge.seek(to: position)
+        source.seek(to: position)
         refresh()
     }
 
@@ -113,72 +103,22 @@ final class NowPlayingService: ObservableObject, PerchModule {
         running.first?.activate(options: [.activateAllWindows])
     }
 
-    // MARK: - Observation
-
-    private func observe() {
-        // Event-driven. MediaRemote tells us; nothing here polls
-        // (`CLAUDE.md` §5.1).
-        for name in [
-            MediaRemoteBridge.infoDidChange,
-            MediaRemoteBridge.isPlayingDidChange,
-            MediaRemoteBridge.applicationDidChange
-        ] {
-            let observer = NotificationCenter.default.addObserver(
-                forName: name,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                MainActor.assumeIsolated { self?.refresh() }
-            }
-            observers.append(observer)
-        }
-    }
+    // MARK: - Reading
 
     /// Reads the current state and applies it.
     ///
-    /// Coalesced into a single task: MediaRemote posts two or three
-    /// notifications for one track change, and answering each of them
-    /// separately would decode the artwork three times.
+    /// Coalesced into a single task: a source reports two or three changes
+    /// for one track change, and answering each of them separately would
+    /// decode the artwork three times.
     private func refresh() {
         guard isActive else { return }
         refreshTask?.cancel()
         refreshTask = Task { [weak self] in
             guard let self else { return }
-            let next = await self.readSnapshot()
-            guard !Task.isCancelled else { return }
+            let next = await self.source.readSnapshot()
+            guard !Task.isCancelled, self.isActive else { return }
             self.apply(next)
         }
-    }
-
-    private func readSnapshot() async -> NowPlayingSnapshot? {
-        let bundleID = await withCheckedContinuation { continuation in
-            bridge.readOwningBundleID { continuation.resume(returning: $0) }
-        }
-
-        var snapshot = await withCheckedContinuation { continuation in
-            bridge.readNowPlaying(sourceBundleID: bundleID) {
-                continuation.resume(returning: $0)
-            }
-        }
-
-        // The display name is an AppKit question, so it is answered here on
-        // the main actor rather than on MediaRemote's callback queue.
-        snapshot?.sourceName = bundleID.flatMap { Self.appName(for: $0) }
-        return snapshot
-    }
-
-    private static func appName(for bundleID: String) -> String? {
-        if let running = NSRunningApplication.runningApplications(
-            withBundleIdentifier: bundleID
-        ).first {
-            return running.localizedName
-        }
-        guard
-            let url = NSWorkspace.shared.urlForApplication(
-                withBundleIdentifier: bundleID
-            )
-        else { return nil }
-        return FileManager.default.displayName(atPath: url.path)
     }
 
     private func apply(_ next: NowPlayingSnapshot?) {
