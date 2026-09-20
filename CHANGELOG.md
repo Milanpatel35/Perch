@@ -8,6 +8,12 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
+Nothing yet. Next up is Phase 2.3 — HUDs, battery and the focus timer.
+
+## [0.3.0] — 2026-09-20
+
+Three of eighteen modules. The two that turn Perch from a toy into a tool.
+
 ### Added
 - **Clipboard history** (module 3) — the single biggest gap in the paid
   field. Text, rich text, images, file paths and colours; a searchable picker
@@ -122,6 +128,7 @@ of the eighteen modules is in it.
   `.statusBar + 1`, centred on the notch, and collapses and expands with the
   shared motion tokens.
 
+[0.3.0]: https://github.com/Milanpatel35/Perch/releases/tag/v0.3.0
 [0.2.0]: https://github.com/Milanpatel35/Perch/releases/tag/v0.2.0
 
 [Keep a Changelog]: https://keepachangelog.com/en/1.1.0/
