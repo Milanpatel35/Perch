@@ -18,8 +18,8 @@ final class FileConverterTests: XCTestCase {
 
     private var directory = URL(fileURLWithPath: NSTemporaryDirectory())
 
-    override func setUp() async throws {
-        try await super.setUp()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
         directory = URL(fileURLWithPath: NSTemporaryDirectory())
             .appendingPathComponent("perch-convert-\(UUID().uuidString)")
         try FileManager.default.createDirectory(
@@ -28,9 +28,9 @@ final class FileConverterTests: XCTestCase {
         )
     }
 
-    override func tearDown() async throws {
+    override func tearDownWithError() throws {
         try? FileManager.default.removeItem(at: directory)
-        try await super.tearDown()
+        try super.tearDownWithError()
     }
 
     // MARK: - TC-SHF-011

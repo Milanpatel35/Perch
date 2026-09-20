@@ -15,8 +15,8 @@ final class ShelfServiceTests: XCTestCase {
     private var directory = URL(fileURLWithPath: NSTemporaryDirectory())
     private var desktop = URL(fileURLWithPath: NSTemporaryDirectory())
 
-    override func setUp() async throws {
-        try await super.setUp()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
         let root = URL(fileURLWithPath: NSTemporaryDirectory())
             .appendingPathComponent("perch-shelf-\(UUID().uuidString)")
         directory = root.appendingPathComponent("Shelf")
@@ -31,10 +31,10 @@ final class ShelfServiceTests: XCTestCase {
         Defaults[.shelfClearOnQuit] = false
     }
 
-    override func tearDown() async throws {
+    override func tearDownWithError() throws {
         try? FileManager.default.removeItem(at: directory.deletingLastPathComponent())
         Defaults.reset(.shelfClearOnQuit)
-        try await super.tearDown()
+        try super.tearDownWithError()
     }
 
     private func makeService() -> (ShelfService, IslandController) {
