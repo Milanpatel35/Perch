@@ -15,7 +15,12 @@ struct PerchApp: App {
         // The one real scene. `Settings` gives the preferences window its
         // standard ⌘, behaviour, placement and restoration for free.
         Settings {
-            PreferencesView()
+            PreferencesView(
+                switchboard: delegate.switchboard,
+                paneProvider: { module in
+                    PerchModuleRegistry.settingsPane(for: module, in: delegate.modules)
+                }
+            )
         }
     }
 }

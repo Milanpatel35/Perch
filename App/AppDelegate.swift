@@ -13,10 +13,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let motion = MotionPreferences()
     private let island = IslandController()
+    let switchboard = ModuleSwitchboard()
+
+    lazy var modules = ModuleHost(
+        switchboard: switchboard,
+        island: island
+    )
 
     private lazy var panel = IslandPanelController(
         controller: island,
-        motion: motion
+        motion: motion,
+        modules: modules
     )
 
     private var menuBar: MenuBarController?
@@ -36,6 +43,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         panel.show()
 
+        // Modules come up after the panel, so the first activity a module
+        // submits has somewhere to land. Only the ones whose switch is on
+        // actually start.
+        PerchModuleRegistry.registerAll(in: modules, island: island)
+
         menuBar = MenuBarController(island: island)
     }
 
@@ -43,6 +55,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Panel torn down explicitly: no orphan window, no orphan process
         // (TC-UPD-004).
         menuBar = nil
+        modules.deactivateAll()
         panel.teardown()
     }
 

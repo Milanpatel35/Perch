@@ -58,10 +58,3 @@ public final class MotionPreferences: ObservableObject {
         IslandAnimation.animation(for: token, reduceMotion: reduceMotion)
     }
 }
-
-extension Duration {
-    /// Seconds as a `Double`, for the APIs that predate `Duration`.
-    public var seconds: Double {
-        Double(components.seconds) + (Double(components.attoseconds) / 1e18)
-    }
-}

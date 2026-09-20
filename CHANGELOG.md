@@ -9,6 +9,18 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 ## [Unreleased]
 
 ### Added
+- **Now Playing** (module 1). Artwork, title and artist beside the notch, a
+  visualiser that stops dead on pause, expanded transport with a working seek
+  scrubber, the output-device picker, per-app source switching, a two-second
+  sneak peek on track change, and swipe to skip. Built on `MediaRemote`
+  through a `dlopen`'d bridge that degrades to "unavailable" rather than
+  breaking the app — [ADR 0002](docs/adr/0002-mediaremote-for-now-playing.md).
+- `PerchModule` and `ModuleHost` — the lifecycle every module is switched on
+  and off through, and the thing that guarantees an off module costs nothing.
+- `MarqueeText` — a title that scrolls only when it has to, only while it is
+  on screen, and not at all with Reduce Motion on.
+- A Preferences window with a sidebar, one pane per module, that does not need
+  a list of panes kept in step with the list of modules.
 - `IslandPanel` — the borderless, non-activating panel the island lives in,
   above the menu bar, on every Space, over full-screen apps, and never
   taking key focus from the app in front.

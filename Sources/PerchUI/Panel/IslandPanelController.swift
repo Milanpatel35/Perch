@@ -29,6 +29,7 @@ public final class IslandPanelController {
 
     private let controller: IslandController
     private let motion: MotionPreferences
+    private let modules: ModuleHost
 
     private var panel: IslandPanel?
     private var hostingView: NSHostingView<IslandRootView>?
@@ -46,9 +47,14 @@ public final class IslandPanelController {
     /// notification, not a relaunch.
     public var onLayoutChange: ((IslandLayout) -> Void)?
 
-    public init(controller: IslandController, motion: MotionPreferences) {
+    public init(
+        controller: IslandController,
+        motion: MotionPreferences,
+        modules: ModuleHost
+    ) {
         self.controller = controller
         self.motion = motion
+        self.modules = modules
     }
 
     // MARK: - Lifecycle
@@ -93,12 +99,13 @@ public final class IslandPanelController {
         layout = next
 
         let frame = CGRect.fromDisplaySpace(next.panelFrame)
-        let panel = panel ?? makePanel(frame: frame)
+        let panel = panel ?? makePanel(frame: frame, layout: next)
         panel.setFrame(frame, display: true)
 
         hostingView?.rootView = IslandRootView(
             controller: controller,
             motion: motion,
+            modules: modules,
             layout: next
         )
 
@@ -106,18 +113,15 @@ public final class IslandPanelController {
         onLayoutChange?(next)
     }
 
-    private func makePanel(frame: CGRect) -> IslandPanel {
+    private func makePanel(frame: CGRect, layout: IslandLayout) -> IslandPanel {
         let panel = IslandPanel(contentRect: frame)
 
         let hosting = NSHostingView(
             rootView: IslandRootView(
                 controller: controller,
                 motion: motion,
+                modules: modules,
                 layout: layout
-                    ?? IslandLayout(
-                        metrics: NotchMetrics(screen: ScreenGeometry(frame: frame)),
-                        screen: ScreenGeometry(frame: frame)
-                    )
             )
         )
         hosting.autoresizingMask = [.width, .height]

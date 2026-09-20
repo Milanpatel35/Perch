@@ -56,6 +56,29 @@ quality, not novelty.
 **Differentiator:** nobody does lyrics *and* queue *and* device picker in one
 free app.
 
+**Status — shipped in 0.2.0.** Artwork, title and artist in the collapsed
+island; the visualiser; expanded transport and a working seek scrubber;
+the output-device picker; per-app source switching; fullscreen presentation;
+the two-second sneak peek on track change; and swipe to skip. Built on
+`MediaRemote` — see [ADR 0002](adr/0002-mediaremote-for-now-playing.md).
+
+Two rows are **not done**, and are recorded here rather than quietly dropped:
+
+- **Up Next queue** and **synced lyrics.** `MediaRemote` exposes neither, and
+  no other local interface exposes them for an arbitrary source — a browser
+  tab has no queue to read. Reachable only for Music.app, via
+  `ScriptingBridge`, and only as static lyrics with no timings. Tracked for a
+  later release; it is not a 1.0 blocker.
+
+And one row means something narrower than it sounds, which the module says out
+loud in its own source:
+
+- **The visualiser reflects playback, not amplitude.** Reading the actual
+  signal means capturing system audio, which on macOS means Screen Recording
+  permission and a capture session running for as long as music plays. That is
+  a permission prompt and a constant cost, for decoration. Perch does not do
+  it, and does not imply a spectrum analyser it has not built.
+
 ## 2. Shelf — P0
 
 | Capability | Comes from | Notes |
