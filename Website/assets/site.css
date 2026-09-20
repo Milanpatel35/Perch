@@ -1,0 +1,334 @@
+/*
+ * Perch — site styles.
+ *
+ * One stylesheet, custom properties, no preprocessor and no framework
+ * (docs/WEBSITE-PLAN.md §7). A marketing page for an app whose selling point
+ * is "no Electron, no bloat" has no business shipping 180KB of React, and a
+ * hand-written stylesheet keeps the contributor barrier at zero: anyone who
+ * can write CSS can fix a typo here.
+ *
+ * Motion tokens mirror the app's IslandMotion tokens. If one changes, both
+ * change — the whole point is that the island on this page moves the way the
+ * island on your menu bar does.
+ */
+
+:root{
+  --bg:#f5f5f7;
+  --card:#ffffff;
+  --ink:#1d1d1f;
+  --sub:#6e6e73;   /* 5.07:1 on white, 4.66:1 on --bg. WCAG AA. */
+  --line:#d2d2d7;
+  --blue:#0066cc;  /* 5.57:1 on white, 5.11:1 on --bg. #0071e3 was 4.31. */
+  --blue-fill:#0066cc;  /* white text on this: 5.57:1 */
+  --red:#c00010;   /* 5.49:1 on the tinted pill. #ff453a was 2.89. */
+  --green:#1a7f37;  /* 5.08:1 on white. #30a14e was 3.32 — the ticks
+                       in the comparison table are text, not decoration. */
+  --amber:#ff9f0a;
+  --radius:28px;
+  --shadow:0 2px 6px rgba(0,0,0,.04), 0 24px 60px -30px rgba(0,0,0,.28);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#000000; --card:#151517; --ink:#f5f5f7; --sub:#86868b; --line:#2a2a2d;
+    --blue:#2997ff; --blue-fill:#0b62c9; --green:#32d74b; --red:#ff453a;
+    --shadow:0 24px 60px -30px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#000; --card:#151517; --ink:#f5f5f7; --sub:#86868b; --line:#2a2a2d; --blue:#2997ff; --blue-fill:#0b62c9; --green:#32d74b; --red:#ff453a;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(86px + env(safe-area-inset-top,0px));-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",sans-serif;
+  font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+.narrow{max-width:760px;margin:0 auto;padding:0 22px}
+
+h1,h2,h3,h4{margin:0;letter-spacing:-.035em;line-height:1.06;font-weight:700}
+h1{font-size:clamp(2.7rem,6.4vw,4.6rem)}
+h2{font-size:clamp(2rem,4.6vw,3.3rem)}
+h3{font-size:clamp(1.3rem,2.4vw,1.75rem);letter-spacing:-.025em}
+h4{font-size:1.16rem;letter-spacing:-.02em}
+.soft{color:var(--sub);display:block}
+p{margin:0}
+
+.eyebrow{
+  font-size:.82rem;font-weight:600;letter-spacing:.01em;color:var(--blue);
+  margin-bottom:14px;
+}
+.body{font-size:clamp(1.03rem,1.7vw,1.24rem);color:var(--sub);line-height:1.5;letter-spacing:-.01em}
+.body strong{color:var(--ink);font-weight:600}
+
+section{padding:clamp(72px,10vw,132px) 0}
+.center{text-align:center}
+.center .body{max-width:60ch;margin-left:auto;margin-right:auto}
+
+/* ---------- nav ---------- */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:100;padding:10px 0}
+.navbar{
+  max-width:1000px;margin:0 auto;height:54px;padding:0 10px 0 18px;
+  display:flex;align-items:center;gap:26px;
+  background:color-mix(in srgb,var(--card) 76%,transparent);
+  border:1px solid color-mix(in srgb,var(--line) 60%,transparent);
+  border-radius:999px;backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+}
+.brand{display:flex;align-items:center;gap:9px;font-weight:600;letter-spacing:-.02em}
+.brand i{display:block;width:26px;height:12px;background:var(--ink);border-radius:0 0 7px 7px}
+.navlinks{display:flex;gap:24px;margin-left:auto;font-size:.9rem;color:var(--sub)}
+.navlinks a:hover{color:var(--ink)}
+@media(max-width:780px){.navlinks{display:none}}
+.pillbtn{
+  background:var(--blue-fill);color:#fff;border-radius:999px;padding:9px 18px;
+  font-size:.88rem;font-weight:500;white-space:nowrap;
+}
+@media(max-width:780px){.pillbtn{margin-left:auto}}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;background:var(--blue-fill);color:#fff;font-size:1rem;font-weight:500;transition:opacity .2s}
+.btn:hover{opacity:.86}
+.btn.sec{background:transparent;color:var(--blue);padding-left:6px;padding-right:6px}
+.btn.sec::after{content:"›";font-size:1.25em;line-height:0}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:8px}
+
+/* ---------- hero ---------- */
+.hero{padding-top:clamp(52px,7vw,92px);padding-bottom:0;text-align:center}
+.hero h1{margin-bottom:22px}
+.hero .body{max-width:58ch;margin:0 auto}
+.herocta{display:flex;gap:26px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:34px}
+.freeline{margin-top:20px;font-size:.88rem;color:var(--sub);display:flex;gap:8px;justify-content:center;align-items:center}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
+
+/* ---------- macbook ---------- */
+.machine{margin:clamp(44px,6vw,76px) auto 0;max-width:940px;padding:0 22px}
+.lid{
+  background:linear-gradient(180deg,#3a3a3e,#1c1c1e);
+  padding:11px 11px 0;border-radius:20px 20px 4px 4px;box-shadow:var(--shadow);
+}
+.screen{
+  position:relative;border-radius:12px 12px 0 0;overflow:hidden;
+  background:linear-gradient(165deg,#1b2432 0%,#2c2140 45%,#0d1117 100%);
+  aspect-ratio:16/10;min-height:250px;
+}
+.screen::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(100% 70% at 20% 0%,rgba(90,120,220,.30),transparent 60%),
+             radial-gradient(90% 70% at 85% 30%,rgba(220,90,140,.22),transparent 58%);
+}
+/* The mock menu bar.
+   Given a solid strip rather than sitting straight on the wallpaper
+   gradient. It reads closer to a real menu bar, and it means a contrast
+   checker can actually resolve the background underneath the text —
+   over a gradient it cannot, and reports white-on-white. */
+.mb{
+  position:absolute;top:0;left:0;right:0;height:26px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 14px;font-size:11px;
+  color:rgba(255,255,255,.92);background:#1b2432;z-index:3;
+}
+.mb .l{display:flex;gap:14px}
+.mb .l b{font-weight:600}
+.base{height:11px;background:linear-gradient(180deg,#1c1c1e,#3a3a3e);border-radius:0 0 4px 4px}
+.foot{height:13px;width:36%;margin:0 auto;background:linear-gradient(180deg,#c9ccd1,#8e9297);border-radius:0 0 12px 12px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .foot{background:linear-gradient(180deg,#4a4d52,#2a2c30)}}
+
+.dock{
+  position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:3;
+  display:flex;gap:8px;padding:7px 10px;border-radius:16px;
+  background:rgba(255,255,255,.14);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.16);
+}
+.dock b{width:30px;height:30px;border-radius:8px;display:block}
+@media(max-width:600px){.dock b{width:24px;height:24px}}
+
+/* ---------- island ---------- */
+.island{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:5;
+  background:#000;color:#f5f5f7;border-radius:0 0 22px 22px;
+  width:180px;height:26px;padding:0 14px;overflow:hidden;
+  display:flex;align-items:center;cursor:pointer;
+  transition:width .5s cubic-bezier(.32,.72,0,1),height .5s cubic-bezier(.32,.72,0,1),padding .5s cubic-bezier(.32,.72,0,1);
+}
+.island.open{width:min(400px,78%);height:110px;padding:0 18px}
+.row{display:flex;align-items:center;gap:11px;width:100%;min-width:0}
+.thumb{width:18px;height:18px;border-radius:5px;flex:none;transition:all .5s cubic-bezier(.32,.72,0,1)}
+.island.open .thumb{width:62px;height:62px;border-radius:14px}
+.meta{min-width:0;flex:1}
+.l1{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em}
+.l2{font-size:10px;color:#9b9ba1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.island.open .l1{font-size:15px}
+.island.open .l2{font-size:12px;margin-top:3px}
+.extra{display:none}
+.island.open .extra{display:block;margin-top:10px}
+.bar{height:3px;background:#2e2e32;border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:#f5f5f7;border-radius:3px}
+.eq{display:flex;align-items:flex-end;gap:2.5px;height:13px;flex:none}
+.eq b{width:2.5px;height:4px;background:var(--green);border-radius:2px;animation:eq .95s ease-in-out infinite}
+.eq b:nth-child(2){animation-delay:.14s}.eq b:nth-child(3){animation-delay:.28s}.eq b:nth-child(4){animation-delay:.42s}
+@keyframes eq{0%,100%{height:4px}50%{height:12px}}
+.tag{flex:none;font-size:10px;padding:3px 9px;border-radius:999px;background:#2a2a2e;color:#c9c9cf;white-space:nowrap}
+.tag.g{background:rgba(48,209,75,.18);color:#4ade6b}
+.tag.a{background:rgba(255,159,10,.18);color:#ffb340}
+
+.tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+.tab{
+  font:inherit;font-size:.88rem;padding:9px 18px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--line);background:transparent;color:var(--sub);transition:all .2s;
+}
+.tab[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.tabhint{margin-top:14px;font-size:.84rem;color:var(--sub);text-align:center}
+
+/* ---------- marquee ---------- */
+.ticker{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;margin-top:clamp(60px,8vw,96px)}
+.ticker ul{display:flex;gap:0;list-style:none;margin:0;padding:0;width:max-content;animation:slide 34s linear infinite}
+.ticker li{font-size:.92rem;color:var(--sub);padding:0 26px;white-space:nowrap;position:relative}
+.ticker li::after{content:"·";position:absolute;right:-3px;color:var(--line)}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---------- stats ---------- */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,4vw,44px)}
+@media(max-width:760px){.stats{grid-template-columns:1fr;gap:34px}}
+.stat .n{font-size:clamp(3rem,7vw,4.6rem);font-weight:700;letter-spacing:-.05em;line-height:1}
+.stat h3{margin:10px 0 8px}
+.stat p{font-size:.97rem;color:var(--sub)}
+
+/* ---------- feature blocks ---------- */
+.block{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,6vw,72px);align-items:center}
+.block + .block{margin-top:clamp(56px,8vw,104px)}
+.block.flip .copy{order:2}
+@media(max-width:840px){.block,.block.flip .copy{grid-template-columns:1fr;order:0}}
+.block h3{margin-bottom:14px}
+.block .body{font-size:1.06rem}
+.visual{
+  background:var(--card);border-radius:var(--radius);padding:26px;border:1px solid var(--line);
+  box-shadow:var(--shadow);min-height:250px;display:flex;flex-direction:column;justify-content:center;gap:10px;
+}
+.clip{display:flex;gap:12px;align-items:center;padding:11px 13px;border-radius:14px;background:var(--bg);font-size:.9rem}
+.clip span:first-child{width:28px;height:28px;border-radius:8px;flex:none;display:grid;place-items:center;font-size:13px;background:var(--card);border:1px solid var(--line)}
+.clip em{font-style:normal;color:var(--sub);font-size:.8rem;margin-left:auto;white-space:nowrap}
+.mono{font-family:"JetBrains Mono",monospace}
+
+/* ---------- table ---------- */
+.tablecard{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow)}
+.scroller{overflow-x:auto}
+.scroller:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+table{border-collapse:collapse;width:100%;min-width:800px;font-size:.9rem}
+th,td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+thead th{font-weight:600;font-size:.86rem;letter-spacing:-.01em}
+tbody th{font-weight:400;color:var(--sub)}
+.us{background:color-mix(in srgb,var(--blue) 7%,transparent)}
+thead .us{border-bottom:2px solid var(--blue);color:var(--blue)}
+.y{color:var(--green);font-weight:600}
+.n{color:var(--sub)}   /* was --line: a border colour, unreadable as text */
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:0}
+
+/* ---------- steps ---------- */
+.steps{counter-reset:s;display:grid;gap:0}
+.step{display:grid;grid-template-columns:90px 1fr;gap:clamp(16px,4vw,44px);padding:30px 0;border-top:1px solid var(--line)}
+.step:last-child{border-bottom:1px solid var(--line)}
+.step .num{font-size:1.05rem;font-weight:600;color:var(--sub);letter-spacing:-.02em}
+.step p{color:var(--sub);margin-top:10px;font-size:1rem;max-width:60ch}
+@media(max-width:620px){.step{grid-template-columns:1fr;gap:6px}}
+
+/* ---------- faq ---------- */
+details{border-top:1px solid var(--line);padding:20px 0}
+details:last-of-type{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;list-style:none;display:flex;gap:16px;align-items:center;font-weight:500;font-size:1.05rem;letter-spacing:-.015em}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";margin-left:auto;font-size:1.4rem;color:var(--sub);line-height:1;font-weight:400}
+details[open] summary::after{content:"–"}
+details .ans{margin-top:14px;color:var(--sub);font-size:1rem;max-width:66ch}
+details .ans a{color:var(--blue)}
+
+/* ---------- pricing ---------- */
+.price{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:clamp(30px,5vw,50px);max-width:470px;margin:0 auto;box-shadow:var(--shadow);text-align:center;
+}
+.price .tier{font-size:.86rem;color:var(--sub);font-weight:500}
+.price .fig{font-size:clamp(3.4rem,9vw,5rem);font-weight:700;letter-spacing:-.05em;line-height:1.05;margin:8px 0 2px}
+.price .per{font-size:.95rem;color:var(--sub);margin-bottom:20px}
+.price ul{list-style:none;margin:26px 0 0;padding:0;text-align:left;display:grid;gap:11px;font-size:.96rem}
+.price li{display:flex;gap:11px;align-items:flex-start;color:var(--sub)}
+.price li::before{content:"✓";color:var(--green);font-weight:700;flex:none}
+.pricenote{margin-top:22px;font-size:.84rem;color:var(--sub)}
+.cmd{display:flex;align-items:center;gap:12px;background:var(--ink);color:var(--bg);border-radius:14px;padding:14px 16px;font-family:"JetBrains Mono",monospace;font-size:.85rem;overflow-x:auto;max-width:470px;margin:22px auto 0}
+.cmd button{margin-left:auto;flex:none;font:inherit;font-size:.74rem;cursor:pointer;background:color-mix(in srgb,var(--bg) 22%,transparent);color:var(--bg);border:0;border-radius:8px;padding:6px 11px}
+
+/* ---------- finale ---------- */
+.finale{text-align:center;padding:clamp(80px,11vw,150px) 0;background:var(--card);border-radius:var(--radius);margin:0 22px;border:1px solid var(--line)}
+.finale h2{margin-bottom:26px}
+
+/* ---------- footer ---------- */
+footer{padding:64px 0 80px;color:var(--sub);font-size:.9rem}
+.fgrid{display:grid;grid-template-columns:1.6fr repeat(3,1fr);gap:clamp(22px,4vw,44px);margin-bottom:44px}
+@media(max-width:760px){.fgrid{grid-template-columns:1fr 1fr}.fgrid > div:first-child{grid-column:1/-1}}
+footer h3{margin:0 0 14px;font-size:.88rem;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+footer a:hover{color:var(--ink)}
+.legal{border-top:1px solid var(--line);padding-top:24px;font-size:.82rem;line-height:1.6}
+
+/* ------------------------------------------------------------------ */
+/* "What it doesn't do yet" — WEBSITE-PLAN.md §8, rule 4.              */
+/*                                                                     */
+/* A section nobody else in this category writes, so it gets a grid of */
+/* its own rather than being squeezed into the feature blocks. Cards   */
+/* read as admissions, not as features: no tint, no shadow lift, no    */
+/* hover state. Nothing here is being sold.                            */
+/* ------------------------------------------------------------------ */
+.sec{padding:clamp(64px,9vw,120px) 0}
+.lead{
+  color:var(--sub);font-size:1.05rem;line-height:1.6;
+  max-width:62ch;margin:14px 0 36px;
+}
+.grid3{
+  display:grid;gap:clamp(16px,2.4vw,24px);
+  grid-template-columns:repeat(auto-fit,minmax(248px,1fr));
+}
+.card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:20px;padding:22px 22px 24px;
+}
+.card h3{margin:0 0 8px;font-size:1rem;font-weight:600;letter-spacing:-.01em}
+.card p{margin:0;color:var(--sub);font-size:.92rem;line-height:1.58}
+
+/* Visible to screen readers, to nobody else. Used by the island's
+   polite live region. */
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
+}
+
+/* The "Leave a call" pill. Its colour is a token so the light theme gets a
+   red that survives a contrast check and the dark theme keeps the bright
+   one, instead of one hardcoded value failing in whichever theme it was not
+   picked for. */
+.tag.r{background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--red)}
+
+/* Links inside running text carry an underline, because colour alone is not
+   a distinction (WCAG 1.4.1). Nav links, buttons and card links are
+   distinguishable by shape and position and are left alone. */
+p a:not(.btn):not(.pillbtn),
+.ans a,
+.legal a,
+td a{text-decoration:underline;text-underline-offset:2px}
+
+/* The pre-1.0 notice under the download button.
+   A dead download button with nothing said about it is the one thing that
+   would make the "honest one" position look like a pose. */
+.prerelease{
+  margin:14px 0 0;font-size:.84rem;line-height:1.55;
+  color:var(--sub);text-align:left;
+}
+.prerelease a{color:var(--blue);text-decoration:underline;text-underline-offset:2px}

@@ -4,265 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#f5f5f7">
-<title>Dynamic Island for Mac, open source | Perch</title>
-<meta name="description" content="Perch is a free, open-source Dynamic Island for the Mac: live activities for music, calls, AirPods and calendar, a file shelf, searchable clipboard history. Runs on macOS 13. Nothing leaves your Mac.">
+<title>A free, open-source Dynamic Island for the Mac | Perch</title>
+<meta name="description" content="Perch puts your MacBook notch to work: music, meetings, a file shelf, clipboard history, camera and a system monitor. Eighteen modules, all free, open source, macOS 13+. Nothing leaves your Mac.">
+<link rel="canonical" href="https://milanpatel35.github.io/Perch/">
+<meta property="og:title" content="Perch — a free, open-source Dynamic Island for the Mac">
+<meta property="og:description" content="Eighteen modules, every one free. No licence key, no account, no telemetry.">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#f5f5f7;
-  --card:#ffffff;
-  --ink:#1d1d1f;
-  --sub:#86868b;
-  --line:#d2d2d7;
-  --blue:#0071e3;
-  --green:#30a14e;
-  --amber:#ff9f0a;
-  --radius:28px;
-  --shadow:0 2px 6px rgba(0,0,0,.04), 0 24px 60px -30px rgba(0,0,0,.28);
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);
-  padding-bottom:env(safe-area-inset-bottom,0px);
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#000000; --card:#151517; --ink:#f5f5f7; --sub:#86868b; --line:#2a2a2d;
-    --blue:#2997ff; --green:#32d74b;
-    --shadow:0 24px 60px -30px rgba(0,0,0,.9);
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#000; --card:#151517; --ink:#f5f5f7; --sub:#86868b; --line:#2a2a2d; --blue:#2997ff; --green:#32d74b;
-}
-*,*::before,*::after{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:calc(86px + env(safe-area-inset-top,0px));-webkit-text-size-adjust:100%}
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-}
-body{
-  margin:0;background:var(--bg);color:var(--ink);
-  font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",sans-serif;
-  font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;
-}
-a{color:inherit;text-decoration:none}
-img{max-width:100%}
-.wrap{max-width:1040px;margin:0 auto;padding:0 22px}
-.narrow{max-width:760px;margin:0 auto;padding:0 22px}
-
-h1,h2,h3,h4{margin:0;letter-spacing:-.035em;line-height:1.06;font-weight:700}
-h1{font-size:clamp(2.7rem,6.4vw,4.6rem)}
-h2{font-size:clamp(2rem,4.6vw,3.3rem)}
-h3{font-size:clamp(1.3rem,2.4vw,1.75rem);letter-spacing:-.025em}
-h4{font-size:1.16rem;letter-spacing:-.02em}
-.soft{color:var(--sub);display:block}
-p{margin:0}
-
-.eyebrow{
-  font-size:.82rem;font-weight:600;letter-spacing:.01em;color:var(--blue);
-  margin-bottom:14px;
-}
-.body{font-size:clamp(1.03rem,1.7vw,1.24rem);color:var(--sub);line-height:1.5;letter-spacing:-.01em}
-.body strong{color:var(--ink);font-weight:600}
-
-section{padding:clamp(72px,10vw,132px) 0}
-.center{text-align:center}
-.center .body{max-width:60ch;margin-left:auto;margin-right:auto}
-
-/* ---------- nav ---------- */
-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:100;padding:10px 0}
-.navbar{
-  max-width:1000px;margin:0 auto;height:54px;padding:0 10px 0 18px;
-  display:flex;align-items:center;gap:26px;
-  background:color-mix(in srgb,var(--card) 76%,transparent);
-  border:1px solid color-mix(in srgb,var(--line) 60%,transparent);
-  border-radius:999px;backdrop-filter:saturate(180%) blur(20px);
-  -webkit-backdrop-filter:saturate(180%) blur(20px);
-}
-.brand{display:flex;align-items:center;gap:9px;font-weight:600;letter-spacing:-.02em}
-.brand i{display:block;width:26px;height:12px;background:var(--ink);border-radius:0 0 7px 7px}
-.navlinks{display:flex;gap:24px;margin-left:auto;font-size:.9rem;color:var(--sub)}
-.navlinks a:hover{color:var(--ink)}
-@media(max-width:780px){.navlinks{display:none}}
-.pillbtn{
-  background:var(--blue);color:#fff;border-radius:999px;padding:9px 18px;
-  font-size:.88rem;font-weight:500;white-space:nowrap;
-}
-@media(max-width:780px){.pillbtn{margin-left:auto}}
-
-/* ---------- buttons ---------- */
-.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;background:var(--blue);color:#fff;font-size:1rem;font-weight:500;transition:opacity .2s}
-.btn:hover{opacity:.86}
-.btn.sec{background:transparent;color:var(--blue);padding-left:6px;padding-right:6px}
-.btn.sec::after{content:"›";font-size:1.25em;line-height:0}
-:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:8px}
-
-/* ---------- hero ---------- */
-.hero{padding-top:clamp(52px,7vw,92px);padding-bottom:0;text-align:center}
-.hero h1{margin-bottom:22px}
-.hero .body{max-width:58ch;margin:0 auto}
-.herocta{display:flex;gap:26px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:34px}
-.freeline{margin-top:20px;font-size:.88rem;color:var(--sub);display:flex;gap:8px;justify-content:center;align-items:center}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
-
-/* ---------- macbook ---------- */
-.machine{margin:clamp(44px,6vw,76px) auto 0;max-width:940px;padding:0 22px}
-.lid{
-  background:linear-gradient(180deg,#3a3a3e,#1c1c1e);
-  padding:11px 11px 0;border-radius:20px 20px 4px 4px;box-shadow:var(--shadow);
-}
-.screen{
-  position:relative;border-radius:12px 12px 0 0;overflow:hidden;
-  background:linear-gradient(165deg,#1b2432 0%,#2c2140 45%,#0d1117 100%);
-  aspect-ratio:16/10;min-height:250px;
-}
-.screen::after{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(100% 70% at 20% 0%,rgba(90,120,220,.30),transparent 60%),
-             radial-gradient(90% 70% at 85% 30%,rgba(220,90,140,.22),transparent 58%);
-}
-.mb{position:absolute;top:0;left:0;right:0;height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:11px;color:rgba(255,255,255,.72);z-index:3}
-.mb .l{display:flex;gap:14px}
-.mb .l b{font-weight:600}
-.base{height:11px;background:linear-gradient(180deg,#1c1c1e,#3a3a3e);border-radius:0 0 4px 4px}
-.foot{height:13px;width:36%;margin:0 auto;background:linear-gradient(180deg,#c9ccd1,#8e9297);border-radius:0 0 12px 12px}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .foot{background:linear-gradient(180deg,#4a4d52,#2a2c30)}}
-
-.dock{
-  position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:3;
-  display:flex;gap:8px;padding:7px 10px;border-radius:16px;
-  background:rgba(255,255,255,.14);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.16);
-}
-.dock b{width:30px;height:30px;border-radius:8px;display:block}
-@media(max-width:600px){.dock b{width:24px;height:24px}}
-
-/* ---------- island ---------- */
-.island{
-  position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:5;
-  background:#000;color:#f5f5f7;border-radius:0 0 22px 22px;
-  width:180px;height:26px;padding:0 14px;overflow:hidden;
-  display:flex;align-items:center;cursor:pointer;
-  transition:width .5s cubic-bezier(.32,.72,0,1),height .5s cubic-bezier(.32,.72,0,1),padding .5s cubic-bezier(.32,.72,0,1);
-}
-.island.open{width:min(400px,78%);height:110px;padding:0 18px}
-.row{display:flex;align-items:center;gap:11px;width:100%;min-width:0}
-.thumb{width:18px;height:18px;border-radius:5px;flex:none;transition:all .5s cubic-bezier(.32,.72,0,1)}
-.island.open .thumb{width:62px;height:62px;border-radius:14px}
-.meta{min-width:0;flex:1}
-.l1{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em}
-.l2{font-size:10px;color:#9b9ba1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.island.open .l1{font-size:15px}
-.island.open .l2{font-size:12px;margin-top:3px}
-.extra{display:none}
-.island.open .extra{display:block;margin-top:10px}
-.bar{height:3px;background:#2e2e32;border-radius:3px;overflow:hidden}
-.bar i{display:block;height:100%;background:#f5f5f7;border-radius:3px}
-.eq{display:flex;align-items:flex-end;gap:2.5px;height:13px;flex:none}
-.eq b{width:2.5px;height:4px;background:var(--green);border-radius:2px;animation:eq .95s ease-in-out infinite}
-.eq b:nth-child(2){animation-delay:.14s}.eq b:nth-child(3){animation-delay:.28s}.eq b:nth-child(4){animation-delay:.42s}
-@keyframes eq{0%,100%{height:4px}50%{height:12px}}
-.tag{flex:none;font-size:10px;padding:3px 9px;border-radius:999px;background:#2a2a2e;color:#c9c9cf;white-space:nowrap}
-.tag.g{background:rgba(48,209,75,.18);color:#4ade6b}
-.tag.a{background:rgba(255,159,10,.18);color:#ffb340}
-
-.tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:30px}
-.tab{
-  font:inherit;font-size:.88rem;padding:9px 18px;border-radius:999px;cursor:pointer;
-  border:1px solid var(--line);background:transparent;color:var(--sub);transition:all .2s;
-}
-.tab[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-.tabhint{margin-top:14px;font-size:.84rem;color:var(--sub);text-align:center}
-
-/* ---------- marquee ---------- */
-.ticker{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;margin-top:clamp(60px,8vw,96px)}
-.ticker ul{display:flex;gap:0;list-style:none;margin:0;padding:0;width:max-content;animation:slide 34s linear infinite}
-.ticker li{font-size:.92rem;color:var(--sub);padding:0 26px;white-space:nowrap;position:relative}
-.ticker li::after{content:"·";position:absolute;right:-3px;color:var(--line)}
-@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-/* ---------- stats ---------- */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,4vw,44px)}
-@media(max-width:760px){.stats{grid-template-columns:1fr;gap:34px}}
-.stat .n{font-size:clamp(3rem,7vw,4.6rem);font-weight:700;letter-spacing:-.05em;line-height:1}
-.stat h4{margin:10px 0 8px}
-.stat p{font-size:.97rem;color:var(--sub)}
-
-/* ---------- feature blocks ---------- */
-.block{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,6vw,72px);align-items:center}
-.block + .block{margin-top:clamp(56px,8vw,104px)}
-.block.flip .copy{order:2}
-@media(max-width:840px){.block,.block.flip .copy{grid-template-columns:1fr;order:0}}
-.block h3{margin-bottom:14px}
-.block .body{font-size:1.06rem}
-.visual{
-  background:var(--card);border-radius:var(--radius);padding:26px;border:1px solid var(--line);
-  box-shadow:var(--shadow);min-height:250px;display:flex;flex-direction:column;justify-content:center;gap:10px;
-}
-.clip{display:flex;gap:12px;align-items:center;padding:11px 13px;border-radius:14px;background:var(--bg);font-size:.9rem}
-.clip span:first-child{width:28px;height:28px;border-radius:8px;flex:none;display:grid;place-items:center;font-size:13px;background:var(--card);border:1px solid var(--line)}
-.clip em{font-style:normal;color:var(--sub);font-size:.8rem;margin-left:auto;white-space:nowrap}
-.mono{font-family:"JetBrains Mono",monospace}
-
-/* ---------- table ---------- */
-.tablecard{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow)}
-.scroller{overflow-x:auto}
-table{border-collapse:collapse;width:100%;min-width:800px;font-size:.9rem}
-th,td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
-thead th{font-weight:600;font-size:.86rem;letter-spacing:-.01em}
-tbody th{font-weight:400;color:var(--sub)}
-.us{background:color-mix(in srgb,var(--blue) 7%,transparent)}
-thead .us{border-bottom:2px solid var(--blue);color:var(--blue)}
-.y{color:var(--green);font-weight:600}
-.n{color:var(--line)}
-tbody tr:last-child th,tbody tr:last-child td{border-bottom:0}
-
-/* ---------- steps ---------- */
-.steps{counter-reset:s;display:grid;gap:0}
-.step{display:grid;grid-template-columns:90px 1fr;gap:clamp(16px,4vw,44px);padding:30px 0;border-top:1px solid var(--line)}
-.step:last-child{border-bottom:1px solid var(--line)}
-.step .num{font-size:1.05rem;font-weight:600;color:var(--sub);letter-spacing:-.02em}
-.step p{color:var(--sub);margin-top:10px;font-size:1rem;max-width:60ch}
-@media(max-width:620px){.step{grid-template-columns:1fr;gap:6px}}
-
-/* ---------- faq ---------- */
-details{border-top:1px solid var(--line);padding:20px 0}
-details:last-of-type{border-bottom:1px solid var(--line)}
-summary{cursor:pointer;list-style:none;display:flex;gap:16px;align-items:center;font-weight:500;font-size:1.05rem;letter-spacing:-.015em}
-summary::-webkit-details-marker{display:none}
-summary::after{content:"+";margin-left:auto;font-size:1.4rem;color:var(--sub);line-height:1;font-weight:400}
-details[open] summary::after{content:"–"}
-details .ans{margin-top:14px;color:var(--sub);font-size:1rem;max-width:66ch}
-details .ans a{color:var(--blue)}
-
-/* ---------- pricing ---------- */
-.price{
-  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-  padding:clamp(30px,5vw,50px);max-width:470px;margin:0 auto;box-shadow:var(--shadow);text-align:center;
-}
-.price .tier{font-size:.86rem;color:var(--sub);font-weight:500}
-.price .fig{font-size:clamp(3.4rem,9vw,5rem);font-weight:700;letter-spacing:-.05em;line-height:1.05;margin:8px 0 2px}
-.price .per{font-size:.95rem;color:var(--sub);margin-bottom:20px}
-.price ul{list-style:none;margin:26px 0 0;padding:0;text-align:left;display:grid;gap:11px;font-size:.96rem}
-.price li{display:flex;gap:11px;align-items:flex-start;color:var(--sub)}
-.price li::before{content:"✓";color:var(--green);font-weight:700;flex:none}
-.pricenote{margin-top:22px;font-size:.84rem;color:var(--sub)}
-.cmd{display:flex;align-items:center;gap:12px;background:var(--ink);color:var(--bg);border-radius:14px;padding:14px 16px;font-family:"JetBrains Mono",monospace;font-size:.85rem;overflow-x:auto;max-width:470px;margin:22px auto 0}
-.cmd button{margin-left:auto;flex:none;font:inherit;font-size:.74rem;cursor:pointer;background:color-mix(in srgb,var(--bg) 22%,transparent);color:var(--bg);border:0;border-radius:8px;padding:6px 11px}
-
-/* ---------- finale ---------- */
-.finale{text-align:center;padding:clamp(80px,11vw,150px) 0;background:var(--card);border-radius:var(--radius);margin:0 22px;border:1px solid var(--line)}
-.finale h2{margin-bottom:26px}
-
-/* ---------- footer ---------- */
-footer{padding:64px 0 80px;color:var(--sub);font-size:.9rem}
-.fgrid{display:grid;grid-template-columns:1.6fr repeat(3,1fr);gap:clamp(22px,4vw,44px);margin-bottom:44px}
-@media(max-width:760px){.fgrid{grid-template-columns:1fr 1fr}.fgrid > div:first-child{grid-column:1/-1}}
-footer h5{margin:0 0 14px;font-size:.88rem;font-weight:600;color:var(--ink);letter-spacing:-.01em}
-footer ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
-footer a:hover{color:var(--ink)}
-.legal{border-top:1px solid var(--line);padding-top:24px;font-size:.82rem;line-height:1.6}
-</style>
+<link rel="stylesheet" href="assets/site.css">
+<script type="module" src="js/main.js" defer></script>
+</head>
 </head>
 <body>
 
@@ -274,6 +27,7 @@ footer a:hover{color:var(--ink)}
         <a href="#features">Features</a>
         <a href="#compare">Compare</a>
         <a href="#how">How it works</a>
+        <a href="#notyet">Not yet</a>
         <a href="#faq">FAQ</a>
         <a href="#price">Price</a>
       </nav>
@@ -287,18 +41,12 @@ footer a:hover{color:var(--ink)}
 <!-- HERO -->
 <section class="hero">
   <div class="wrap">
-    <p class="eyebrow">Dynamic Island, open sourced</p>
-    <!-- ⚠ REWRITE BEFORE THIS PAGE GOES PUBLIC.
-         "Your MacBook notch, finally a Dynamic Island." is notchbay.com's own
-         hero headline, word for word (checked 20 Sep 2026), and the sub-head
-         below is close to theirs too. Shipping a competitor's copy is a
-         trademark risk and destroys the "we're the honest one" position this
-         whole project rests on. Replacements: docs/WEBSITE-PLAN.md §8. -->
-    <h1>Your MacBook notch,<span class="soft">finally a Dynamic Island.</span></h1>
-    <p class="body" style="margin-top:22px">Perch is a <strong>Dynamic Island-style hub</strong> for the Mac: live activities for music, calendar, calls and AirPods, a shelf for files, and a searchable clipboard. <strong>Free, open source, and nothing leaves your Mac.</strong></p>
+    <p class="eyebrow">Free and open source, forever</p>
+    <h1>Everyone else charges for your notch.<span class="soft">This one is the source code.</span></h1>
+    <p class="body" style="margin-top:22px">Perch turns the MacBook camera notch into a live, interactive surface: music, meetings, a file shelf, searchable clipboard history, your camera, and a real system monitor. <strong>Eighteen modules, every one free</strong> — no licence key, no account, no telemetry, and no network request beyond checking for updates.</p>
     <div class="herocta">
       <a class="btn" href="#price">Download for macOS</a>
-      <a class="btn sec" href="#demo">See it live</a>
+      <a class="btn sec" href="#demo">Try the island below</a>
     </div>
     <p class="freeline"><span class="dot"></span>No licence key · No account · No subscription, ever</p>
   </div>
@@ -311,7 +59,7 @@ footer a:hover{color:var(--ink)}
           <div class="l"><b>Finder</b><span>File</span><span>Edit</span><span>View</span></div>
           <span>Sun 20 Sep&nbsp;&nbsp;9:41 AM</span>
         </div>
-        <div class="island" id="island"><div class="row" id="row"></div></div>
+        <div class="island" id="island" role="button" tabindex="0" aria-expanded="false"><div class="row" id="row"></div></div>
         <div class="dock">
           <b style="background:linear-gradient(145deg,#4facfe,#2b78e4)"></b>
           <b style="background:linear-gradient(145deg,#fa709a,#fee140)"></b>
@@ -362,17 +110,17 @@ footer a:hover{color:var(--ink)}
   <div class="wrap stats">
     <div class="stat">
       <div class="n">0</div>
-      <h4>Accounts. Servers. Analytics.</h4>
+      <h3>Accounts. Servers. Analytics.</h3>
       <p>Everything happens on your Mac. The only request Perch ever makes is to its own update feed, and you can turn that off too.</p>
     </div>
     <div class="stat">
       <div class="n">18</div>
-      <h4>Modules, each switchable</h4>
+      <h3>Modules, each switchable</h3>
       <p>Against a paid field that averages six. Turn one off and it stops existing — no observer, no timer, no CPU. Run Perch as a music strip or as the whole hub.</p>
     </div>
     <div class="stat">
       <div class="n">$0</div>
-      <h4>Forever, and the source too</h4>
+      <h3>Forever, and the source too</h3>
       <p>MIT licensed on GitHub. No Pro tier, no licence key in the codebase, nothing held back for a version 2.</p>
     </div>
   </div>
@@ -421,7 +169,7 @@ footer a:hover{color:var(--ink)}
           <span class="tag" style="background:var(--bg);color:var(--ink);border:1px solid var(--line);font-size:.8rem;padding:8px 14px">Join</span>
           <span class="tag" style="background:var(--bg);color:var(--ink);border:1px solid var(--line);font-size:.8rem;padding:8px 14px">Mute</span>
           <span class="tag" style="background:var(--bg);color:var(--ink);border:1px solid var(--line);font-size:.8rem;padding:8px 14px">Camera</span>
-          <span class="tag" style="background:rgba(255,59,48,.12);color:#ff453a;font-size:.8rem;padding:8px 14px">Leave</span>
+          <span class="tag r" style="font-size:.8rem;padding:8px 14px">Leave</span>
         </div>
       </div>
     </div>
@@ -471,6 +219,40 @@ footer a:hover{color:var(--ink)}
   </div>
 </section>
 
+<!-- NOT YET -->
+<section class="sec" id="notyet">
+  <div class="wrap">
+    <h2>What it doesn't do yet</h2>
+    <p class="lead">Every other site in this category lists only what ships. Here is the other half, because you will find out anyway and it may as well be from us.</p>
+    <div class="grid3">
+      <div class="card">
+        <h3>Voice typing</h3>
+        <p>On-device dictation is the hardest thing on the roadmap and it is not in 1.0. Two of the paid apps have it and Perch does not, yet.</p>
+      </div>
+      <div class="card">
+        <h3>Up Next and synced lyrics</h3>
+        <p>macOS exposes no local interface that reports another app's play queue or word-by-word lyrics. A browser tab has no queue to read. We would rather say so than ship a panel that is empty for most people.</p>
+      </div>
+      <div class="card">
+        <h3>The audio visualiser is not a spectrum analyser</h3>
+        <p>It reflects playback, not amplitude. Reading the real signal means Screen Recording permission and a capture session running the whole time music plays — for decoration. We said no.</p>
+      </div>
+      <div class="card">
+        <h3>Anything that needs an account</h3>
+        <p>No cloud sync of your clipboard or shelf, no iPhone companion, no AI summaries. All three would mean a server, and a server means a bill, and a bill is how free apps stop being free.</p>
+      </div>
+      <div class="card">
+        <h3>Animation polish, on day one</h3>
+        <p>Alcove's motion is better than ours is at launch. We know, we have used it, and the gap is a matter of iteration rather than architecture. Watch the repo.</p>
+      </div>
+      <div class="card">
+        <h3>A Mac App Store build</h3>
+        <p>Reading pasteboard changes, driving the Accessibility API and reading IOKit sensors are all impossible inside the App Sandbox. Perch is signed, notarised, and installed directly or with Homebrew.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- COMPARE -->
 <section id="compare">
   <div class="wrap">
@@ -480,10 +262,11 @@ footer a:hover{color:var(--ink)}
       <p class="body" style="margin-top:20px">Apple ships the idea free on every iPhone. On the Mac it became a $9–25 category. Prices checked September 2026 — confirm on each vendor's own site, they move faster than web pages.</p>
     </div>
     <div class="tablecard">
-      <div class="scroller">
+      <div class="scroller" tabindex="0" role="region"
+           aria-label="Feature comparison against seven competing apps">
         <table>
           <thead><tr>
-            <th scope="col">&nbsp;</th><th scope="col" class="us">Perch</th><th scope="col">Boring Notch</th>
+            <th scope="col"><span class="sr-only">Capability</span></th><th scope="col" class="us">Perch</th><th scope="col">Boring Notch</th>
             <th scope="col">Seam</th><th scope="col">Alcove</th><th scope="col">NotchNook</th>
             <th scope="col">DynamicLake Pro</th><th scope="col">NotchBay</th><th scope="col">TopNotch</th>
           </tr></thead>
@@ -520,28 +303,28 @@ footer a:hover{color:var(--ink)}
       <div class="step">
         <div class="num">01.</div>
         <div>
-          <h4>One app. One launch.</h4>
+          <h3>One app. One launch.</h3>
           <p>Perch is a single native Swift app. No account, no setup wizard, no Electron runtime sitting in your menu bar. Open it once and an island settles in around the notch. That's the whole setup.</p>
         </div>
       </div>
       <div class="step">
         <div class="num">02.</div>
         <div>
-          <h4>Nothing you didn't allow.</h4>
+          <h3>Nothing you didn't allow.</h3>
           <p>Each module asks for its own macOS permission the first time you switch it on — the calendar for your next meeting, accessibility for the volume overlay. Grant what you want, skip the rest. Nothing is requested at launch.</p>
         </div>
       </div>
       <div class="step">
         <div class="num">03.</div>
         <div>
-          <h4>Your day, in the notch.</h4>
+          <h3>Your day, in the notch.</h3>
           <p>Play a song, join a call, copy a link, park a file. Each one becomes a live activity above the keyboard. Glance to check it, hover to peek, click to expand — right where your eyes already are.</p>
         </div>
       </div>
       <div class="step">
         <div class="num">04.</div>
         <div>
-          <h4>Then it disappears.</h4>
+          <h3>Then it disappears.</h3>
           <p>When nothing needs you, the island goes quiet: a black sliver shaped like the notch it lives in, doing no work at all. Status flashes surface for a second, then fade. You stop noticing it's running. That's the point.</p>
         </div>
       </div>
@@ -589,7 +372,7 @@ footer a:hover{color:var(--ink)}
 
     <details>
       <summary>Is it safe to install?</summary>
-      <div class="ans">Perch is signed with an Apple Developer ID and notarised, so Gatekeeper opens it without a warning. Clips, files and calendar events stay in the app's own container and are never uploaded. The only network request it makes is to its update feed. If you'd rather check yourself, <a href="https://github.com/your-org/perch">the source is right here</a>.</div>
+      <div class="ans">Perch is signed with an Apple Developer ID and notarised, so Gatekeeper opens it without a warning. Clips, files and calendar events stay in the app's own container and are never uploaded. The only network request it makes is to its update feed. If you'd rather check yourself, <a href="https://github.com/Milanpatel35/Perch">the source is right here</a>.</div>
     </details>
   </div>
 </section>
@@ -603,7 +386,14 @@ footer a:hover{color:var(--ink)}
       <div class="tier">Everything, always</div>
       <div class="fig">$0</div>
       <div class="per">MIT licensed · every feature · unlimited Macs</div>
-      <a class="btn" href="https://github.com/your-org/perch/releases" style="width:100%;justify-content:center">Download for macOS</a>
+      <a class="btn" href="https://github.com/Milanpatel35/Perch/releases/latest" style="width:100%;justify-content:center">Download for macOS</a>
+      <p class="prerelease">
+        <strong>Pre-1.0.</strong> There is no published build yet — the island
+        and the first module are done, the rest of the roadmap is not. The
+        button goes live with the first tagged release. Until then,
+        <a href="https://github.com/Milanpatel35/Perch#install">build it from source</a>
+        — it is three commands.
+      </p>
       <ul>
         <li>Searchable clipboard history with pinning</li>
         <li>File shelf that survives app switches</li>
@@ -614,7 +404,7 @@ footer a:hover{color:var(--ink)}
       <p class="pricenote">macOS 13 Ventura or later · Apple Silicon and Intel · signed and notarised</p>
     </div>
     <div class="cmd"><code>brew install --cask perch</code><button data-copy="brew install --cask perch">Copy</button></div>
-    <p style="font-size:.86rem;color:var(--sub);margin-top:18px">Or build it yourself — <a href="https://github.com/your-org/perch" style="color:var(--blue)">clone the repo</a> and run <span class="mono">make run</span>.</p>
+    <p style="font-size:.86rem;color:var(--sub);margin-top:18px">Or build it yourself — <a href="https://github.com/Milanpatel35/Perch" style="color:var(--blue)">clone the repo</a> and run <span class="mono">make run</span>.</p>
   </div>
 </section>
 
@@ -626,6 +416,11 @@ footer a:hover{color:var(--ink)}
   </div>
 </div>
 
+
+<!-- Island state, announced politely. WEBSITE-PLAN.md §7. Inside <main> so
+     it sits in a landmark rather than loose in the body. -->
+<p id="island-live" class="sr-only" aria-live="polite"></p>
+
 </main>
 
 <footer>
@@ -636,7 +431,7 @@ footer a:hover{color:var(--ink)}
         <p style="max-width:34ch">The notch, put to work. Live activities, your clipboard, your files and your meetings — right where your eyes already are.</p>
       </div>
       <div>
-        <h5>Product</h5>
+        <h3>Product</h3>
         <ul>
           <li><a href="#features">Features</a></li>
           <li><a href="#demo">Live demo</a></li>
@@ -645,16 +440,16 @@ footer a:hover{color:var(--ink)}
         </ul>
       </div>
       <div>
-        <h5>Source</h5>
+        <h3>Source</h3>
         <ul>
-          <li><a href="https://github.com/your-org/perch">GitHub</a></li>
-          <li><a href="https://github.com/your-org/perch/blob/dev/CONTRIBUTING.md">Contributing</a></li>
-          <li><a href="https://github.com/your-org/perch/blob/dev/docs/PLAN.md">Roadmap</a></li>
-          <li><a href="https://github.com/your-org/perch/blob/dev/SECURITY.md">Security</a></li>
+          <li><a href="https://github.com/Milanpatel35/Perch">GitHub</a></li>
+          <li><a href="https://github.com/Milanpatel35/Perch/blob/dev/CONTRIBUTING.md">Contributing</a></li>
+          <li><a href="https://github.com/Milanpatel35/Perch/blob/dev/docs/PLAN.md">Roadmap</a></li>
+          <li><a href="https://github.com/Milanpatel35/Perch/blob/dev/SECURITY.md">Security</a></li>
         </ul>
       </div>
       <div>
-        <h5>Compare</h5>
+        <h3>Compare</h3>
         <ul>
           <li><a href="#compare">vs Boring Notch</a></li>
           <li><a href="#compare">vs NotchNook</a></li>
@@ -669,70 +464,5 @@ footer a:hover{color:var(--ink)}
   </div>
 </footer>
 
-<script>
-(function(){
-  var island=document.getElementById('island'),row=document.getElementById('row'),
-      tabs=[].slice.call(document.querySelectorAll('.tab'));
-
-  var S={
-    music:{c:'linear-gradient(145deg,#fa709a,#fee140)',a:'Midnight City',b:"M83 — Hurry Up, We're Dreaming",
-      r:'<div class="eq"><b></b><b></b><b></b><b></b></div>',
-      x:'<div class="bar"><i style="width:38%"></i></div>'},
-    meet:{c:'linear-gradient(145deg,#2af598,#009efd)',a:'Standup in 4 min',b:'Google Meet · 6 attendees',
-      r:'<span class="tag g">Join</span>',
-      x:'<div class="l2">Mute, camera and leave stay up here once you are in.</div>'},
-    shelf:{c:'linear-gradient(145deg,#4facfe,#2b78e4)',a:'3 files held',b:'Q3-contract.pdf, logo.svg, notes.md',
-      r:'<span class="tag">Drop</span>',
-      x:'<div class="l2">Drag them out anywhere. They survive app switches.</div>'},
-    clip:{c:'linear-gradient(145deg,#a770ef,#f6d365)',a:'Copied',b:'github.com/your-org/perch',
-      r:'<span class="tag">142</span>',
-      x:'<div class="l2">142 clips in history. Search, pin, paste.</div>'},
-    focus:{c:'linear-gradient(145deg,#f7971e,#ffd200)',a:'18:42 left',b:'Deep work · session 3 of 4',
-      r:'<span class="tag a">Focus</span>',
-      x:'<div class="bar"><i style="width:26%"></i></div>'},
-    batt:{c:'linear-gradient(145deg,#8e9297,#c9ccd1)',a:'AirPods Pro',b:'Left 82% · Right 79% · Case 44%',
-      r:'<span class="tag">82%</span>',
-      x:'<div class="l2">Mac, AirPods, mouse, keyboard and trackpad in one place.</div>'},
-    cam:{c:'linear-gradient(145deg,#2b2b30,#4a4a52)',a:'Camera',b:'Standup starts in 40 seconds',
-      r:'<span class="tag g">Live</span>',
-      x:'<div class="l2">Fires by itself before a meeting. Nobody else builds this past a plain mirror.</div>'},
-    sys:{c:'linear-gradient(145deg,#30cfd0,#330867)',a:'CPU 46% · RAM 11.2 GB',b:'Net ↓ 4.1 MB/s · 62°C · fans 2,100 rpm',
-      r:'<span class="tag a">46%</span>',
-      x:'<div class="bar"><i style="width:46%"></i></div>'}
-  };
-
-  function paint(k){
-    var s=S[k];
-    row.innerHTML='<div class="thumb" style="background:'+s.c+'"></div>'+
-      '<div class="meta"><div class="l1">'+s.a+'</div><div class="l2">'+s.b+'</div>'+
-      '<div class="extra">'+s.x+'</div></div>'+s.r;
-  }
-
-  tabs.forEach(function(t){
-    t.addEventListener('click',function(){
-      tabs.forEach(function(o){o.setAttribute('aria-pressed','false')});
-      t.setAttribute('aria-pressed','true');
-      paint(t.dataset.s);
-      island.classList.add('open');
-    });
-  });
-  island.addEventListener('click',function(){island.classList.toggle('open')});
-  paint('music');
-  setTimeout(function(){island.classList.add('open')},700);
-
-  // duplicate ticker for a seamless loop
-  var tk=document.getElementById('ticker');
-  tk.innerHTML+=tk.innerHTML;
-
-  document.querySelectorAll('[data-copy]').forEach(function(b){
-    b.addEventListener('click',function(){
-      navigator.clipboard.writeText(b.dataset.copy).then(function(){
-        var o=b.textContent;b.textContent='Copied';
-        setTimeout(function(){b.textContent=o},1500);
-      }).catch(function(){b.textContent='Press ⌘C'});
-    });
-  });
-})();
-</script>
 </body>
 </html>

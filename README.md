@@ -8,12 +8,17 @@ Media controls, a file shelf, clipboard history, a system monitor, your camera,
 timers, battery and meeting alerts — all living in the black cutout you already
 paid for.
 
+### [**perch — see it running →**](https://milanpatel35.github.io/Perch/)
+
+The site has a live island you can actually use: hover it, click it, switch it
+between states. No video, no install.
+
 [![CI](https://github.com/Milanpatel35/Perch/actions/workflows/ci.yml/badge.svg)](https://github.com/Milanpatel35/Perch/actions/workflows/ci.yml)
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-black.svg)](LICENSE)
 [![macOS 13+](https://img.shields.io/badge/macOS-13%2B-black.svg)]()
 [![Universal](https://img.shields.io/badge/arch-Apple%20Silicon%20%2B%20Intel-black.svg)]()
 
-[Download](#install) · [Features](#what-it-does) · [Why Perch](#how-it-compares) · [Contributing](CONTRIBUTING.md) · [Roadmap](docs/PLAN.md) · [Full feature list](docs/FEATURES.md)
+[**Website**](https://milanpatel35.github.io/Perch/) · [**Download**](https://github.com/Milanpatel35/Perch/releases/latest) · [Features](#what-it-does) · [Why Perch](#how-it-compares) · [Contributing](CONTRIBUTING.md) · [Roadmap](docs/PLAN.md) · [Full feature list](docs/FEATURES.md)
 
 </div>
 
@@ -60,17 +65,22 @@ and nobody has built the camera out past a plain mirror.
 
 ## Install
 
-**Homebrew** (recommended)
+> **Pre-1.0.** There is no published release yet — Phase 1 and the first
+> module are done, the rest of `docs/PLAN.md` is not. The Homebrew cask and
+> the `.dmg` below go live with the first tagged release; until then, build
+> from source. The site says the same thing rather than offering a download
+> that is not there.
+
+**Download the app** — [latest release](https://github.com/Milanpatel35/Perch/releases/latest)
+
+Signed, notarised and stapled `.dmg`. Drag to Applications and launch;
+Gatekeeper opens it without a warning.
+
+**Homebrew** (recommended once released)
 
 ```bash
 brew install --cask perch
 ```
-
-**Direct download**
-
-Grab the latest signed and notarised `.dmg` from
-[Releases](https://github.com/Milanpatel35/Perch/releases/latest), drag to
-Applications, launch.
 
 **Build from source**
 
@@ -82,6 +92,12 @@ make run
 ```
 
 Requires macOS 13.0 or later and Xcode 16+.
+
+**The website** lives in [`Website/`](Website/) and deploys to
+<https://milanpatel35.github.io/Perch/>. Run it locally with `make site`,
+which serves it on <http://localhost:8000>. It is a hand-written static site
+— no framework, no bundler — so anyone who can write HTML can fix a typo in
+it. The plan for it is [docs/WEBSITE-PLAN.md](docs/WEBSITE-PLAN.md).
 
 ## How it compares
 
