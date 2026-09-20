@@ -47,7 +47,8 @@ export const STATES = {
         title: "18:42 left",
         subtitle: "Deep work · session 3 of 4",
         trailing: '<span class="tag a">Focus</span>',
-        expanded: '<div class="bar"><i style="width:26%"></i></div>',
+        expanded:
+            '<div class="bar"><i style="width:26%"></i></div><div class="l2">Close the lid for forty minutes and it is finished when you open it. Nothing is counting.</div>',
     },
     hud: {
         tint: "linear-gradient(145deg,#4b6cb7,#182848)",

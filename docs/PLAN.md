@@ -168,7 +168,15 @@ interfaces it needs and how each degrades. Keyboard backlight and AirDrop are
 recorded in `FEATURES.md` §6 as not done: macOS publishes no change
 notification for either, and a HUD that can never fire is not a feature.
 
-**Still to do in 2.3:** the focus timer.
+**Status: 2.3 complete.** Module 4 shipped in 0.5.0 too — Pomodoro with
+configurable lengths, the countdown in the collapsed island, session and
+streak counts, and a finished alert that pre-empts Now Playing through the
+existing priority ladder rather than a special case. No ticking: the timer is
+wall-clock, the countdown is rendered by macOS, and completion is a single
+scheduled wake-up. Auto-enabling a macOS Focus is recorded in `FEATURES.md` §4
+as not done — nothing at any level can set one.
+
+**Phase 2.3 is done.** Next is 2.4: calendar, meetings and notifications.
 
 **Also starts here: the website.** It is 24 working days (`WEBSITE-PLAN.md`
 §9) and cannot be compressed into launch week. Run it in parallel from now on.

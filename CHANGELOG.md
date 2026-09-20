@@ -47,6 +47,25 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
   change notification for either, at any level, so a switch for them would be
   a switch that never does anything. Both are recorded in `FEATURES.md` §6.
 
+- **Focus timer** (module 4). Pomodoro with configurable work and break
+  lengths, the countdown in the collapsed island rather than in a window or a
+  menu-bar string, session and streak counts, and a finished alert that
+  pre-empts Now Playing through the existing priority ladder rather than a
+  special case.
+
+  **Nothing ticks.** The timer is wall-clock — a running phase is the `Date`
+  it ends at — so a Mac asleep for forty minutes wakes to a session that is
+  simply over, with no accounting, because nothing was ever counting. The
+  countdown is drawn by `Text(timerInterval:)`, which macOS renders itself,
+  and completion is a single scheduled wake-up rather than a repeating timer.
+
+  The streak counts **days, not sessions**: four on Tuesday is one day.
+
+  **Auto-enabling a macOS Focus during a session is not included.** Nothing at
+  any level can set a Focus — the entitlement is Apple's own — so Perch can
+  read which one is on and show it, but not turn one on. `FEATURES.md` §4
+  records it and the Preferences pane says so.
+
 ### Changed
 - The Battery module needs **no permission**. `FEATURES.md` listed Bluetooth,
   which was wrong: `CoreBluetooth` and `IOBluetooth` are what require it, and
