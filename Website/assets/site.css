@@ -336,3 +336,25 @@ td a{text-decoration:underline;text-underline-offset:2px}
   color:var(--sub);text-align:left;
 }
 .prerelease a{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
+
+/* ------------------------------------------------------------------ */
+/* Real screenshots.                                                   */
+/*                                                                     */
+/* Rendered from the app's own views by IslandSnapshots, not drawn in  */
+/* a design tool — so they cannot drift from what ships. They arrive   */
+/* with the transparent panel already trimmed off and a shadow already */
+/* in the pixels, so the frame here is a backdrop for them to sit on   */
+/* rather than a border around them.                                   */
+/* ------------------------------------------------------------------ */
+.shot{
+  margin:0;padding:clamp(18px,3vw,34px);
+  background:linear-gradient(160deg,#1b2432,#2c2140 45%,#0d1117);
+  border-radius:var(--radius);border:1px solid var(--line);
+  box-shadow:var(--shadow);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:16px;min-height:250px;
+}
+.shot img{display:block;width:100%;height:auto;max-width:512px}
+.shot figcaption{
+  color:rgba(255,255,255,.55);font-size:.8rem;line-height:1.5;
+  text-align:center;max-width:44ch;
+}

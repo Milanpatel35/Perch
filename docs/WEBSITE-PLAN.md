@@ -41,6 +41,66 @@ headline directions are in §8.
 
 ---
 
+## 0.1 Structural study: notchbay.com
+
+Fetched again 20 September 2026, this time reading **structure and
+interaction only**. The rule from §0 stands and is worth restating, because
+the request to "make it like theirs" will come back: we study how their page
+is *built*, never what it *says*. Their words are theirs, and a free project
+has no budget to defend a passing-off claim.
+
+Their section order:
+
+1. Fixed header — logo, features, blog, pricing, download
+2. Hero — headline, two CTAs (download, and a link to a demo anchor)
+3. Social proof — a Product Hunt badge
+4. A mockup of the macOS menu bar
+5. One-line statement of what it does
+6. A grid of differentiators
+7. Live activities, explained
+8. Four capability blocks, each text plus an icon
+9. How it works — four numbered steps
+10. FAQ
+11. Pricing — one tier, $9 lifetime, plus a free path
+12. Final CTA over a full-width image
+13. Footer, links grouped by category
+
+**What is actually interactive:** the navigation, the CTAs, two email capture
+forms and the FAQ disclosures. Everything else is static. The product is
+shown as **screenshots and mockups** — there is no video and no live demo,
+and the "see it live" link is an anchor to a static section further down.
+
+### What to take
+
+- **Repeat the download CTA.** Theirs appears in the header, the hero and the
+  footer. Ours appears in the header, the hero, the price block and the
+  finale, so this one is already done — but it is the right instinct and the
+  mid-page gap after the feature blocks is the one place ours goes quiet.
+- **Pricing before the final CTA, not as the final CTA.** Theirs sits at 11
+  of 13 with a closing section after it. Ours does the same. Keep it.
+- **Numbered, progressively disclosed "how it works".** Reduces install
+  anxiety. Ours has it; theirs is the better length.
+
+### What not to take
+
+- **A long page that defers everything.** Theirs is notably long and closes
+  late. Ours makes its argument — price, source, no account — above the fold,
+  because that argument is the product.
+- **Static mockups as the demonstration.** This is the gap §0 identified and
+  it is still the gap. Their page *tells* you the notch is interactive.
+  Ours lets you use it, and now also shows screenshots rendered from the
+  app's own views rather than drawn in a design tool.
+
+### Where we are ahead
+
+Two things, and neither is an accident:
+
+1. **The island on our page is real.** Scroll it, hover it, click it.
+2. **"What it doesn't do yet".** Nobody in this category publishes their
+   gaps. It is the cheapest credibility available and it costs one section.
+
+---
+
 ## 1. Information architecture
 
 Sections in order. Every one has a defined job and a defined interaction.
