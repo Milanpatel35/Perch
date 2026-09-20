@@ -97,6 +97,9 @@ targets:
     dependencies:
       - target: PerchCore
       - package: Defaults
+      # Modules register their own global shortcuts — the clipboard picker is
+      # the first — so the library belongs here, not only in the app target.
+      - package: KeyboardShortcuts
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: app.perch.PerchUI

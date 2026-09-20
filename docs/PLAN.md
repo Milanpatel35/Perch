@@ -136,10 +136,10 @@ paths, search, pinning, retention, exclusions, and OCR on copied images.
 **Done when:** you have stopped using a separate shelf app, and the clipboard
 beats the $9 app's tray in a way you can demonstrate in ten seconds.
 
-**Status: the shelf is done**, including conversion and the share sheet. The
-clipboard is next and is the bigger half — it is the single biggest gap in the
-paid field, and the one that needs a pasteboard observer that costs nothing
-when it is off.
+**Status: done.** Both halves. The clipboard needed the one exception to
+§5.1 in the whole project — `NSPasteboard` has no notification, so it polls —
+and that is written down in ADR 0003 rather than left for somebody to
+discover in Activity Monitor.
 
 ## 2.3 — HUDs, battery, focus (weeks 8–9)
 

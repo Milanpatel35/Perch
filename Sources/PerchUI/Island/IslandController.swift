@@ -29,6 +29,14 @@ public final class IslandController: ObservableObject {
     /// this as the "stack" badge.
     @Published public private(set) var queued: [AnyIslandActivity] = []
 
+    /// Whether something currently on the island needs the keyboard.
+    ///
+    /// Almost always false. The island is a surface you touch, not one you
+    /// focus, and typing has to keep going to the app in front (TC-ISL-008).
+    /// The clipboard's search field is the only thing that raises this, and
+    /// it lowers it again the moment the picker closes.
+    @Published public private(set) var requiresKeyFocus = false
+
     /// The motion token for the transition the island is currently making.
     ///
     /// Held here rather than derived in the view because the view only sees
@@ -82,6 +90,13 @@ public final class IslandController: ObservableObject {
     /// it must leave nothing behind (TC-MED-007).
     public func withdrawAll(from module: ModuleID) {
         send(.moduleDisabled(module))
+    }
+
+    /// Asks the panel for key focus, for as long as a module genuinely needs
+    /// it. Modules lower this themselves; nothing does it for them.
+    public func setRequiresKeyFocus(_ required: Bool) {
+        guard requiresKeyFocus != required else { return }
+        requiresKeyFocus = required
     }
 
     // MARK: - Input

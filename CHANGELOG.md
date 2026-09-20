@@ -9,6 +9,11 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 ## [Unreleased]
 
 ### Added
+- **Clipboard history** (module 3) — the single biggest gap in the paid
+  field. Text, rich text, images, file paths and colours; a searchable picker
+  on a global shortcut; pinning; retention by count and age; paste as plain
+  text; and on-device OCR of copied images. Password managers are excluded
+  out of the box, and a concealed pasteboard type is never recorded at all.
 - **Shelf** (module 2). Drag a file to the notch and it waits there: across
   app switches, Space changes and relaunches. Drag it back out to anywhere.
   Folders count as one item, text and image selections become clippings, and
@@ -21,6 +26,13 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
   to the notch works while music is playing.
 
 ### Notes
+- The clipboard contains Perch's **only polling loop**, and it is the
+  documented exception to `CLAUDE.md` §5.1 — `NSPasteboard` has no
+  notification of any kind. 600ms, only while the module is on, suspended on
+  screen lock and on sleep. See
+  [ADR 0003](docs/adr/0003-polling-the-pasteboard.md).
+- The clipboard's global shortcut has **no default**. One that claims a
+  hotkey without being asked will collide with something, silently.
 - Files are **copied** into Perch's own folder, never moved. The original
   stays where you dragged it from.
 - Clear-on-quit is **off** by default. A shelf that empties itself without
