@@ -27,7 +27,17 @@ jobs:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
+      # Always `main`, whatever fired the run.
+      #
+      # A `release: published` run is checked out at the *tag*, and a tag's
+      # tree is by definition no newer than main — so any fix that landed
+      # after the tag was cut gets silently rolled back by publishing the
+      # release. That is not hypothetical: it happened in production on
+      # 21 September 2026, reverting the site's download link to the
+      # previous version minutes after the new one went out.
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - name: Build site
         run: |
           cd Website
