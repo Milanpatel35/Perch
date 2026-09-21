@@ -126,6 +126,9 @@ unsigned build is acceptable at all.
 ## After every release
 
 - [ ] Release page shows the `.dmg`, and it downloads
+- [ ] `README.md`'s two download links point at the release just published.
+      The website's link is derived from `project.yml` by `build.js` and needs
+      no attention; the README's is not, and has been stale before
 - [ ] Gatekeeper opens it on a Mac that has never run Perch — no warning
 - [ ] `appcast.xml` lists the new version, and an older install actually sees
       the update

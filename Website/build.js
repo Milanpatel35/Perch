@@ -62,6 +62,20 @@ let html = await readFile(path, 'utf8')
 const [tag, repo] = await Promise.all([version(), repository()])
 
 html = inject(html, 'version', tag)
+
+// The download link, from the same single source as the version.
+//
+// It used to be the build tag typed into the markup by hand, which meant it
+// pointed at the *previous* release for as long as nobody noticed — and
+// nobody notices a link that still works, it just hands you an old app.
+// Derived here, so it cannot be forgotten at release time. No network:
+// `version()` reads project.yml.
+if (tag) {
+  html = html.replace(
+    /releases\/download\/build-[\d.]+\/Perch-[\d.]+-unsigned\.zip/g,
+    `releases/download/build-${tag}/Perch-${tag}-unsigned.zip`,
+  )
+}
 html = inject(html, 'stars', repo?.stargazers_count)
 html = inject(html, 'forks', repo?.forks_count)
 html = inject(html, 'issues', repo?.open_issues_count)
