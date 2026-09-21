@@ -47,7 +47,16 @@ export const STATES = {
         title: "18:42 left",
         subtitle: "Deep work · session 3 of 4",
         trailing: '<span class="tag a">Focus</span>',
-        expanded: '<div class="bar"><i style="width:26%"></i></div>',
+        expanded:
+            '<div class="bar"><i style="width:26%"></i></div><div class="l2">Close the lid for forty minutes and it is finished when you open it. Nothing is counting.</div>',
+    },
+    hud: {
+        tint: "linear-gradient(145deg,#4b6cb7,#182848)",
+        title: "Volume",
+        subtitle: "MacBook Pro Speakers",
+        trailing: '<span class="tag">62%</span>',
+        expanded:
+            '<div class="l2">Six overlays replaced. The macOS one is suspended while the module is on, and back the moment it is not.</div>',
     },
     batt: {
         tint: "linear-gradient(145deg,#8e9297,#c9ccd1)",

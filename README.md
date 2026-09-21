@@ -42,10 +42,10 @@ updates.
 | **Now Playing** | Artwork, scrubbing, AirPlay target, Up Next queue, synced lyrics |
 | **Shelf** | Drag files to the notch, hold, drop them anywhere else. AirDrop and quick format conversion built in |
 | **Clipboard** | Searchable history with pinning, text, images, colours — and OCR on anything you screenshot |
-| **Focus** | Pomodoro timer that lives in the notch instead of stealing a window |
+| **Focus** | Pomodoro that counts down in the notch instead of stealing a window — and survives the lid being closed, because nothing is counting |
 | **Calendar** | Next meeting, countdown, one-click join — then mute, camera and leave without finding the window |
-| **HUDs** | Replaces the stock volume, brightness, backlight, charging and Bluetooth overlays |
-| **Battery** | Mac, AirPods, mouse, keyboard, trackpad — charge state and low alerts |
+| **HUDs** | Volume, brightness, charging, Bluetooth, Focus and the camera-in-use dot — in the notch, with the macOS overlay suspended while the module is on |
+| **Battery** | Mac, AirPods, mouse, keyboard, trackpad — charge state, time remaining, and one low warning per discharge cycle rather than one per wobble |
 | **Notifications** | Mirrored into the island, with inline reply |
 | **Camera** | Live preview under the notch. Fires automatically before a meeting so you see yourself before they do. Pin it while presenting |
 | **System stats** | CPU, GPU, memory, disk, network, temperature and fans — with alert thresholds |
@@ -65,8 +65,9 @@ and nobody has built the camera out past a plain mirror.
 
 ## Install
 
-> **Pre-1.0.** Three of the eighteen modules are built — Now Playing, the
-> Shelf and the Clipboard — plus the island itself. The rest of
+> **Pre-1.0.** Six of the eighteen modules are built — Now Playing, the
+> Shelf, the Clipboard, the Battery, the HUDs and the Focus timer — plus the
+> island itself. The rest of
 > `docs/PLAN.md` is not done, and the Homebrew cask goes live with the first
 > signed release. The feature table below is what 1.0 is aiming at.
 

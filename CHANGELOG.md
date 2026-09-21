@@ -8,7 +8,75 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Nothing yet. Next up is Phase 2.3 — HUDs, battery and the focus timer.
+Nothing yet. Next up is Phase 2.4 — calendar, meetings and notifications.
+
+## [0.5.0] — 2026-09-21
+
+Phase 2.3: the three modules that make the island answer the machine rather
+than just the apps on it. Three of the eighteen, taking the built count to six.
+
+### Added
+- **Battery and accessories** (module 7). The Mac's charge, power source and
+  time remaining; AirPods left, right and case; every mouse, keyboard and
+  trackpad that reports a level. A low warning once per discharge cycle, a
+  charging-complete announcement, and a tile on the island's home surface
+  that is where the module actually lives — the alerts are rare by design.
+  Each announcement is individually switchable, and the warning threshold is
+  configurable.
+
+  There is no timer in this module. `IOPSNotificationCreateRunLoopSource`
+  pushes the Mac's battery and `IOServiceAddMatchingNotification` pushes
+  accessory connects; the one thing nothing publishes — a level moving while
+  a device stays connected — is re-read when the island is opened rather
+  than sampled. [ADR 0004](docs/adr/0004-ioregistry-for-accessory-levels.md)
+  records why the accessory levels come from the IO registry, and what
+  happens when Apple renames the keys.
+
+- **HUD replacement** (module 6). Six overlays in the notch instead of
+  stamped over the screen: volume and mute, display brightness, charging,
+  Bluetooth connect and disconnect, Focus — Do Not Disturb is a Focus — and a
+  camera-and-microphone-in-use indicator that needs neither permission. Each
+  is individually switchable. The macOS overlay is suspended while the module
+  is on and restored the instant it is switched off or Perch quits; nothing is
+  killed and nothing is changed on disk.
+
+  Every rule about what reaches the island lives in `HUDPolicy`, which is pure
+  — a held brightness key coalescing into one smooth HUD, a change Perch made
+  itself not being announced back, and one HUD switched off leaving the others
+  alone are all unit tests rather than things to check by eye.
+
+  Brightness and the suppression need private interfaces;
+  [ADR 0005](docs/adr/0005-private-apis-for-the-hud.md) records what is used,
+  how each half degrades, and the one cost: after the macOS overlay agent
+  starts, one stock overlay appears before Perch catches it, and none after.
+
+  **Keyboard backlight and AirDrop are not included.** macOS publishes no
+  change notification for either, at any level, so a switch for them would be
+  a switch that never does anything. Both are recorded in `FEATURES.md` §6.
+
+- **Focus timer** (module 4). Pomodoro with configurable work and break
+  lengths, the countdown in the collapsed island rather than in a window or a
+  menu-bar string, session and streak counts, and a finished alert that
+  pre-empts Now Playing through the existing priority ladder rather than a
+  special case.
+
+  **Nothing ticks.** The timer is wall-clock — a running phase is the `Date`
+  it ends at — so a Mac asleep for forty minutes wakes to a session that is
+  simply over, with no accounting, because nothing was ever counting. The
+  countdown is drawn by `Text(timerInterval:)`, which macOS renders itself,
+  and completion is a single scheduled wake-up rather than a repeating timer.
+
+  The streak counts **days, not sessions**: four on Tuesday is one day.
+
+  **Auto-enabling a macOS Focus during a session is not included.** Nothing at
+  any level can set a Focus — the entitlement is Apple's own — so Perch can
+  read which one is on and show it, but not turn one on. `FEATURES.md` §4
+  records it and the Preferences pane says so.
+
+### Changed
+- The Battery module needs **no permission**. `FEATURES.md` listed Bluetooth,
+  which was wrong: `CoreBluetooth` and `IOBluetooth` are what require it, and
+  this module uses neither.
 
 ## [0.4.0] — 2026-09-20
 

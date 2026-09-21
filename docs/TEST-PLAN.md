@@ -139,6 +139,10 @@ rather than the converter.
 | TC-FOC-003 | U | Pause and resume | Remaining time preserved exactly |
 | TC-FOC-004 | E | Mac sleeps mid-session | Elapsed wall-clock time accounted for on wake |
 | TC-FOC-005 | U | Session count across days | Streak increments once per day, not per session |
+| TC-FOC-006 | U | Module disabled mid-session | Scheduled wake-up cancelled; nothing on the island; streak kept on disk |
+| TC-FOC-007 | U | Perch relaunched with a session that was running | Not resumed silently — the timer is started on purpose |
+| TC-FOC-008 | U | Wall clock jumps backwards | No early finish, and the countdown never shows more than a whole phase |
+| TC-FOC-009 | U | Phase ends while asleep **and** the scheduled wake-up fires | Reported exactly once, not twice |
 
 ## BAT — battery and accessories
 
@@ -149,6 +153,9 @@ rather than the converter.
 | TC-BAT-003 | U | AirPods connected | Both buds plus case levels shown |
 | TC-BAT-004 | U | Accessory disconnected | Entry removed; no stale level displayed |
 | TC-BAT-005 | E | Desktop Mac with no battery | Mac battery row hidden, accessories still shown |
+| TC-BAT-006 | U | Module disabled | Power and accessory notifications removed; roster empty; nothing on the island |
+| TC-BAT-007 | U | Charger attached but not charging (battery-health hold at 80%) | No repeated announcement — the alert is keyed on the power source, not on `isCharging` |
+| TC-BAT-008 | U | Accessory reports a level of 0 | Treated as "not reporting"; the device is not listed at 0% |
 
 ## CAL — calendar and meetings
 
@@ -179,6 +186,10 @@ rather than the converter.
 | TC-HUD-006 | E | AirPods connected | Connect animation with the device name and battery levels |
 | TC-HUD-007 | E | Focus mode changed | HUD reflects the new mode; no HUD when the change came from Perch itself |
 | TC-HUD-008 | U | Individual HUD disabled, module still on | Only that HUD stops; the others are unaffected |
+| TC-HUD-009 | U | Module disabled | Every watcher stopped, stock overlay resumed, nothing on the island |
+| TC-HUD-010 | E | `OSDUIHelper` starts after the module is already on | Caught on the next HUD event; exactly one stock overlay appears, and none after it |
+| TC-HUD-011 | E | `DisplayServices` unavailable | Brightness switch disabled with an explanation; the other five HUDs unaffected |
+| TC-HUD-012 | U | Camera or microphone in use | Reported with the device name, without requesting either permission |
 
 ## CAM — camera
 
@@ -347,3 +358,58 @@ the two features the launch rests on:
 - [ ] A 2GB video converted: island stays responsive, progress moves,
       the file plays (TC-SHF-014)
 - [ ] Weather and public-IP confirmed off in a fresh install (TC-PRV-005)
+
+Added for the Battery module. CI runners have no battery and no Bluetooth
+accessories, so every row below is only ever checked by a person:
+
+- [ ] AirPods connected: left, right and case all shown, and the number the
+      island leads with is the lowest of the three (TC-BAT-003)
+- [ ] AirPods put back in the case: the row disappears rather than freezing
+      at its last level (TC-BAT-004)
+- [ ] Magic Mouse, Magic Keyboard and Magic Trackpad each report and are
+      classified correctly
+- [ ] Charger unplugged and replugged: one announcement each way, and none at
+      all while it sits at the battery-health hold (TC-BAT-007)
+- [ ] Run down past the threshold: one warning, and no second one when the
+      level wobbles back across it (TC-BAT-002)
+- [ ] Desktop Mac: no battery row, accessories still listed (TC-BAT-005)
+- [ ] A macOS version bump: confirm `AppleDeviceManagementHIDEventService`
+      and the `BatteryPercent*` keys still exist. If they do not, the list
+      goes empty rather than wrong — ADR 0004
+
+Added for the HUD module. The whole module is about what appears on a screen
+in response to a key, so most of it can only be judged by eye:
+
+- [ ] Volume, mute and brightness keys each show one HUD and only one — no
+      stock overlay alongside (TC-HUD-001)
+- [ ] Hold a brightness key: the bar moves continuously, does not flicker, and
+      the HUD leaves the screen when the finger comes off (TC-HUD-002)
+- [ ] Switch the module off: the stock overlay is back on the very next key
+      press (TC-HUD-003)
+- [ ] Quit Perch outright: the overlay is back. `ps -o stat` on `OSDUIHelper`
+      shows `S`, not `T`
+- [ ] Change the volume while the island is expanded: the HUD composes rather
+      than fighting (TC-HUD-004)
+- [ ] Plug and unplug the charger: one HUD each way, and none at all while the
+      Mac sits at the battery-health hold (TC-HUD-005)
+- [ ] Connect and disconnect AirPods: one HUD each way, with the device name
+      (TC-HUD-006)
+- [ ] Change a Focus from Control Centre: the HUD names it (TC-HUD-007)
+- [ ] Start a video call: the camera HUD names the device, and no Camera
+      permission prompt appears (TC-HUD-012)
+- [ ] Switch each of the six HUDs off individually and confirm only that one
+      stops (TC-HUD-008)
+- [ ] Second display attached: a brightness change on the *other* screen does
+      not draw a HUD on the island's screen
+
+Added for the Focus module:
+
+- [ ] Start a 25-minute session and leave it: the countdown in the collapsed
+      island is smooth and correct, and Activity Monitor shows Perch using
+      effectively nothing while it runs (TC-FOC-001)
+- [ ] Close the lid mid-session for longer than the session has left: on
+      waking, the finished alert is there (TC-FOC-004)
+- [ ] Close the lid for *less* than the remaining time: the countdown is
+      correct on waking, not frozen where it was (TC-FOC-004)
+- [ ] A session finishing while music is playing takes the island (TC-FOC-002)
+- [ ] Four sessions in a row produce one day of streak, not four (TC-FOC-005)

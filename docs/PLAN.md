@@ -150,6 +150,34 @@ island. **Tests:** HUD, BAT, FOC.
 
 **Done when:** the stock macOS HUD never appears again.
 
+**Status: battery done.** Module 7 shipped in 0.5.0 — the Mac's battery,
+charge state and time remaining, AirPods left/right/case, every BLE device
+that reports a level, the low warning once per discharge cycle and the
+charging-complete alert. No timer anywhere in it: IOKit pushes the Mac's
+battery and pushes accessory connects, and the one thing nothing publishes —
+a level moving while a device stays connected — is re-read when somebody
+opens the island rather than sampled. [ADR 0004](adr/0004-ioregistry-for-accessory-levels.md)
+records why the accessory levels come from the IO registry. The permission
+table was wrong about this module: it needs none.
+
+**Status: the HUDs done too.** Module 6 shipped in 0.5.0 — six of the eight
+HUDs, each individually switchable, with the stock overlay suspended while the
+module is on and restored the moment it is not.
+[ADR 0005](adr/0005-private-apis-for-the-hud.md) records the two private
+interfaces it needs and how each degrades. Keyboard backlight and AirDrop are
+recorded in `FEATURES.md` §6 as not done: macOS publishes no change
+notification for either, and a HUD that can never fire is not a feature.
+
+**Status: 2.3 complete.** Module 4 shipped in 0.5.0 too — Pomodoro with
+configurable lengths, the countdown in the collapsed island, session and
+streak counts, and a finished alert that pre-empts Now Playing through the
+existing priority ladder rather than a special case. No ticking: the timer is
+wall-clock, the countdown is rendered by macOS, and completion is a single
+scheduled wake-up. Auto-enabling a macOS Focus is recorded in `FEATURES.md` §4
+as not done — nothing at any level can set one.
+
+**Phase 2.3 is done.** Next is 2.4: calendar, meetings and notifications.
+
 **Also starts here: the website.** It is 24 working days (`WEBSITE-PLAN.md`
 §9) and cannot be compressed into launch week. Run it in parallel from now on.
 

@@ -86,6 +86,7 @@
       <button class="tab" aria-pressed="false" data-s="shelf">Shelf</button>
       <button class="tab" aria-pressed="false" data-s="clip">Clipboard</button>
       <button class="tab" aria-pressed="false" data-s="focus">Focus</button>
+      <button class="tab" aria-pressed="false" data-s="hud">HUDs</button>
       <button class="tab" aria-pressed="false" data-s="batt">Battery</button>
       <button class="tab" aria-pressed="false" data-s="cam">Camera</button>
       <button class="tab" aria-pressed="false" data-s="sys">System stats</button>
@@ -175,6 +176,45 @@
           <span class="tag" style="background:var(--bg);color:var(--ink);border:1px solid var(--line);font-size:.8rem;padding:8px 14px">Camera</span>
           <span class="tag r" style="font-size:.8rem;padding:8px 14px">Leave</span>
         </div>
+      </div>
+    </div>
+
+    <div class="block flip">
+      <div class="copy">
+        <p class="eyebrow">Focus</p>
+        <h3>The timer counts down<span class="soft">where you already look.</span></h3>
+        <p class="body">A Pomodoro in the notch, not in a window and not as a string in the menu bar. Close the lid for forty minutes and it is finished when you open it &mdash; nothing was counting, so there is nothing to catch up. When a session ends it takes the island from whatever is playing, and the streak counts days, not sessions: four on Tuesday is one day.</p>
+      </div>
+      <div class="visual" style="min-height:200px">
+        <div class="clip"><span>⏱</span><div>Focus<div style="font-size:.78rem;color:var(--sub)">Session 3 of 4 · long break next</div></div><em style="font-weight:600">18:42</em></div>
+        <div class="clip"><span>✅</span><div>Today<div style="font-size:.78rem;color:var(--sub)">Finished focus sessions</div></div><em style="font-weight:600">3</em></div>
+        <div class="clip"><span>🔥</span><div>Streak<div style="font-size:.78rem;color:var(--sub)">Days in a row, not sessions</div></div><em style="font-weight:600">5 days</em></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="copy">
+        <p class="eyebrow">HUDs</p>
+        <h3>One overlay,<span class="soft">not two.</span></h3>
+        <p class="body">Volume, brightness, charging, Bluetooth, Focus and the camera-in-use dot, in the notch instead of stamped over whatever you were looking at. Perch suspends the macOS overlay while the module is on and puts it back the instant you switch it off or quit &mdash; nothing is killed, nothing is changed on disk. Each of the six is individually switchable.</p>
+      </div>
+      <div class="visual" style="min-height:200px">
+        <div class="clip"><span>🔊</span><div>Volume<div style="font-size:.78rem;color:var(--sub)">MacBook Pro Speakers</div></div><em style="font-weight:600">62%</em></div>
+        <div class="clip"><span>☀️</span><div>Brightness<div style="font-size:.78rem;color:var(--sub)">Built-in display</div></div><em style="font-weight:600">49%</em></div>
+        <div class="clip"><span>🌙</span><div>Do Not Disturb<div style="font-size:.78rem;color:var(--sub)">Focus on</div></div><em style="font-weight:600">On</em></div>
+      </div>
+    </div>
+
+    <div class="block flip">
+      <div class="copy">
+        <p class="eyebrow">Battery</p>
+        <h3>The Mac, and<span class="soft">everything on it.</span></h3>
+        <p class="body">Charge, power source and time remaining for the Mac; left, right and case for AirPods; every mouse, keyboard and trackpad that reports a level. One low warning per discharge cycle &mdash; not one every time the number wobbles back across the line. There is no timer in it: macOS pushes the changes, and the accessories are re-read when you open the island.</p>
+      </div>
+      <div class="visual" style="min-height:200px">
+        <div class="clip"><span>🔋</span><div>This Mac<div style="font-size:.78rem;color:var(--sub)">On the wall · holding at 80% for battery health</div></div><em style="font-weight:600">80%</em></div>
+        <div class="clip"><span>🎧</span><div>AirPods Pro<div style="font-size:.78rem;color:var(--sub)">Left 82% · Right 79% · Case 44%</div></div><em style="font-weight:600">44%</em></div>
+        <div class="clip"><span>🖱️</span><div>Magic Mouse<div style="font-size:.78rem;color:var(--sub)">Reporting one level</div></div><em style="font-weight:600">14%</em></div>
       </div>
     </div>
 
@@ -274,7 +314,7 @@
             <th scope="col">Seam</th><th scope="col">Alcove</th><th scope="col">NotchNook</th>
             <th scope="col">DynamicLake Pro</th><th scope="col">NotchBay</th><th scope="col">TopNotch</th>
           </tr></thead>
-          <tbody>
+          <tbody data-comparison>
             <tr><th scope="row">Price</th><td class="us y">Free</td><td>Free</td><td>$19.90</td><td>~$15–17</td><td>$25 or $3/mo</td><td>$13.99</td><td>$9</td><td>Free</td></tr>
             <tr><th scope="row">Open source</th><td class="us y">Yes</td><td>Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
             <tr><th scope="row">Minimum macOS</th><td class="us y">13</td><td>13</td><td>14</td><td>14</td><td>14</td><td>13–14</td><td>14</td><td>12</td></tr>
@@ -284,6 +324,7 @@
             <tr><th scope="row">Focus timer</th><td class="us y">Yes</td><td class="n">—</td><td>Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td>Yes</td><td class="n">—</td></tr>
             <tr><th scope="row">Meeting join &amp; controls</th><td class="us y">Yes</td><td class="n">—</td><td>Calendar</td><td class="n">—</td><td>Peek</td><td>Activities</td><td>Yes</td><td class="n">—</td></tr>
             <tr><th scope="row">System HUDs</th><td class="us y">Yes</td><td class="n">—</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td class="n">—</td></tr>
+            <tr><th scope="row">Battery &amp; accessories</th><td class="us y">Yes</td><td class="n">—</td><td>Yes</td><td>Yes</td><td class="n">—</td><td>Alerts</td><td>Yes</td><td class="n">—</td></tr>
             <tr><th scope="row">System stats</th><td class="us y">Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
             <tr><th scope="row">Camera beyond a mirror</th><td class="us y">Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
             <tr><th scope="row">Works without a notch</th><td class="us y">Yes</td><td>Yes</td><td>Yes</td><td class="n">—</td><td class="n">—</td><td>Partial</td><td>Yes</td><td>n/a</td></tr>
@@ -427,7 +468,7 @@
     </div>
 
     <p class="srcmeta">
-      MIT licence · version <span data-gh="version">0.3.0</span> ·
+      MIT licence · version <span data-gh="version">0.5.0</span> ·
       <span data-gh="issuesPhrase">open issues</span> ·
       <a href="https://github.com/Milanpatel35/Perch/blob/dev/LICENSE">Read the licence</a>
     </p>
@@ -454,9 +495,10 @@
         <a href="https://github.com/Milanpatel35/Perch#install">build from source</a>
       </p>
       <p class="prerelease" style="margin-top:18px">
-        <strong>Three of eighteen modules are built so far</strong> — Now
-        Playing, the Shelf and the Clipboard, plus the island itself. The
-        list below is what 1.0 is aiming at; the roadmap says when.
+        <strong>Six of eighteen modules are built so far</strong> — Now
+        Playing, the Shelf, the Clipboard, the Battery, the HUDs and the
+        Focus timer, plus the island itself. The list below is what 1.0 is
+        aiming at; the roadmap says when.
       </p>
       <ul>
         <li>Searchable clipboard history with pinning</li>

@@ -169,6 +169,42 @@ collide with something, and the collision will be silent.
 | Survives sleep | ★ | Wall-clock accounting on wake |
 | Auto-enable macOS Focus mode during a session | ★ | Optional |
 
+**Status — shipped in 0.5.0, five of the six rows.** Configurable work and
+break lengths (25/5/15 and four sessions to the long break by default), the
+countdown in the collapsed island, session and streak counts, the finished
+alert pre-empting Now Playing, and survival of sleep.
+
+**There is no ticking anywhere in this module**, which is worth saying because
+a Pomodoro timer is the most obvious place in the whole app to put a
+one-second repeating timer. Three things make it unnecessary:
+
+- `PomodoroTimer` is wall-clock: a running phase is the `Date` it ends at, and
+  the time left is computed on demand. That *is* TC-FOC-004 — a Mac asleep for
+  forty minutes wakes to a session that is simply over, with no accounting,
+  because nothing was ever counting.
+- The countdown is drawn with `Text(timerInterval:)`, which macOS renders
+  itself. It does not exist while the island is not showing it.
+- Completion is one `Task.sleep` to the moment the phase ends, cancelled the
+  instant anything changes.
+
+One row is **not** done:
+
+- **Auto-enabling a macOS Focus during a session.** There is no interface for
+  *setting* a Focus at any level — the entitlement belongs to Apple's own apps
+  — so Perch can read which Focus is on and show it (module 6 does), but not
+  turn one on. The route that does exist is a user-written Shortcut, which
+  belongs to module 13 rather than here. Preferences says so in the pane
+  rather than leaving somebody hunting for the switch.
+
+Two decisions the table left open:
+
+- **The next phase is queued, not started.** A break that begins by itself
+  while you are still typing is a break you do not take, and a work session
+  that begins by itself is worse. The finished alert offers to start it.
+- **A session running when Perch quits is not resumed.** The timer is a thing
+  you start on purpose, and silently resuming one from yesterday is worse than
+  forgetting it.
+
 ## 5. Calendar and meetings — P0
 
 | Capability | Comes from | Notes |
@@ -195,6 +231,48 @@ Alcove's whole personality. Replace every stock overlay.
 | Do Not Disturb state | AL | |
 | Per-HUD on/off switches | AL | Every one individually |
 
+**Status — shipped in 0.5.0, six of the eight rows.** Volume and mute
+(CoreAudio, entirely public), display brightness, charging, Bluetooth connect
+and disconnect, Focus — Do Not Disturb is a Focus, so the two rows above are
+one HUD — and a camera-and-microphone-in-use indicator. Every one is
+individually switchable, and the stock overlay is suspended while the module
+is on and restored the instant it is switched off or Perch quits.
+
+Brightness and the suppression both need private interfaces, and
+[ADR 0005](adr/0005-private-apis-for-the-hud.md) is the decision: what is
+used, how it is contained, and how each half degrades.
+
+**One thing it costs, stated plainly because the website says it too.**
+`OSDUIHelper` — the agent that draws the stock overlay — is started on demand,
+and macOS publishes no notification when it launches. (`NSWorkspace` does not
+report it at all; that was checked on hardware, both ways of launching it.)
+Perch catches it on its own next HUD event instead, and waits for the stock
+overlay to fade before suspending it, because suspending a process while its
+window is up freezes that window on screen. So **one** stock overlay appears
+after the agent starts, and none after that for the rest of the session.
+
+Two rows are **not** done, and are recorded here rather than quietly dropped:
+
+- **Keyboard backlight.** The level can be read —
+  `KeyboardBrightnessClient.brightnessForKeyboard:` works, and returned
+  0.237 on the machine this was written on — but nothing on macOS publishes a
+  *change* to it, at any level, public or private. A getter with no
+  notification can only be used by polling, and `CLAUDE.md` §5.1 says no. It
+  is not a switch in Preferences, because a switch for a HUD that can never
+  fire is worse than an honest gap.
+- **AirDrop received.** No property, no notification, no framework. Watching
+  `~/Downloads` would fire for every download, which is a different feature
+  wearing this one's name.
+
+And one row means something narrower than it sounds:
+
+- **"Screen recording / camera in use" is the camera and the microphone.**
+  Both are property listeners on `…DeviceIsRunningSomewhere`, need no Camera
+  or Microphone permission, and name the device in use. Screen recording has
+  no such interface, and the only route to detecting it is Screen Recording
+  permission — which Perch is not going to request in order to tell you that
+  something else has it.
+
 ## 7. Battery and accessories — P0
 
 | Capability | Comes from | Notes |
@@ -204,6 +282,38 @@ Alcove's whole personality. Replace every stock overlay.
 | Mouse, keyboard, trackpad, and any BLE device that reports level | SE | |
 | Low-battery alert once per discharge cycle | DL SE | Not repeating |
 | Charging-complete alert | AL | |
+
+**Status — shipped in 0.5.0.** All five rows. The Mac's battery, charge state
+and time remaining come from `IOPSNotificationCreateRunLoopSource`, which is
+a genuine push notification — there is no timer anywhere in this module. The
+accessory levels come from the IO registry, which is where every Mac battery
+utility gets them because there is no public API; that decision, and what
+happens when Apple renames the keys, is
+[ADR 0004](adr/0004-ioregistry-for-accessory-levels.md).
+
+Two things the implementation settled that the table above left open:
+
+- **The alerts are keyed on the power *source*, never on `isCharging`.** A
+  charger that is attached but not currently taking charge — a full battery,
+  or macOS holding at 80% for battery health — flips `isCharging` on and off
+  by itself. Keying the announcement on that would repeat it all day. This is
+  the same rule TC-HUD-005 asks of the charging HUD, and the reason the
+  machine that built this module, sitting at 80% on the wall with
+  `isCharging` false, was a useful thing to have.
+- **The low warning rearms on plugging in, not on the level recovering.** A
+  battery under load crosses the threshold, recovers a point when a core
+  parks, and crosses it again. Rearming on the level would warn every time.
+
+**This module needs no permission.** The permission table below said
+Bluetooth, and that was wrong: `CoreBluetooth` and `IOBluetooth` are what
+require it, and this module uses neither. Reading the IO registry needs no
+entitlement and shows no prompt.
+
+The readable state — every level, all the time — is a tile on the island's
+home surface rather than an alert, because the alerts are rare by design and
+a battery read-out is a thing you glance at. The tile re-reads the
+accessories when it appears and at no other time: the levels are only stale
+when nobody is looking at them.
 
 ## 8. Notifications — P1
 
@@ -355,7 +465,7 @@ Shipping it costs almost nothing and removes a reason to install a second app.
 | 4 | Focus timer | P0 | — |
 | 5 | Calendar & meetings | P0 | Calendar, Accessibility (call controls) |
 | 6 | HUD replacement | P0 | — |
-| 7 | Battery | P0 | Bluetooth |
+| 7 | Battery | P0 | — |
 | 8 | Notifications | P1 | Accessibility |
 | 9 | **Camera** | P0 | Camera |
 | 10 | **System stats** | P0 | — |
