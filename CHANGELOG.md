@@ -8,6 +8,13 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
+Nothing yet. Next up is Phase 2.4 — calendar, meetings and notifications.
+
+## [0.5.0] — 2026-09-21
+
+Phase 2.3: the three modules that make the island answer the machine rather
+than just the apps on it. Three of the eighteen, taking the built count to six.
+
 ### Added
 - **Battery and accessories** (module 7). The Mac's charge, power source and
   time remaining; AirPods left, right and case; every mouse, keyboard and
