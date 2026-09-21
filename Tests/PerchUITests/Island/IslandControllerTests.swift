@@ -160,18 +160,33 @@ private final class SleepRecorder: @unchecked Sendable {
 
     /// Cleared by the test before it returns. A recorder that keeps calling
     /// back after its test has finished is how one test crashes another.
-    var onBegin: ((Int) -> Void)? {
+    ///
+    /// **`@MainActor` in the type, deliberately.** These are assigned closure
+    /// literals written inside a `@MainActor` test case, so they *are*
+    /// main-actor isolated whether or not the property says so — and when the
+    /// property did not say so, `sleep` below called them from whatever
+    /// thread its continuation resumed on. Swift 6 catches that at runtime
+    /// and kills the process:
+    ///
+    ///     data race detected: @MainActor function at
+    ///     IslandControllerTests.swift:86 was not called on the main thread
+    ///
+    /// Intermittently, because it depends on which executor the continuation
+    /// lands on — it passed locally and on macOS 15 and failed on macOS 14,
+    /// after every assertion in the suite had already passed. Saying the
+    /// isolation out loud makes the compiler insert the hop.
+    var onBegin: (@MainActor @Sendable (Int) -> Void)? {
         get { lock.withLock { _onBegin } }
         set { lock.withLock { _onBegin = newValue } }
     }
 
-    var onCancel: ((Int) -> Void)? {
+    var onCancel: (@MainActor @Sendable (Int) -> Void)? {
         get { lock.withLock { _onCancel } }
         set { lock.withLock { _onCancel = newValue } }
     }
 
-    private var _onBegin: ((Int) -> Void)?
-    private var _onCancel: ((Int) -> Void)?
+    private var _onBegin: (@MainActor @Sendable (Int) -> Void)?
+    private var _onCancel: (@MainActor @Sendable (Int) -> Void)?
 
     var begun: Int { lock.withLock { _begun } }
     var cancellations: Int { lock.withLock { _cancellations } }
@@ -181,7 +196,7 @@ private final class SleepRecorder: @unchecked Sendable {
             _begun += 1
             return _begun
         }
-        onBegin?(count)
+        await onBegin?(count)
 
         do {
             try await Task.sleep(for: .seconds(86_400))
@@ -190,7 +205,9 @@ private final class SleepRecorder: @unchecked Sendable {
                 _cancellations += 1
                 return _cancellations
             }
-            onCancel?(cancelled)
+            // `await`, because the handler is main-actor isolated and this
+            // continuation is not guaranteed to be.
+            await onCancel?(cancelled)
             throw error
         }
     }
