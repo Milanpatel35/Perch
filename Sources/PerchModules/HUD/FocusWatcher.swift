@@ -57,6 +57,13 @@ final class FocusWatcher {
         onChange = nil
     }
 
+    /// Whether any Focus — Do Not Disturb included — is on right now.
+    ///
+    /// Read on demand rather than watched. The notification module asks once
+    /// per banner, which is as event-driven as a question gets, and it means
+    /// only one thing in the app ever holds the kqueue (TC-NTF-007).
+    var isFocusOn: Bool { activeFocus() != nil }
+
     /// The current state, for seeding the policy at activation.
     func reading() -> HUDReading {
         guard let focus = activeFocus() else {

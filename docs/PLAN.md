@@ -207,7 +207,20 @@ it, along with the module's one polling exception. Zoom is verified; Teams
 and Webex are best effort and say so; Meet, Around and Whereby get no
 controls at all, because a browser tab has no menu bar.
 
-Next in 2.4: notifications (module 8).
+**Status: 2.4 complete.** Module 8 shipped in 0.6.0 too — notifications
+mirrored into the island grouped by app, inline reply through the banner's
+own field, a per-app list that works either way round, and everything that
+arrives during a focus session held rather than dropped and released when it
+ends.
+
+Read from the **banner** through Accessibility, not from the notification
+database, which sits behind Full Disk Access.
+[ADR 0007](adr/0007-reading-the-banner-for-notifications.md) records that
+choice and what follows from it: Perch mirrors what is on screen and nothing
+more, so Do Not Disturb needs no handling at all and a notification history
+is not something this module can grow.
+
+**Phase 2.4 done.** Next is 2.5: camera and system stats.
 
 ## 2.5 — Camera and System stats (weeks 12–13)
 
