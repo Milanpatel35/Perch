@@ -243,6 +243,22 @@ the existing priority queue. The sampler belongs to the *view*, not the module
 checked your hair before a standup, and Activity Monitor still says Perch is
 using effectively nothing when neither is on screen.
 
+**Status: camera done.** Module 9 shipped in 0.6.0 — live preview, the
+pre-call check, mirror, four shapes, the floating pinned pill, scroll to
+resize, the device picker and snapshot to the shelf.
+
+The privacy promises are kept by construction rather than by discipline: a
+running preview has **no output attached to the session**, only a preview
+layer, so there is no frame to keep and none to write. Closing removes the
+session's inputs rather than only stopping it, because stopping alone leaves
+the device held and the light on. And nothing opens a device except the
+preview appearing — TC-CAM-009 runs the whole lifecycle five times to say so.
+
+The pinned pill is the one window in the app that is not `IslandPanel`; it
+has to outlive the island collapsing, which is what pinning means.
+
+Next in 2.5: system stats (module 10).
+
 ## 2.6 — Weather, windows, Shortcuts, hide-the-notch (week 14)
 
 The P1 tier. Individually small, collectively the difference between "as good
