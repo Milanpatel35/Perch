@@ -50,7 +50,7 @@
   <div class="wrap">
     <p class="eyebrow">Free and open source, forever</p>
     <h1>Everyone else charges for your notch.<span class="soft">This one is the source code.</span></h1>
-    <p class="body" style="margin-top:22px">Perch turns the MacBook camera notch into a live, interactive surface. <strong>Three modules are built today</strong> — music, a file shelf and a searchable clipboard — <strong>and fifteen more are on the way, every one free</strong>. No licence key, no account, no telemetry, and no network request beyond checking for updates.</p>
+    <p class="body" style="margin-top:22px">Perch turns the MacBook camera notch into a live, interactive surface. <strong>Ten of its eighteen modules are built today</strong> — music, a file shelf, a searchable clipboard, the next meeting, a focus timer, the system HUDs, battery for every accessory, mirrored notifications, the camera and a system monitor — <strong>and the other eight are on the way, every one free</strong>. No licence key, no account, no telemetry, and no network request beyond checking for updates.</p>
     <div class="herocta">
       <a class="btn" href="#price">Download for macOS</a>
       <a class="btn sec" href="#demo">Try the island below</a>
@@ -120,12 +120,12 @@
     <div class="stat">
       <div class="n">0</div>
       <h3>Accounts. Servers. Analytics.</h3>
-      <p>Everything happens on your Mac. The only request Perch ever makes is to its own update feed, and you can turn that off too.</p>
+      <p>Everything happens on your Mac. Perch makes one request, to its own update feed, and you can turn that off too. There is exactly one other, and it is off unless you switch it on: the public-IP readout in the system monitor.</p>
     </div>
     <div class="stat">
-      <div class="n">18</div>
-      <h3>Modules, each switchable</h3>
-      <p>Against a paid field that averages six. Turn one off and it stops existing — no observer, no timer, no CPU. Run Perch as a music strip or as the whole hub.</p>
+      <div class="n">10<span style="font-size:.45em;color:var(--sub)">/18</span></div>
+      <h3>Modules built, each switchable</h3>
+      <p>Ten work in the build you can download today; eighteen are specified, against a paid field that averages six. Turn one off and it stops existing — no observer, no timer, no CPU. <a href="#notyet">What is not built yet</a>.</p>
     </div>
     <div class="stat">
       <div class="n">$0</div>
@@ -238,7 +238,7 @@
       <div class="copy">
         <p class="eyebrow">System stats · nobody else has this</p>
         <h3>Your whole Mac,<span class="soft">in the notch.</span></h3>
-        <p class="body">CPU, GPU, memory, disk, network, temperature and fan speed — a glance up instead of opening Activity Monitor. Set a threshold and the notch tells you when a build pegs every core or the disk drops under 10&nbsp;GB. <strong>Not one of the seven apps we compared has a system monitor.</strong></p>
+        <p class="body">CPU, GPU, memory, disk, network and fan speed — a glance up instead of opening Activity Monitor. Set a threshold and the notch tells you when a build pegs every core or the disk drops under 10&nbsp;GB. <strong>Not one of the seven apps we compared has a system monitor.</strong></p>
       </div>
       <div class="visual" style="min-height:200px">
         <div class="clip"><span>⚡️</span><span style="font-size:.9rem">CPU</span><em class="mono" style="color:var(--ink)">46%</em></div>
@@ -286,6 +286,18 @@
     <h2>What it doesn't do yet</h2>
     <p class="lead">Every other site in this category lists only what ships. Here is the other half, because you will find out anyway and it may as well be from us.</p>
     <div class="grid3">
+      <div class="card">
+        <h3>Eight of the eighteen modules</h3>
+        <p><strong>Weather, window snapping, Shortcuts, hide-the-notch, notes, screenshots and voice typing are specified and not built.</strong> They are described in the repo's feature document and they are not in the build you can download. Everything shown above this section is; everything in this card is not.</p>
+      </div>
+      <div class="card">
+        <h3>Meeting controls, beyond Zoom</h3>
+        <p>Mute, camera and leave drive the meeting app's own menu bar. Zoom is the one we have verified. Teams and Webex ship title tables that match their published menus but are best effort, and the controls say so on screen when they cannot find them. Meet, Around and Whereby get the join button and no controls at all — a browser tab has no menu bar to drive.</p>
+      </div>
+      <div class="card">
+        <h3>Temperature, in the system monitor</h3>
+        <p>Fan speeds read fine. CPU die temperature on Apple Silicon needs a private interface, so the row is hidden rather than shown as a number we guessed. GPU load reads on Apple Silicon and not on Intel, where the tile is replaced rather than zeroed.</p>
+      </div>
       <div class="card">
         <h3>Voice typing</h3>
         <p>On-device dictation is the hardest thing on the roadmap and it is not in 1.0. Two of the paid apps have it and Perch does not, yet.</p>
