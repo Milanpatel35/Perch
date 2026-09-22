@@ -173,6 +173,8 @@ rather than the converter.
 | TC-CAL-010 | E | Leave from the island | Call ends, island collapses, controls withdrawn |
 | TC-CAL-011 | E | Meeting app updated / element tree changed | Controls degrade to "unavailable", app does not crash or hang |
 | TC-CAL-012 | E | Accessibility permission revoked mid-call | Controls disabled with an explanation, rest of the app unaffected |
+| TC-CAL-013 | U | Module disabled mid-countdown | Store released, wake-up cancelled, control poll stopped, island cleared |
+| TC-CAL-014 | E | Reminder completed from the island | Marked done in Reminders; the row leaves the list |
 
 ## HUD — system HUD replacement
 
