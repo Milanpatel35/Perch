@@ -92,7 +92,7 @@ final class SystemReader {
 
         defer {
             vm_deallocate(
-                mach_task_self_,
+                Self.taskSelf,
                 vm_address_t(bitPattern: info),
                 vm_size_t(Int(infoCount) * MemoryLayout<integer_t>.stride)
             )
@@ -218,6 +218,12 @@ final class SystemReader {
 
         return memory
     }
+
+    /// `mach_task_self_` is a global `var` in the SDK headers, which the
+    /// macOS 14 compiler reads as shared mutable state. It is a port name
+    /// fixed for the life of the process, so reading it once is both correct
+    /// and the only spelling that compiles on every SDK Perch builds against.
+    private static let taskSelf: mach_port_t = mach_task_self_
 
     /// Read once. The page size cannot change while the machine is running.
     private static let pageSize: UInt64 = {
