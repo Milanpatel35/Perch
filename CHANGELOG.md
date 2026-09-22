@@ -8,7 +8,8 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Phase 2.4 — the machine's own interruptions, answered in the notch.
+Phase 2.4 and half of 2.5 — the machine's own interruptions, answered in
+the notch.
 
 ### Added
 
@@ -54,7 +55,27 @@ Phase 2.4 — the machine's own interruptions, answered in the notch.
   history, nothing read from disk, and Do Not Disturb needs no handling at
   all, because a banner macOS does not draw is one Perch never sees.
 
-Phase 2.4 is complete. Next up: camera and system stats.
+- **Camera** (module 9). A live preview under the notch — mirror, four
+  shapes, scroll to resize, opacity, a device picker that covers Continuity
+  Camera, snapshot straight into the shelf, and a floating pill you can pin
+  and drag while you present. The **pre-call check** opens it by itself just
+  before a meeting starts and closes itself if you do nothing; nobody in the
+  paid field has that.
+
+  The privacy promises hold by construction rather than by discipline. A
+  running preview has no output attached to the capture session at all — only
+  a preview layer, which renders from the device and hands Perch nothing — so
+  there is no frame to keep and none to write. Closing removes the session's
+  inputs rather than only stopping it, because stopping alone leaves the
+  device held and the green light on. And nothing opens a device except the
+  preview appearing: switching the module on, launching the app and enabling
+  the pre-call check all open nothing, which TC-CAM-009 checks by running the
+  whole lifecycle five times.
+
+  Camera permission is asked for at the first preview, with the reason on
+  screen. Never on switching the module on.
+
+Next up: system stats, and Phase 2.5 is done.
 
 ## [0.5.0] — 2026-09-21
 

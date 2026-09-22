@@ -55,6 +55,14 @@ final class CalendarService: ObservableObject, PerchModule {
     /// withdraw the one it replaces.
     private var presentedID: ActivityID?
 
+    /// Called on every refresh with the event that is coming up, if any.
+    ///
+    /// The camera module's pre-call check hangs off this
+    /// (`docs/FEATURES.md` §9). Wired by `PerchModuleRegistry`, so neither
+    /// module knows the other exists — and with the camera switched off it
+    /// is simply nil.
+    var onMeetingApproaching: (@MainActor (CalendarEvent) -> Void)?
+
     private var observers: [NSObjectProtocol] = []
 
     private let now: @MainActor () -> Date
@@ -112,6 +120,7 @@ final class CalendarService: ObservableObject, PerchModule {
         observers.removeAll()
 
         KeyboardShortcuts.disable(.joinMeeting)
+        onMeetingApproaching = nil
 
         agenda.replace(with: [])
         reminders = []
@@ -168,6 +177,12 @@ final class CalendarService: ObservableObject, PerchModule {
 
         let isRunning = event.isRunning(at: now())
         let state = isRunning ? controls.state(for: event.meeting) : MeetingControlState()
+
+        // Before it starts, and only then. The camera decides whether that
+        // is close enough to be worth opening for; this only reports.
+        if !isRunning {
+            onMeetingApproaching?(event)
+        }
 
         // The one interruption: the moment it starts, announced once.
         if isRunning, !announced.contains(announcementKey(for: event)) {

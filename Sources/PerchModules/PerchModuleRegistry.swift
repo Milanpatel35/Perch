@@ -24,8 +24,11 @@ public enum PerchModuleRegistry {
         host.register(FocusService(island: island))
         host.register(CalendarService(island: island))
         host.register(NotificationService(island: island))
+        host.register(CameraService(island: island))
 
         wireFocusToNotifications(in: host)
+        wireCalendarToCamera(in: host)
+        wireCameraToShelf(in: host)
     }
 
     /// Lets the notification module know when a focus session is running.
@@ -46,6 +49,35 @@ public enum PerchModuleRegistry {
 
         host.service(FocusService.self)?.onSessionEnded = { [weak host] in
             host?.service(NotificationService.self)?.releaseHeldNotifications()
+        }
+    }
+
+    /// Lets the camera open itself just before a meeting.
+    ///
+    /// `docs/FEATURES.md` §9's "you're on mute / your hair" moment, and the
+    /// module's one original idea. With the calendar switched off nothing
+    /// calls the camera and nothing breaks — TC-CAM-015 is this closure not
+    /// firing rather than a check inside either module.
+    @MainActor
+    private static func wireCalendarToCamera(in host: ModuleHost) {
+        host.service(CalendarService.self)?.onMeetingApproaching = { [weak host] event in
+            host?.service(CameraService.self)?
+                .meetingApproaching(
+                    eventID: event.id,
+                    title: event.title,
+                    startsAt: event.startDate,
+                    hasLink: event.meeting != nil
+                )
+        }
+    }
+
+    /// Lands a snapshot in the shelf when the shelf is on
+    /// (`docs/FEATURES.md` §9). Returning false is how the camera learns the
+    /// shelf is not there, and puts the image in Pictures instead.
+    @MainActor
+    private static func wireCameraToShelf(in host: ModuleHost) {
+        host.service(CameraService.self)?.onSnapshot = { [weak host] url in
+            host?.service(ShelfService.self)?.add(fileAt: url) != nil
         }
     }
 
@@ -92,6 +124,8 @@ public enum PerchModuleRegistry {
             calendarPane(in: host)
         case .notifications:
             notificationsPane(in: host)
+        case .camera:
+            cameraPane(in: host)
         case .nowPlaying:
             AnyView(
                 NowPlayingSettingsView(
@@ -132,6 +166,25 @@ public enum PerchModuleRegistry {
                     isSuppressing: hud.isSuppressingStockHUD,
                     onToggle: { hud.setEnabled($0, $1) },
                     onSuppressionChange: { hud.setSuppressesStockHUD($0) }
+                )
+            )
+        }
+    }
+
+    @MainActor
+    private static func cameraPane(in host: ModuleHost) -> AnyView? {
+        host.service(CameraService.self).map { camera in
+            AnyView(
+                CameraSettingsView(
+                    presentation: camera.presentation,
+                    devices: camera.devices,
+                    selectedDeviceID: camera.selectedDeviceID,
+                    preCall: camera.preCall.configuration,
+                    isCalendarOn: host.service(CalendarService.self) != nil,
+                    onPresentationChange: { camera.setPresentation($0) },
+                    onPreCallChange: { camera.setPreCallConfiguration($0) },
+                    onSelectDevice: { camera.selectDevice($0) },
+                    onRefreshDevices: { camera.refreshDevices() }
                 )
             )
         }
