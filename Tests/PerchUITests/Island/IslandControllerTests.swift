@@ -52,6 +52,54 @@ final class IslandControllerTests: XCTestCase {
         XCTAssertEqual(controller.presented?.id, HomeActivity.identifier)
     }
 
+    /// The whole path from launch to an open island, in one test.
+    ///
+    /// Worth having as a chain rather than as three separate assertions,
+    /// because each link is fine on its own and the *order* is what breaks:
+    /// the panel ignores mouse events while the island is idle, so a home
+    /// surface that never arrived would leave it permanently unhoverable —
+    /// and nothing else in the suite would notice.
+    func test_TC_ISL_014_theHomeSurfaceIsWhatMakesTheIslandHoverable() {
+        let controller = IslandController(sleep: { _ in try await Task.never() })
+
+        // Before it lands: inert, by design.
+        XCTAssertFalse(controller.acceptsMouseEvents)
+
+        controller.submit(HomeActivity(collapsedSize: CGSize(width: 186, height: 32)))
+
+        // The moment it lands the panel starts taking the pointer.
+        XCTAssertTrue(controller.acceptsMouseEvents)
+
+        controller.send(.hoverBegan)
+        XCTAssertEqual(controller.state.presentation, .expanded(HomeActivity.identifier))
+
+        // Leaving schedules the grace period rather than collapsing at once
+        // (TC-ISL-005). The runtime delivers it as an expiry.
+        controller.send(.hoverEnded)
+        XCTAssertEqual(controller.state.presentation, .expanded(HomeActivity.identifier))
+
+        controller.send(.timeToLiveExpired(HomeActivity.identifier))
+
+        XCTAssertEqual(
+            controller.state.presentation,
+            .peek(HomeActivity.identifier),
+            "the island has to come back down to the notch"
+        )
+        XCTAssertEqual(
+            controller.presented?.id,
+            HomeActivity.identifier,
+            "coming down must not withdraw the floor"
+        )
+        XCTAssertTrue(
+            controller.acceptsMouseEvents,
+            "collapsing back to the home surface must not make the island inert again"
+        )
+
+        // And it can be opened again, which is the whole point.
+        controller.send(.hoverBegan)
+        XCTAssertEqual(controller.state.presentation, .expanded(HomeActivity.identifier))
+    }
+
     func test_TC_ISL_014_islandIsIdleAndInertBeforeTheHomeSurfaceArrives() {
         let controller = IslandController(sleep: { _ in try await Task.never() })
 

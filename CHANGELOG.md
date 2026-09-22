@@ -8,7 +8,105 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Nothing yet. Next up is Phase 2.4 — calendar, meetings and notifications.
+Nothing yet. Next up is Phase 2.6 — weather, windows, Shortcuts and
+hide-the-notch, the P1 tier that closes Phase 2.
+
+## [0.6.0] — 2026-09-22
+
+Phases 2.4 and 2.5 — the machine's own interruptions, answered in the notch,
+and the two modules nobody else in the field has.
+
+### Added
+
+- **Calendar and meetings** (module 5). The next event with a live countdown
+  at a lead time you choose, one-click join for Meet, Zoom, Teams, Webex,
+  Around and Whereby, the agenda for today and tomorrow in the expanded
+  island, and reminders completed from it. All-day events and invitations you
+  have not answered are kept out of the countdown; a cancelled event is taken
+  off the island rather than merely stopped from appearing.
+
+  Nothing in the countdown ticks. `Agenda.nextChange(after:)` computes the
+  exact next moment the answer can change — a lead time beginning, an event
+  starting, an event ending — and the module sleeps until it. Between two
+  meetings it runs no code at all.
+
+- **In-call mute, camera and leave**, driven through the meeting client's own
+  menu bar. `Meeting ▸ Unmute Audio` is the control and the state in one, so
+  muting inside Zoom and muting from the island cannot disagree.
+  [ADR 0006](docs/adr/0006-menu-bar-accessibility-for-meeting-controls.md)
+  records the choice and the module's one polling exception: while a call is
+  running and on the island, its menu is re-read every two seconds.
+
+  **Zoom is verified.** Teams and Webex ship title tables matching their
+  published menus and are best effort — an unrecognised title reads as
+  "controls unavailable" rather than performing the wrong action. Meet,
+  Around and Whereby get no controls: they run in a browser tab, which has no
+  menu bar. Accessibility is asked for the first time you press a control,
+  never on switching the module on.
+
+- **Notifications** (module 8). Mirrored into the island grouped by app —
+  nine messages from one person is one entry saying nine, not nine fighting
+  over the notch. Inline reply types into the banner's own reply field, so it
+  works wherever macOS offers one rather than only for apps Perch knows
+  about. The per-app list works both ways round: everything except these, or
+  only these. Notifications that arrive during a focus session are held, not
+  dropped, and released grouped by app when it ends.
+
+  There is no API for this — macOS hands an app its own notifications and
+  nobody else's. Perch reads the banner through Accessibility rather than the
+  notification database, which sits behind Full Disk Access.
+  [ADR 0007](docs/adr/0007-reading-the-banner-for-notifications.md) records
+  why. It follows that Perch mirrors what is on screen and nothing more: no
+  history, nothing read from disk, and Do Not Disturb needs no handling at
+  all, because a banner macOS does not draw is one Perch never sees.
+
+- **Camera** (module 9). A live preview under the notch — mirror, four
+  shapes, scroll to resize, opacity, a device picker that covers Continuity
+  Camera, snapshot straight into the shelf, and a floating pill you can pin
+  and drag while you present. The **pre-call check** opens it by itself just
+  before a meeting starts and closes itself if you do nothing; nobody in the
+  paid field has that.
+
+  The privacy promises hold by construction rather than by discipline. A
+  running preview has no output attached to the capture session at all — only
+  a preview layer, which renders from the device and hands Perch nothing — so
+  there is no frame to keep and none to write. Closing removes the session's
+  inputs rather than only stopping it, because stopping alone leaves the
+  device held and the green light on. And nothing opens a device except the
+  preview appearing: switching the module on, launching the app and enabling
+  the pre-call check all open nothing, which TC-CAM-009 checks by running the
+  whole lifecycle five times.
+
+  Camera permission is asked for at the first preview, with the reason on
+  screen. Never on switching the module on.
+
+- **System stats** (module 10). CPU total, per core and the busiest process;
+  memory with Activity Monitor's own pressure level; free space per volume;
+  network throughput and VPN state; GPU load on Apple Silicon; fan speeds;
+  uptime, load average and battery health. A two-glyph micro-gauge beside the
+  notch, a grid of 60-second sparklines when it opens, alert thresholds that
+  fire once rather than once per sample, and click-through to Activity
+  Monitor. Nobody else in the field has a system monitor at all.
+
+  The performance trap `CLAUDE.md` §4 warns about is closed by construction.
+  The sampler's lifetime belongs to the view, and `SamplerPolicy` returns
+  `nil` for "do not sample" rather than a long interval, so a caller cannot
+  treat it as a default. Collapsed with no gauge showing, no timer exists —
+  not a slower one, none.
+
+  Three rows are refusals rather than gaps. Temperature needs a private
+  interface, so fans read and the temperature row is hidden rather than
+  guessed at. GPU load does not exist on Intel, where the tile is replaced
+  rather than zeroed. Per-volume disk throughput would attribute to devices
+  rather than volumes, and a number that disagrees with the row beside it is
+  worse than no number.
+
+  The public-IP readout is the one network request in Perch outside the
+  update feed. It is off, it is asked once rather than on a schedule, it
+  carries no identifier, and its own pane says so.
+
+Phase 2.5 is complete. Next up: weather, windows, Shortcuts and
+hide-the-notch — the P1 tier that closes Phase 2.
 
 ## [0.5.0] — 2026-09-21
 

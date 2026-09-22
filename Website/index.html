@@ -50,7 +50,7 @@
   <div class="wrap">
     <p class="eyebrow">Free and open source, forever</p>
     <h1>Everyone else charges for your notch.<span class="soft">This one is the source code.</span></h1>
-    <p class="body" style="margin-top:22px">Perch turns the MacBook camera notch into a live, interactive surface. <strong>Three modules are built today</strong> — music, a file shelf and a searchable clipboard — <strong>and fifteen more are on the way, every one free</strong>. No licence key, no account, no telemetry, and no network request beyond checking for updates.</p>
+    <p class="body" style="margin-top:22px">Perch turns the MacBook camera notch into a live, interactive surface. <strong>Ten of its eighteen modules are built today</strong> — music, a file shelf, a searchable clipboard, the next meeting, a focus timer, the system HUDs, battery for every accessory, mirrored notifications, the camera and a system monitor — <strong>and the other eight are on the way, every one free</strong>. No licence key, no account, no telemetry, and no network request beyond checking for updates.</p>
     <div class="herocta">
       <a class="btn" href="#price">Download for macOS</a>
       <a class="btn sec" href="#demo">Try the island below</a>
@@ -87,6 +87,7 @@
       <button class="tab" aria-pressed="false" data-s="clip">Clipboard</button>
       <button class="tab" aria-pressed="false" data-s="focus">Focus</button>
       <button class="tab" aria-pressed="false" data-s="hud">HUDs</button>
+      <button class="tab" aria-pressed="false" data-s="notif">Notifications</button>
       <button class="tab" aria-pressed="false" data-s="batt">Battery</button>
       <button class="tab" aria-pressed="false" data-s="cam">Camera</button>
       <button class="tab" aria-pressed="false" data-s="sys">System stats</button>
@@ -119,12 +120,12 @@
     <div class="stat">
       <div class="n">0</div>
       <h3>Accounts. Servers. Analytics.</h3>
-      <p>Everything happens on your Mac. The only request Perch ever makes is to its own update feed, and you can turn that off too.</p>
+      <p>Everything happens on your Mac. Perch makes one request, to its own update feed, and you can turn that off too. There is exactly one other, and it is off unless you switch it on: the public-IP readout in the system monitor.</p>
     </div>
     <div class="stat">
-      <div class="n">18</div>
-      <h3>Modules, each switchable</h3>
-      <p>Against a paid field that averages six. Turn one off and it stops existing — no observer, no timer, no CPU. Run Perch as a music strip or as the whole hub.</p>
+      <div class="n">10<span style="font-size:.45em;color:var(--sub)">/18</span></div>
+      <h3>Modules built, each switchable</h3>
+      <p>Ten work in the build you can download today; eighteen are specified, against a paid field that averages six. Turn one off and it stops existing — no observer, no timer, no CPU. <a href="#notyet">What is not built yet</a>.</p>
     </div>
     <div class="stat">
       <div class="n">$0</div>
@@ -166,7 +167,8 @@
       <div class="copy">
         <p class="eyebrow">Meetings</p>
         <h3>Join, mute, leave.<span class="soft">Without finding the window.</span></h3>
-        <p class="body">Your next event counts down in the notch and joins in one click for Meet, Zoom or Teams. Once you're in, mute and camera controls stay up there while you work in something else.</p>
+        <p class="body">Your next event counts down in the notch and joins in one click &mdash; Meet, Zoom, Teams, Webex, Around and Whereby. Once you are in a Zoom call, mute, camera and leave stay up there while you work in something else. Between two meetings the module is not running any code at all: it works out the exact next moment the answer can change, and sleeps until then.</p>
+        <p class="body" style="font-size:.9rem;color:var(--sub)">The call controls drive the meeting app&rsquo;s own menu bar, so the island and the app can never disagree about whether you are muted. Zoom is the one we have verified; Teams and Webex are best effort and say so when they cannot find their menus. Browser meetings &mdash; Meet, Around, Whereby &mdash; get the join button but no controls, because a browser tab has no menu bar to drive.</p>
       </div>
       <div class="visual" style="min-height:200px">
         <div class="clip"><span>📹</span><div>Standup<div style="font-size:.78rem;color:var(--sub)">Google Meet · 6 attendees</div></div><em style="color:var(--green);font-weight:600">in 4 min</em></div>
@@ -207,6 +209,20 @@
 
     <div class="block flip">
       <div class="copy">
+        <p class="eyebrow">Notifications</p>
+        <h3>Nine messages,<span class="soft">one line.</span></h3>
+        <p class="body">Notifications mirror into the island grouped by app, so a burst from one person is one entry saying nine rather than nine fighting over the notch. Reply without leaving what you are doing &mdash; Perch types into the banner&rsquo;s own reply field, so it works wherever macOS offers one. Anything that arrives during a focus session is held, not dropped, and comes back when the session ends.</p>
+        <p class="body" style="font-size:.9rem;color:var(--sub)">macOS has no API that hands one app another app&rsquo;s notifications. The other way in is the notification database, which sits behind Full Disk Access &mdash; so Perch reads the banner through Accessibility instead, and never asks for Full Disk Access. It follows that Perch mirrors what is on screen and nothing more: no history, nothing read from disk, and Do Not Disturb needs no handling at all, because a banner macOS does not draw is one Perch never sees.</p>
+      </div>
+      <div class="visual" style="min-height:200px">
+        <div class="clip"><span>💬</span><div>Priya<div style="font-size:.78rem;color:var(--sub)">Messages · on my way, five minutes</div></div><em style="font-weight:600">9</em></div>
+        <div class="clip"><span>✉️</span><div>Mail<div style="font-size:.78rem;color:var(--sub)">Reply from the notch, no window</div></div><em style="font-weight:600">Reply</em></div>
+        <div class="clip"><span>🤫</span><div>Held<div style="font-size:.78rem;color:var(--sub)">Arrived during a focus session</div></div><em style="font-weight:600">4</em></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="copy">
         <p class="eyebrow">Battery</p>
         <h3>The Mac, and<span class="soft">everything on it.</span></h3>
         <p class="body">Charge, power source and time remaining for the Mac; left, right and case for AirPods; every mouse, keyboard and trackpad that reports a level. One low warning per discharge cycle &mdash; not one every time the number wobbles back across the line. There is no timer in it: macOS pushes the changes, and the accessories are re-read when you open the island.</p>
@@ -222,7 +238,7 @@
       <div class="copy">
         <p class="eyebrow">System stats · nobody else has this</p>
         <h3>Your whole Mac,<span class="soft">in the notch.</span></h3>
-        <p class="body">CPU, GPU, memory, disk, network, temperature and fan speed — a glance up instead of opening Activity Monitor. Set a threshold and the notch tells you when a build pegs every core or the disk drops under 10&nbsp;GB. <strong>Not one of the seven apps we compared has a system monitor.</strong></p>
+        <p class="body">CPU, GPU, memory, disk, network and fan speed — a glance up instead of opening Activity Monitor. Set a threshold and the notch tells you when a build pegs every core or the disk drops under 10&nbsp;GB. <strong>Not one of the seven apps we compared has a system monitor.</strong></p>
       </div>
       <div class="visual" style="min-height:200px">
         <div class="clip"><span>⚡️</span><span style="font-size:.9rem">CPU</span><em class="mono" style="color:var(--ink)">46%</em></div>
@@ -237,6 +253,7 @@
         <p class="eyebrow">Camera</p>
         <h3>See yourself<span class="soft">before they do.</span></h3>
         <p class="body">A live preview under the notch that opens by itself in the last seconds before a meeting starts. Mirror it, reshape it, or pin it as a floating pill while you present. <strong>No frame is ever written to disk unless you press snapshot, and the green light goes out within half a second of closing</strong> — that is a test in the suite, not a promise in a privacy policy.</p>
+        <p class="body" style="font-size:.9rem;color:var(--sub)">That promise is kept by construction rather than by care. A running preview has no output attached to the capture session at all &mdash; only a preview layer, which renders from the device and hands Perch nothing &mdash; so there is no frame to keep and none to write. Closing removes the session&rsquo;s inputs rather than only stopping it, because stopping alone leaves the device held and the light on. And nothing opens a camera except the preview appearing: switching the module on and launching the app both open nothing.</p>
       </div>
       <div class="visual" style="min-height:200px;justify-content:flex-start">
         <div class="clip"><span>🎥</span><span style="font-size:.9rem">Opens 40s before your next event</span><em style="color:var(--green)">automatic</em></div>
@@ -269,6 +286,18 @@
     <h2>What it doesn't do yet</h2>
     <p class="lead">Every other site in this category lists only what ships. Here is the other half, because you will find out anyway and it may as well be from us.</p>
     <div class="grid3">
+      <div class="card">
+        <h3>Eight of the eighteen modules</h3>
+        <p><strong>Weather, window snapping, Shortcuts, hide-the-notch, notes, screenshots and voice typing are specified and not built.</strong> They are described in the repo's feature document and they are not in the build you can download. Everything shown above this section is; everything in this card is not.</p>
+      </div>
+      <div class="card">
+        <h3>Meeting controls, beyond Zoom</h3>
+        <p>Mute, camera and leave drive the meeting app's own menu bar. Zoom is the one we have verified. Teams and Webex ship title tables that match their published menus but are best effort, and the controls say so on screen when they cannot find them. Meet, Around and Whereby get the join button and no controls at all — a browser tab has no menu bar to drive.</p>
+      </div>
+      <div class="card">
+        <h3>Temperature, in the system monitor</h3>
+        <p>Fan speeds read fine. CPU die temperature on Apple Silicon needs a private interface, so the row is hidden rather than shown as a number we guessed. GPU load reads on Apple Silicon and not on Intel, where the tile is replaced rather than zeroed.</p>
+      </div>
       <div class="card">
         <h3>Voice typing</h3>
         <p>On-device dictation is the hardest thing on the roadmap and it is not in 1.0. Two of the paid apps have it and Perch does not, yet.</p>
@@ -323,6 +352,7 @@
             <tr><th scope="row">Clipboard history</th><td class="us y">Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td>Files only</td><td>60 clips</td><td class="n">—</td></tr>
             <tr><th scope="row">Focus timer</th><td class="us y">Yes</td><td class="n">—</td><td>Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td>Yes</td><td class="n">—</td></tr>
             <tr><th scope="row">Meeting join &amp; controls</th><td class="us y">Yes</td><td class="n">—</td><td>Calendar</td><td class="n">—</td><td>Peek</td><td>Activities</td><td>Yes</td><td class="n">—</td></tr>
+            <tr><th scope="row">Notification mirroring</th><td class="us y">Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td>Yes</td><td>Yes</td><td class="n">—</td></tr>
             <tr><th scope="row">System HUDs</th><td class="us y">Yes</td><td class="n">—</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td class="n">—</td></tr>
             <tr><th scope="row">Battery &amp; accessories</th><td class="us y">Yes</td><td class="n">—</td><td>Yes</td><td>Yes</td><td class="n">—</td><td>Alerts</td><td>Yes</td><td class="n">—</td></tr>
             <tr><th scope="row">System stats</th><td class="us y">Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
@@ -468,8 +498,8 @@
     </div>
 
     <p class="srcmeta">
-      MIT licence · version <span data-gh="version">0.5.0</span> ·
-      <span data-gh="issuesPhrase">open issues</span> ·
+      MIT licence · version <span data-gh="version">0.6.0</span> ·
+      <span data-gh="issuesPhrase">2 open issues</span> ·
       <a href="https://github.com/Milanpatel35/Perch/blob/dev/LICENSE">Read the licence</a>
     </p>
   </div>
@@ -484,7 +514,7 @@
       <div class="tier">Everything, always</div>
       <div class="fig">$0</div>
       <div class="per">MIT licensed · every feature · unlimited Macs</div>
-      <a class="btn" href="https://github.com/Milanpatel35/Perch/releases/download/build-0.5.0/Perch-0.5.0-unsigned.zip" style="width:100%;justify-content:center">Download for macOS</a>
+      <a class="btn" href="https://github.com/Milanpatel35/Perch/releases/download/build-0.6.0/Perch-0.6.0-unsigned.zip" style="width:100%;justify-content:center">Download for macOS</a>
       <p class="prerelease">
         <strong>0.4.0, and not yet signed.</strong> Universal — Apple Silicon
         and Intel. macOS will refuse it on a double-click, so
@@ -495,10 +525,10 @@
         <a href="https://github.com/Milanpatel35/Perch#install">build from source</a>
       </p>
       <p class="prerelease" style="margin-top:18px">
-        <strong>Six of eighteen modules are built so far</strong> — Now
-        Playing, the Shelf, the Clipboard, the Battery, the HUDs and the
-        Focus timer, plus the island itself. The list below is what 1.0 is
-        aiming at; the roadmap says when.
+        <strong>Seven of eighteen modules are built so far</strong> — Now
+        Playing, the Shelf, the Clipboard, the Battery, the HUDs, the Focus
+        timer and the Calendar, plus the island itself. The list below is
+        what 1.0 is aiming at; the roadmap says when.
       </p>
       <ul>
         <li>Searchable clipboard history with pinning</li>

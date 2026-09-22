@@ -216,6 +216,33 @@ Two decisions the table left open:
 | All-day events excluded from countdown | ★ | |
 | Reminders integration | NN | Complete from the island |
 
+
+**Status — shipped in 0.6.0, five of the six rows.** The next event with a
+live countdown at a configurable lead time, one-click join for all six
+services, the agenda for today and tomorrow in the expanded state, all-day
+and unanswered events excluded from the countdown, and reminders completed
+from the island.
+
+The **call controls** are the sixth row and they are shipped with a stated
+limit. They are driven through the meeting client's own menu bar rather than
+its window — `Meeting ▸ Unmute Audio` is both the control and the state,
+which is what stops the island and the app ever disagreeing.
+[ADR 0006](adr/0006-menu-bar-accessibility-for-meeting-controls.md) records
+why, and records the one polling exception in the module: while a call is
+running and on the island, its menu is re-read every two seconds. Nothing
+else in the module ticks at all.
+
+**Zoom is the client this is verified against.** Teams and Webex ship title
+tables matching their published menus but are best effort; a title Perch
+does not recognise reads as "controls unavailable" rather than performing
+the wrong action. **Meet, Around and Whereby have no controls and will not
+get them** — they run in a browser tab, which has no menu bar and whose mute
+button is a `<div>`. Reaching into somebody's browser to guess at a web
+page's element tree is not a control Perch can promise.
+
+Accessibility is requested the first time somebody presses a control, never
+on enabling the module. Everything above works without it.
+
 ## 6. HUD replacement — P0
 
 Alcove's whole personality. Replace every stock overlay.
@@ -324,6 +351,31 @@ when nobody is looking at them.
 | Per-app allow/deny list | ★ | |
 | Silent mode while a Focus session runs | ★ | |
 
+**Status — shipped in 0.6.0.** All four rows. Notifications mirror into the
+island grouped by app — nine messages from one person is one entry saying
+nine, not nine fighting over the notch. Inline reply types into the banner's
+own reply field, so it works wherever macOS offers one rather than only for
+apps Perch knows about. The per-app list works both ways round: everything
+except these, or only these. Notifications that arrive during a focus session
+are **held, not dropped**, and released grouped by app when it ends.
+
+**There is no API for this.** macOS hands an app its own notifications and
+nobody else's. Perch reads the banner itself through Accessibility —
+[ADR 0007](adr/0007-reading-the-banner-for-notifications.md) records why that
+rather than the notification database, which sits behind Full Disk Access.
+Perch never asks for Full Disk Access, and this module can never grow a
+notification history without revisiting that decision.
+
+It follows that Perch mirrors what is on screen and nothing more. Do Not
+Disturb needs no special handling: a banner macOS does not draw is one Perch
+never sees. An app whose name cannot be matched to a running application
+still mirrors, but cannot be filtered by app — and allow-list mode drops it,
+because "only these apps" has to mean what it says.
+
+Accessibility is asked for from the module's own settings pane, on a button,
+after it has explained itself. Never on switching the module on, and never at
+launch.
+
 ## 9. Camera — P0 ★ *(you asked for this)*
 
 Boring Notch has a mirror. Nobody has built it out. This is a cheap feature to
@@ -344,6 +396,35 @@ make genuinely better than the field.
 
 Permission: Camera. Requested only on first enable, with a sheet that says
 exactly what the paragraph above says.
+
+**Status — shipped in 0.6.0, eight of the ten rows.** Live preview under the
+notch, the pre-call check, mirror, all four shapes, the floating pinned pill,
+size and opacity by scroll, the device picker, and snapshot to the shelf.
+
+**The privacy rows are the ones worth reading.** They are true by
+construction rather than by discipline:
+
+- A running preview has **no output attached to the session at all** — only
+  an `AVCaptureVideoPreviewLayer`, which renders straight from the device and
+  hands Perch nothing. There is no frame for Perch to keep and none for it to
+  write. Snapshot adds an output, uses it once, and removes it.
+- The island collapsing is what closes the camera, and closing removes the
+  session's inputs rather than only stopping it — stopping alone leaves the
+  device held and the green light on.
+- Nothing in the module opens a device except the preview appearing.
+  Switching the module on, launching the app and enabling the pre-call check
+  all open nothing, and `TC-CAM-009` runs the whole lifecycle five times to
+  say so.
+- Camera permission is asked for at the first preview, with the reason on
+  screen — never on switching the module on.
+
+The **pre-call check** needs the Calendar module. With it off, nothing fires
+and nothing breaks; the settings pane says which, rather than offering a
+switch that silently does nothing.
+
+The pinned pill is the one window in Perch that is not `IslandPanel`, because
+it has to outlive the island collapsing — `CLAUDE.md` §9's rule, and the one
+documented exception to it.
 
 ## 10. System stats — P0 ★ *(you asked for this)*
 
@@ -370,6 +451,44 @@ that's the closest anyone gets to an ambient data module.
 module's — when the island is collapsed and no gauge is shown, no timer exists.
 When the collapsed micro-gauge is shown, the sample interval drops to 5s. This
 is enforced by TC-SYS-009 and TC-PRF-002.
+
+**Status — shipped in 0.6.0, ten of the thirteen rows.** CPU total, per-core
+and top process; memory used, cached, swap and Activity Monitor's own
+pressure level; free space per volume; network up and down with VPN state;
+uptime and load average; battery cycle count and health; the two-glyph
+micro-gauge; the expanded grid with 60-second sparklines; alert thresholds;
+and click-through to Activity Monitor.
+
+**The performance trap is closed by construction.** The sampler's lifetime
+belongs to the *view*: `beginSampling` on appear, `endSampling` on disappear,
+and `SamplerPolicy.interval(for:)` returns `nil` rather than a long number so
+that a caller cannot treat "do not sample" as a default. Collapsed with no
+gauge showing, **no timer exists** — TC-SYS-009 asserts it directly, through
+five lifecycle paths. The micro-gauge samples at 5s, the grid at 2s.
+
+Three rows are **not done**, and each is a refusal rather than an oversight:
+
+- **Temperature.** Fan speeds read from the SMC's registry node. CPU die
+  temperature on Apple Silicon needs `IOHIDEventSystemClient`, which is
+  private. The row is hidden rather than shown as a number Perch guessed —
+  and an unreadable sensor reads as `nil`, never as zero, so the "over 95°C"
+  alert cannot quietly report that everything is fine for ever (TC-SYS-005).
+- **GPU on Intel.** Utilisation comes from the accelerator's own
+  `PerformanceStatistics`, which is a public registry read and exists on
+  Apple Silicon. On Intel the match returns nothing and the tile is replaced
+  rather than zeroed. No Apple-Silicon-only API is called there at all
+  (TC-SYS-006).
+- **Disk throughput.** Free space per volume reads from the same figure
+  Finder shows. Per-volume read and write rates need `IOBlockStorageDriver`
+  statistics, which are readable but attribute to devices rather than to
+  volumes; a number that does not match the row it sits next to is worse
+  than no number.
+
+**The public-IP readout is the one network request in Perch** outside the
+Sparkle feed, and `CLAUDE.md` §5.2 names it as one of the two permitted
+exceptions. It is off, it is asked once rather than on a schedule, it carries
+no identifier, and the pane it lives in says all of that (TC-SYS-012). It
+lives in a file by itself so that every line of it is visible at once.
 
 ## 11. Weather — P1
 

@@ -191,6 +191,37 @@ Notification mirroring with inline reply. **Tests:** CAL.
 **Done when:** you have joined a real meeting from the notch, muted from the
 notch, and left from the notch, without ever finding the window.
 
+**Status: calendar done.** Module 5 shipped in 0.6.0 — the next event with a
+live countdown at a configurable lead time, one-click join for all six
+services, the agenda for today and tomorrow, all-day and unanswered events
+excluded, and reminders completed from the island. Nothing in the countdown
+half ticks: `Agenda.nextChange(after:)` computes the exact next moment the
+answer can change and the service sleeps until it, so between two meetings
+the module runs no code at all.
+
+The call controls went in through the **menu bar** rather than the meeting
+window — `Meeting ▸ Unmute Audio` is the control and the state in one, which
+is what settles TC-CAL-009 for free.
+[ADR 0006](adr/0006-menu-bar-accessibility-for-meeting-controls.md) records
+it, along with the module's one polling exception. Zoom is verified; Teams
+and Webex are best effort and say so; Meet, Around and Whereby get no
+controls at all, because a browser tab has no menu bar.
+
+**Status: 2.4 complete.** Module 8 shipped in 0.6.0 too — notifications
+mirrored into the island grouped by app, inline reply through the banner's
+own field, a per-app list that works either way round, and everything that
+arrives during a focus session held rather than dropped and released when it
+ends.
+
+Read from the **banner** through Accessibility, not from the notification
+database, which sits behind Full Disk Access.
+[ADR 0007](adr/0007-reading-the-banner-for-notifications.md) records that
+choice and what follows from it: Perch mirrors what is on screen and nothing
+more, so Do Not Disturb needs no handling at all and a notification history
+is not something this module can grow.
+
+**Phase 2.4 done.** Next is 2.5: camera and system stats.
+
 ## 2.5 — Camera and System stats (weeks 12–13)
 
 The two modules nobody in the field has, and the two the launch argument rests
@@ -211,6 +242,39 @@ the existing priority queue. The sampler belongs to the *view*, not the module
 **Done when:** you have watched a build peg every core in the notch, and
 checked your hair before a standup, and Activity Monitor still says Perch is
 using effectively nothing when neither is on screen.
+
+**Status: camera done.** Module 9 shipped in 0.6.0 — live preview, the
+pre-call check, mirror, four shapes, the floating pinned pill, scroll to
+resize, the device picker and snapshot to the shelf.
+
+The privacy promises are kept by construction rather than by discipline: a
+running preview has **no output attached to the session**, only a preview
+layer, so there is no frame to keep and none to write. Closing removes the
+session's inputs rather than only stopping it, because stopping alone leaves
+the device held and the light on. And nothing opens a device except the
+preview appearing — TC-CAM-009 runs the whole lifecycle five times to say so.
+
+The pinned pill is the one window in the app that is not `IslandPanel`; it
+has to outlive the island collapsing, which is what pinning means.
+
+**Status: 2.5 complete.** Module 10 shipped in 0.6.0 too — CPU, memory, disk,
+network, GPU, fans, uptime, load average and battery health, a two-glyph
+micro-gauge beside the notch, a grid of 60-second sparklines when it opens,
+alert thresholds with hysteresis, and click-through to Activity Monitor.
+
+**The performance trap is closed by construction rather than by care.** The
+sampler's lifetime belongs to the view — `beginSampling` on appear,
+`endSampling` on disappear — and `SamplerPolicy.interval(for:)` returns
+`nil` rather than a long number, so "do not sample" cannot be mistaken for a
+default. TC-SYS-009 asserts it through five lifecycle paths.
+
+Three rows are refusals rather than gaps, and `FEATURES.md` §10 records each:
+temperature needs a private interface, GPU load does not exist on Intel, and
+per-volume disk throughput would attribute to devices rather than volumes.
+The public-IP readout is the one network request in the app and is off.
+
+**Phase 2.5 done.** Next is 2.6: weather, windows, Shortcuts and
+hide-the-notch — the P1 tier, and the last of Phase 2.
 
 ## 2.6 — Weather, windows, Shortcuts, hide-the-notch (week 14)
 
