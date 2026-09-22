@@ -22,6 +22,7 @@ public enum PerchModuleRegistry {
         host.register(BatteryService(island: island))
         host.register(HUDService(island: island))
         host.register(FocusService(island: island))
+        host.register(CalendarService(island: island))
     }
 
     /// The Preferences pane for a module, if it has one yet.
@@ -63,6 +64,8 @@ public enum PerchModuleRegistry {
             hudPane(in: host)
         case .battery:
             batteryPane(in: host)
+        case .calendar:
+            calendarPane(in: host)
         case .nowPlaying:
             AnyView(
                 NowPlayingSettingsView(
@@ -103,6 +106,23 @@ public enum PerchModuleRegistry {
                     isSuppressing: hud.isSuppressingStockHUD,
                     onToggle: { hud.setEnabled($0, $1) },
                     onSuppressionChange: { hud.setSuppressesStockHUD($0) }
+                )
+            )
+        }
+    }
+
+    @MainActor
+    private static func calendarPane(in host: ModuleHost) -> AnyView? {
+        host.service(CalendarService.self).map { calendar in
+            AnyView(
+                CalendarSettingsView(
+                    access: calendar.access,
+                    remindersAccess: calendar.remindersAccess,
+                    configuration: calendar.agenda.configuration,
+                    calendarTitles: calendar.calendarTitles,
+                    reminderCount: calendar.reminders.count,
+                    onChange: { calendar.setConfiguration($0) },
+                    onEnableReminders: { calendar.enableReminders() }
                 )
             )
         }

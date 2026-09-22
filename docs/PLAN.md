@@ -191,6 +191,24 @@ Notification mirroring with inline reply. **Tests:** CAL.
 **Done when:** you have joined a real meeting from the notch, muted from the
 notch, and left from the notch, without ever finding the window.
 
+**Status: calendar done.** Module 5 shipped in 0.6.0 — the next event with a
+live countdown at a configurable lead time, one-click join for all six
+services, the agenda for today and tomorrow, all-day and unanswered events
+excluded, and reminders completed from the island. Nothing in the countdown
+half ticks: `Agenda.nextChange(after:)` computes the exact next moment the
+answer can change and the service sleeps until it, so between two meetings
+the module runs no code at all.
+
+The call controls went in through the **menu bar** rather than the meeting
+window — `Meeting ▸ Unmute Audio` is the control and the state in one, which
+is what settles TC-CAL-009 for free.
+[ADR 0006](adr/0006-menu-bar-accessibility-for-meeting-controls.md) records
+it, along with the module's one polling exception. Zoom is verified; Teams
+and Webex are best effort and say so; Meet, Around and Whereby get no
+controls at all, because a browser tab has no menu bar.
+
+Next in 2.4: notifications (module 8).
+
 ## 2.5 — Camera and System stats (weeks 12–13)
 
 The two modules nobody in the field has, and the two the launch argument rests

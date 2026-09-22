@@ -65,11 +65,15 @@ and nobody has built the camera out past a plain mirror.
 
 ## Install
 
-> **Pre-1.0.** Six of the eighteen modules are built — Now Playing, the
-> Shelf, the Clipboard, the Battery, the HUDs and the Focus timer — plus the
-> island itself. The rest of
+> **Pre-1.0.** Seven of the eighteen modules are built — Now Playing, the
+> Shelf, the Clipboard, the Battery, the HUDs, the Focus timer and the
+> Calendar — plus the island itself. The rest of
 > `docs/PLAN.md` is not done, and the Homebrew cask goes live with the first
 > signed release. The feature table below is what 1.0 is aiming at.
+>
+> The Calendar's call controls drive Zoom's menu bar and are verified there;
+> Teams and Webex are best effort, and Meet, Around and Whereby have none at
+> all — a browser tab has no menu bar to drive.
 
 **Download the app** — [Perch 0.5.0, universal](https://github.com/Milanpatel35/Perch/releases/download/build-0.5.0/Perch-0.5.0-unsigned.zip)
 

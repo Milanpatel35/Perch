@@ -26,7 +26,7 @@ export const STATES = {
         title: "Standup in 4 min",
         subtitle: "Google Meet · 6 attendees",
         trailing: '<span class="tag g">Join</span>',
-        expanded: '<div class="l2">Mute, camera and leave stay up here once you are in.</div>',
+        expanded: '<div class="l2">Mute, camera and leave stay up here once you are in — read from the meeting app itself, so the two never disagree.</div>',
     },
     shelf: {
         tint: "linear-gradient(145deg,#4facfe,#2b78e4)",

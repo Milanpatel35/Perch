@@ -8,7 +8,37 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Nothing yet. Next up is Phase 2.4 — calendar, meetings and notifications.
+Phase 2.4, first half.
+
+### Added
+
+- **Calendar and meetings** (module 5). The next event with a live countdown
+  at a lead time you choose, one-click join for Meet, Zoom, Teams, Webex,
+  Around and Whereby, the agenda for today and tomorrow in the expanded
+  island, and reminders completed from it. All-day events and invitations you
+  have not answered are kept out of the countdown; a cancelled event is taken
+  off the island rather than merely stopped from appearing.
+
+  Nothing in the countdown ticks. `Agenda.nextChange(after:)` computes the
+  exact next moment the answer can change — a lead time beginning, an event
+  starting, an event ending — and the module sleeps until it. Between two
+  meetings it runs no code at all.
+
+- **In-call mute, camera and leave**, driven through the meeting client's own
+  menu bar. `Meeting ▸ Unmute Audio` is the control and the state in one, so
+  muting inside Zoom and muting from the island cannot disagree.
+  [ADR 0006](docs/adr/0006-menu-bar-accessibility-for-meeting-controls.md)
+  records the choice and the module's one polling exception: while a call is
+  running and on the island, its menu is re-read every two seconds.
+
+  **Zoom is verified.** Teams and Webex ship title tables matching their
+  published menus and are best effort — an unrecognised title reads as
+  "controls unavailable" rather than performing the wrong action. Meet,
+  Around and Whereby get no controls: they run in a browser tab, which has no
+  menu bar. Accessibility is asked for the first time you press a control,
+  never on switching the module on.
+
+Next up: notifications (module 8), the second half of Phase 2.4.
 
 ## [0.5.0] — 2026-09-21
 
