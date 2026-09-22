@@ -73,7 +73,12 @@ final class EventKitBridge {
     /// Returns the resulting state rather than throwing: a refusal is a
     /// normal outcome the module has a UI for, not an error.
     func requestAccess() async -> Access {
-        let store = makeStore()
+        // Same reason as `reminders(from:)`: the macOS 14 SDK does not
+        // annotate `EKEventStore` as `Sendable`, so awaiting one of its own
+        // methods from the main actor reads as sending it across an
+        // isolation boundary. The 15 and 26 SDKs do annotate it, which is
+        // why this builds on one CI runner and not the other.
+        nonisolated(unsafe) let store = makeStore()
 
         do {
             if #available(macOS 14.0, *) {
@@ -93,7 +98,12 @@ final class EventKitBridge {
     /// is switched on — the calendar half works perfectly without it, and
     /// two prompts at once is what makes an app feel grabby.
     func requestRemindersAccess() async -> Access {
-        let store = makeStore()
+        // Same reason as `reminders(from:)`: the macOS 14 SDK does not
+        // annotate `EKEventStore` as `Sendable`, so awaiting one of its own
+        // methods from the main actor reads as sending it across an
+        // isolation boundary. The 15 and 26 SDKs do annotate it, which is
+        // why this builds on one CI runner and not the other.
+        nonisolated(unsafe) let store = makeStore()
 
         do {
             if #available(macOS 14.0, *) {
@@ -132,7 +142,14 @@ final class EventKitBridge {
     func reminders(from date: Date = Date()) async -> [CalendarReminder] {
         guard remindersAccess == .granted, let store else { return [] }
 
-        let predicate = store.predicateForIncompleteReminders(
+        // `EKEventStore` is documented as safe to use from any thread and is
+        // not annotated `Sendable` in the macOS 14 SDK, so handing it to
+        // `withCheckedContinuation` — whose closure is `sending` — reads as a
+        // data race there. It is not one: the store outlives the call, and
+        // `fetchReminders` is its own asynchronous API.
+        nonisolated(unsafe) let reader = store
+
+        let predicate = reader.predicateForIncompleteReminders(
             withDueDateStarting: nil,
             ending: date.addingTimeInterval(window),
             calendars: nil
@@ -142,7 +159,7 @@ final class EventKitBridge {
         // `EKReminder` is not `Sendable` and must not cross back. The value
         // type is what leaves.
         let fetched: [CalendarReminder] = await withCheckedContinuation { continuation in
-            store.fetchReminders(matching: predicate) { reminders in
+            reader.fetchReminders(matching: predicate) { reminders in
                 continuation.resume(returning: (reminders ?? []).map(CalendarReminder.init(_:)))
             }
         }
