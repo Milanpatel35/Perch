@@ -397,6 +397,35 @@ make genuinely better than the field.
 Permission: Camera. Requested only on first enable, with a sheet that says
 exactly what the paragraph above says.
 
+**Status — shipped in 0.6.0, eight of the ten rows.** Live preview under the
+notch, the pre-call check, mirror, all four shapes, the floating pinned pill,
+size and opacity by scroll, the device picker, and snapshot to the shelf.
+
+**The privacy rows are the ones worth reading.** They are true by
+construction rather than by discipline:
+
+- A running preview has **no output attached to the session at all** — only
+  an `AVCaptureVideoPreviewLayer`, which renders straight from the device and
+  hands Perch nothing. There is no frame for Perch to keep and none for it to
+  write. Snapshot adds an output, uses it once, and removes it.
+- The island collapsing is what closes the camera, and closing removes the
+  session's inputs rather than only stopping it — stopping alone leaves the
+  device held and the green light on.
+- Nothing in the module opens a device except the preview appearing.
+  Switching the module on, launching the app and enabling the pre-call check
+  all open nothing, and `TC-CAM-009` runs the whole lifecycle five times to
+  say so.
+- Camera permission is asked for at the first preview, with the reason on
+  screen — never on switching the module on.
+
+The **pre-call check** needs the Calendar module. With it off, nothing fires
+and nothing breaks; the settings pane says which, rather than offering a
+switch that silently does nothing.
+
+The pinned pill is the one window in Perch that is not `IslandPanel`, because
+it has to outlive the island collapsing — `CLAUDE.md` §9's rule, and the one
+documented exception to it.
+
 ## 10. System stats — P0 ★ *(you asked for this)*
 
 Nobody in the seven has a real system monitor. DynamicLake shows weather;

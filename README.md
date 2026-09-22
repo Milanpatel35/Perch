@@ -65,9 +65,9 @@ and nobody has built the camera out past a plain mirror.
 
 ## Install
 
-> **Pre-1.0.** Eight of the eighteen modules are built — Now Playing, the
-> Shelf, the Clipboard, the Battery, the HUDs, the Focus timer, the Calendar
-> and Notifications — plus the island itself. The rest of
+> **Pre-1.0.** Nine of the eighteen modules are built — Now Playing, the
+> Shelf, the Clipboard, the Battery, the HUDs, the Focus timer, the Calendar,
+> Notifications and the Camera — plus the island itself. The rest of
 > `docs/PLAN.md` is not done, and the Homebrew cask goes live with the first
 > signed release. The feature table below is what 1.0 is aiming at.
 >
