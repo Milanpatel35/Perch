@@ -8,7 +8,7 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Phase 2.4, first half.
+Phase 2.4 — the machine's own interruptions, answered in the notch.
 
 ### Added
 
@@ -38,7 +38,23 @@ Phase 2.4, first half.
   menu bar. Accessibility is asked for the first time you press a control,
   never on switching the module on.
 
-Next up: notifications (module 8), the second half of Phase 2.4.
+- **Notifications** (module 8). Mirrored into the island grouped by app —
+  nine messages from one person is one entry saying nine, not nine fighting
+  over the notch. Inline reply types into the banner's own reply field, so it
+  works wherever macOS offers one rather than only for apps Perch knows
+  about. The per-app list works both ways round: everything except these, or
+  only these. Notifications that arrive during a focus session are held, not
+  dropped, and released grouped by app when it ends.
+
+  There is no API for this — macOS hands an app its own notifications and
+  nobody else's. Perch reads the banner through Accessibility rather than the
+  notification database, which sits behind Full Disk Access.
+  [ADR 0007](docs/adr/0007-reading-the-banner-for-notifications.md) records
+  why. It follows that Perch mirrors what is on screen and nothing more: no
+  history, nothing read from disk, and Do Not Disturb needs no handling at
+  all, because a banner macOS does not draw is one Perch never sees.
+
+Phase 2.4 is complete. Next up: camera and system stats.
 
 ## [0.5.0] — 2026-09-21
 

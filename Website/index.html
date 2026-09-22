@@ -87,6 +87,7 @@
       <button class="tab" aria-pressed="false" data-s="clip">Clipboard</button>
       <button class="tab" aria-pressed="false" data-s="focus">Focus</button>
       <button class="tab" aria-pressed="false" data-s="hud">HUDs</button>
+      <button class="tab" aria-pressed="false" data-s="notif">Notifications</button>
       <button class="tab" aria-pressed="false" data-s="batt">Battery</button>
       <button class="tab" aria-pressed="false" data-s="cam">Camera</button>
       <button class="tab" aria-pressed="false" data-s="sys">System stats</button>
@@ -208,6 +209,20 @@
 
     <div class="block flip">
       <div class="copy">
+        <p class="eyebrow">Notifications</p>
+        <h3>Nine messages,<span class="soft">one line.</span></h3>
+        <p class="body">Notifications mirror into the island grouped by app, so a burst from one person is one entry saying nine rather than nine fighting over the notch. Reply without leaving what you are doing &mdash; Perch types into the banner&rsquo;s own reply field, so it works wherever macOS offers one. Anything that arrives during a focus session is held, not dropped, and comes back when the session ends.</p>
+        <p class="body" style="font-size:.9rem;color:var(--sub)">macOS has no API that hands one app another app&rsquo;s notifications. The other way in is the notification database, which sits behind Full Disk Access &mdash; so Perch reads the banner through Accessibility instead, and never asks for Full Disk Access. It follows that Perch mirrors what is on screen and nothing more: no history, nothing read from disk, and Do Not Disturb needs no handling at all, because a banner macOS does not draw is one Perch never sees.</p>
+      </div>
+      <div class="visual" style="min-height:200px">
+        <div class="clip"><span>💬</span><div>Priya<div style="font-size:.78rem;color:var(--sub)">Messages · on my way, five minutes</div></div><em style="font-weight:600">9</em></div>
+        <div class="clip"><span>✉️</span><div>Mail<div style="font-size:.78rem;color:var(--sub)">Reply from the notch, no window</div></div><em style="font-weight:600">Reply</em></div>
+        <div class="clip"><span>🤫</span><div>Held<div style="font-size:.78rem;color:var(--sub)">Arrived during a focus session</div></div><em style="font-weight:600">4</em></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="copy">
         <p class="eyebrow">Battery</p>
         <h3>The Mac, and<span class="soft">everything on it.</span></h3>
         <p class="body">Charge, power source and time remaining for the Mac; left, right and case for AirPods; every mouse, keyboard and trackpad that reports a level. One low warning per discharge cycle &mdash; not one every time the number wobbles back across the line. There is no timer in it: macOS pushes the changes, and the accessories are re-read when you open the island.</p>
@@ -324,6 +339,7 @@
             <tr><th scope="row">Clipboard history</th><td class="us y">Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td>Files only</td><td>60 clips</td><td class="n">—</td></tr>
             <tr><th scope="row">Focus timer</th><td class="us y">Yes</td><td class="n">—</td><td>Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td>Yes</td><td class="n">—</td></tr>
             <tr><th scope="row">Meeting join &amp; controls</th><td class="us y">Yes</td><td class="n">—</td><td>Calendar</td><td class="n">—</td><td>Peek</td><td>Activities</td><td>Yes</td><td class="n">—</td></tr>
+            <tr><th scope="row">Notification mirroring</th><td class="us y">Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td>Yes</td><td>Yes</td><td class="n">—</td></tr>
             <tr><th scope="row">System HUDs</th><td class="us y">Yes</td><td class="n">—</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td class="n">—</td></tr>
             <tr><th scope="row">Battery &amp; accessories</th><td class="us y">Yes</td><td class="n">—</td><td>Yes</td><td>Yes</td><td class="n">—</td><td>Alerts</td><td>Yes</td><td class="n">—</td></tr>
             <tr><th scope="row">System stats</th><td class="us y">Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>

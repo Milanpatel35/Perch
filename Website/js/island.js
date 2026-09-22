@@ -28,6 +28,14 @@ export const STATES = {
         trailing: '<span class="tag g">Join</span>',
         expanded: '<div class="l2">Mute, camera and leave stay up here once you are in — read from the meeting app itself, so the two never disagree.</div>',
     },
+    notif: {
+        tint: "linear-gradient(145deg,#f093fb,#f5576c)",
+        title: "Priya",
+        subtitle: "Messages · on my way, five minutes",
+        trailing: '<span class="tag">9</span>',
+        expanded:
+            '<div class="l2">Grouped by app, so nine messages is one line. Reply without leaving what you are doing.</div>',
+    },
     shelf: {
         tint: "linear-gradient(145deg,#4facfe,#2b78e4)",
         title: "3 files held",
