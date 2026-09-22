@@ -92,7 +92,7 @@ final class SystemReader {
 
         defer {
             vm_deallocate(
-                mach_task_self_,
+                Self.taskSelf,
                 vm_address_t(bitPattern: info),
                 vm_size_t(Int(infoCount) * MemoryLayout<integer_t>.stride)
             )
@@ -218,6 +218,15 @@ final class SystemReader {
 
         return memory
     }
+
+    /// The task port, from the trap rather than from `mach_task_self_`.
+    ///
+    /// That global is a `var` in the SDK headers, which the macOS 14
+    /// compiler reads as shared mutable state — and hoisting it into a
+    /// `static let` does not help, because the initialiser still reads it.
+    /// `task_self_trap()` is a function returning the same port, so there is
+    /// no global to read at all.
+    private static let taskSelf: mach_port_t = task_self_trap()
 
     /// Read once. The page size cannot change while the machine is running.
     private static let pageSize: UInt64 = {
