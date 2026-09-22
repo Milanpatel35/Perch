@@ -162,7 +162,14 @@ struct SystemStatsSettingsView: View {
         onAlertsChange(updated)
     }
 
+    /// Written out rather than passing `onPublicIPChange` straight in: the
+    /// macOS 14 SDK types `Binding`'s setter as `@isolated(any) @Sendable`,
+    /// and handing it a plain stored closure is a conversion it refuses.
+    /// A closure literal is inferred at the isolation it is written in.
     private var publicIPBinding: Binding<Bool> {
-        Binding(get: { isPublicIPEnabled }, set: onPublicIPChange)
+        Binding(
+            get: { isPublicIPEnabled },
+            set: { isOn in onPublicIPChange(isOn) }
+        )
     }
 }
