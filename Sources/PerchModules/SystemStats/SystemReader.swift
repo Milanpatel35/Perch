@@ -219,11 +219,14 @@ final class SystemReader {
         return memory
     }
 
-    /// `mach_task_self_` is a global `var` in the SDK headers, which the
-    /// macOS 14 compiler reads as shared mutable state. It is a port name
-    /// fixed for the life of the process, so reading it once is both correct
-    /// and the only spelling that compiles on every SDK Perch builds against.
-    private static let taskSelf: mach_port_t = mach_task_self_
+    /// The task port, from the trap rather than from `mach_task_self_`.
+    ///
+    /// That global is a `var` in the SDK headers, which the macOS 14
+    /// compiler reads as shared mutable state — and hoisting it into a
+    /// `static let` does not help, because the initialiser still reads it.
+    /// `task_self_trap()` is a function returning the same port, so there is
+    /// no global to read at all.
+    private static let taskSelf: mach_port_t = task_self_trap()
 
     /// Read once. The page size cannot change while the machine is running.
     private static let pageSize: UInt64 = {
