@@ -8,6 +8,11 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
+Nothing yet. Next up is Phase 2.6 — weather, windows, Shortcuts and
+hide-the-notch, the P1 tier that closes Phase 2.
+
+## [0.6.0] — 2026-09-22
+
 Phases 2.4 and 2.5 — the machine's own interruptions, answered in the notch,
 and the two modules nobody else in the field has.
 
