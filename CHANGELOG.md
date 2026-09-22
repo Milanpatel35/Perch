@@ -8,8 +8,8 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Phase 2.4 and half of 2.5 — the machine's own interruptions, answered in
-the notch.
+Phases 2.4 and 2.5 — the machine's own interruptions, answered in the notch,
+and the two modules nobody else in the field has.
 
 ### Added
 
@@ -75,7 +75,33 @@ the notch.
   Camera permission is asked for at the first preview, with the reason on
   screen. Never on switching the module on.
 
-Next up: system stats, and Phase 2.5 is done.
+- **System stats** (module 10). CPU total, per core and the busiest process;
+  memory with Activity Monitor's own pressure level; free space per volume;
+  network throughput and VPN state; GPU load on Apple Silicon; fan speeds;
+  uptime, load average and battery health. A two-glyph micro-gauge beside the
+  notch, a grid of 60-second sparklines when it opens, alert thresholds that
+  fire once rather than once per sample, and click-through to Activity
+  Monitor. Nobody else in the field has a system monitor at all.
+
+  The performance trap `CLAUDE.md` §4 warns about is closed by construction.
+  The sampler's lifetime belongs to the view, and `SamplerPolicy` returns
+  `nil` for "do not sample" rather than a long interval, so a caller cannot
+  treat it as a default. Collapsed with no gauge showing, no timer exists —
+  not a slower one, none.
+
+  Three rows are refusals rather than gaps. Temperature needs a private
+  interface, so fans read and the temperature row is hidden rather than
+  guessed at. GPU load does not exist on Intel, where the tile is replaced
+  rather than zeroed. Per-volume disk throughput would attribute to devices
+  rather than volumes, and a number that disagrees with the row beside it is
+  worse than no number.
+
+  The public-IP readout is the one network request in Perch outside the
+  update feed. It is off, it is asked once rather than on a schedule, it
+  carries no identifier, and its own pane says so.
+
+Phase 2.5 is complete. Next up: weather, windows, Shortcuts and
+hide-the-notch — the P1 tier that closes Phase 2.
 
 ## [0.5.0] — 2026-09-21
 

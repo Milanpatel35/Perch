@@ -25,6 +25,7 @@ public enum PerchModuleRegistry {
         host.register(CalendarService(island: island))
         host.register(NotificationService(island: island))
         host.register(CameraService(island: island))
+        host.register(SystemStatsService(island: island))
 
         wireFocusToNotifications(in: host)
         wireCalendarToCamera(in: host)
@@ -90,48 +91,47 @@ public enum PerchModuleRegistry {
         for module: ModuleID,
         in host: ModuleHost
     ) -> AnyView? {
+        earlyPane(for: module, in: host) ?? laterPane(for: module, in: host)
+    }
+
+    /// Phases 1 and 2.1–2.3. Split from `laterPane` only because one switch
+    /// holding eighteen cases is unreadable long before the eighteenth.
+    @MainActor
+    private static func earlyPane(for module: ModuleID, in host: ModuleHost) -> AnyView? {
         switch module {
-        case .clipboard:
-            host.service(ClipboardService.self).map { clipboard in
-                AnyView(
-                    ClipboardSettingsView(
-                        entryCount: clipboard.history.count,
-                        pinnedCount: clipboard.history.pinned.count,
-                        excludedBundleIDs: clipboard.exclusions.bundleIDs.sorted(),
-                        onRetentionChange: { clipboard.setRetention($0) },
-                        onClear: { clipboard.clearUnpinned() }
-                    )
-                )
-            }
-        case .shelf:
-            host.service(ShelfService.self).map { shelf in
-                AnyView(
-                    ShelfSettingsView(
-                        itemCount: shelf.store.count,
-                        byteCount: shelf.store.byteCount,
-                        directory: ShelfService.defaultDirectory,
-                        onClear: { shelf.clearAll() }
-                    )
-                )
-            }
-        case .focus:
-            focusPane(in: host)
-        case .hud:
-            hudPane(in: host)
-        case .battery:
-            batteryPane(in: host)
-        case .calendar:
-            calendarPane(in: host)
-        case .notifications:
-            notificationsPane(in: host)
-        case .camera:
-            cameraPane(in: host)
         case .nowPlaying:
             AnyView(
                 NowPlayingSettingsView(
                     knownSources: host.service(NowPlayingService.self)?.knownSources ?? []
                 )
             )
+        case .shelf:
+            shelfPane(in: host)
+        case .clipboard:
+            clipboardPane(in: host)
+        case .focus:
+            focusPane(in: host)
+        case .hud:
+            hudPane(in: host)
+        case .battery:
+            batteryPane(in: host)
+        default:
+            nil
+        }
+    }
+
+    /// Phases 2.4 onwards.
+    @MainActor
+    private static func laterPane(for module: ModuleID, in host: ModuleHost) -> AnyView? {
+        switch module {
+        case .calendar:
+            calendarPane(in: host)
+        case .notifications:
+            notificationsPane(in: host)
+        case .camera:
+            cameraPane(in: host)
+        case .systemStats:
+            systemStatsPane(in: host)
         default:
             nil
         }
@@ -140,6 +140,35 @@ public enum PerchModuleRegistry {
     // One function per module rather than one growing switch: the switch is a
     // dispatch table, and eighteen inline view constructions in it would be
     // unreadable long before the eighteenth.
+
+    @MainActor
+    private static func clipboardPane(in host: ModuleHost) -> AnyView? {
+        host.service(ClipboardService.self).map { clipboard in
+            AnyView(
+                ClipboardSettingsView(
+                    entryCount: clipboard.history.count,
+                    pinnedCount: clipboard.history.pinned.count,
+                    excludedBundleIDs: clipboard.exclusions.bundleIDs.sorted(),
+                    onRetentionChange: { clipboard.setRetention($0) },
+                    onClear: { clipboard.clearUnpinned() }
+                )
+            )
+        }
+    }
+
+    @MainActor
+    private static func shelfPane(in host: ModuleHost) -> AnyView? {
+        host.service(ShelfService.self).map { shelf in
+            AnyView(
+                ShelfSettingsView(
+                    itemCount: shelf.store.count,
+                    byteCount: shelf.store.byteCount,
+                    directory: ShelfService.defaultDirectory,
+                    onClear: { shelf.clearAll() }
+                )
+            )
+        }
+    }
 
     @MainActor
     private static func focusPane(in host: ModuleHost) -> AnyView? {
@@ -166,6 +195,24 @@ public enum PerchModuleRegistry {
                     isSuppressing: hud.isSuppressingStockHUD,
                     onToggle: { hud.setEnabled($0, $1) },
                     onSuppressionChange: { hud.setSuppressesStockHUD($0) }
+                )
+            )
+        }
+    }
+
+    @MainActor
+    private static func systemStatsPane(in host: ModuleHost) -> AnyView? {
+        host.service(SystemStatsService.self).map { stats in
+            AnyView(
+                SystemStatsSettingsView(
+                    gauges: stats.gauges,
+                    alerts: stats.alerts.configuration,
+                    snapshot: stats.snapshot,
+                    isPublicIPEnabled: stats.isPublicIPEnabled,
+                    isSampling: stats.isSampling,
+                    onGaugesChange: { stats.setGauges($0) },
+                    onAlertsChange: { stats.setAlertConfiguration($0) },
+                    onPublicIPChange: { stats.setPublicIPEnabled($0) }
                 )
             )
         }

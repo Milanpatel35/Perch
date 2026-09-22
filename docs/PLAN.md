@@ -257,7 +257,24 @@ preview appearing — TC-CAM-009 runs the whole lifecycle five times to say so.
 The pinned pill is the one window in the app that is not `IslandPanel`; it
 has to outlive the island collapsing, which is what pinning means.
 
-Next in 2.5: system stats (module 10).
+**Status: 2.5 complete.** Module 10 shipped in 0.6.0 too — CPU, memory, disk,
+network, GPU, fans, uptime, load average and battery health, a two-glyph
+micro-gauge beside the notch, a grid of 60-second sparklines when it opens,
+alert thresholds with hysteresis, and click-through to Activity Monitor.
+
+**The performance trap is closed by construction rather than by care.** The
+sampler's lifetime belongs to the view — `beginSampling` on appear,
+`endSampling` on disappear — and `SamplerPolicy.interval(for:)` returns
+`nil` rather than a long number, so "do not sample" cannot be mistaken for a
+default. TC-SYS-009 asserts it through five lifecycle paths.
+
+Three rows are refusals rather than gaps, and `FEATURES.md` §10 records each:
+temperature needs a private interface, GPU load does not exist on Intel, and
+per-volume disk throughput would attribute to devices rather than volumes.
+The public-IP readout is the one network request in the app and is off.
+
+**Phase 2.5 done.** Next is 2.6: weather, windows, Shortcuts and
+hide-the-notch — the P1 tier, and the last of Phase 2.
 
 ## 2.6 — Weather, windows, Shortcuts, hide-the-notch (week 14)
 
