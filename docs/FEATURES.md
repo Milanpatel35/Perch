@@ -216,6 +216,33 @@ Two decisions the table left open:
 | All-day events excluded from countdown | ★ | |
 | Reminders integration | NN | Complete from the island |
 
+
+**Status — shipped in 0.6.0, five of the six rows.** The next event with a
+live countdown at a configurable lead time, one-click join for all six
+services, the agenda for today and tomorrow in the expanded state, all-day
+and unanswered events excluded from the countdown, and reminders completed
+from the island.
+
+The **call controls** are the sixth row and they are shipped with a stated
+limit. They are driven through the meeting client's own menu bar rather than
+its window — `Meeting ▸ Unmute Audio` is both the control and the state,
+which is what stops the island and the app ever disagreeing.
+[ADR 0006](adr/0006-menu-bar-accessibility-for-meeting-controls.md) records
+why, and records the one polling exception in the module: while a call is
+running and on the island, its menu is re-read every two seconds. Nothing
+else in the module ticks at all.
+
+**Zoom is the client this is verified against.** Teams and Webex ship title
+tables matching their published menus but are best effort; a title Perch
+does not recognise reads as "controls unavailable" rather than performing
+the wrong action. **Meet, Around and Whereby have no controls and will not
+get them** — they run in a browser tab, which has no menu bar and whose mute
+button is a `<div>`. Reaching into somebody's browser to guess at a web
+page's element tree is not a control Perch can promise.
+
+Accessibility is requested the first time somebody presses a control, never
+on enabling the module. Everything above works without it.
+
 ## 6. HUD replacement — P0
 
 Alcove's whole personality. Replace every stock overlay.
