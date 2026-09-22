@@ -452,6 +452,44 @@ module's — when the island is collapsed and no gauge is shown, no timer exists
 When the collapsed micro-gauge is shown, the sample interval drops to 5s. This
 is enforced by TC-SYS-009 and TC-PRF-002.
 
+**Status — shipped in 0.6.0, ten of the thirteen rows.** CPU total, per-core
+and top process; memory used, cached, swap and Activity Monitor's own
+pressure level; free space per volume; network up and down with VPN state;
+uptime and load average; battery cycle count and health; the two-glyph
+micro-gauge; the expanded grid with 60-second sparklines; alert thresholds;
+and click-through to Activity Monitor.
+
+**The performance trap is closed by construction.** The sampler's lifetime
+belongs to the *view*: `beginSampling` on appear, `endSampling` on disappear,
+and `SamplerPolicy.interval(for:)` returns `nil` rather than a long number so
+that a caller cannot treat "do not sample" as a default. Collapsed with no
+gauge showing, **no timer exists** — TC-SYS-009 asserts it directly, through
+five lifecycle paths. The micro-gauge samples at 5s, the grid at 2s.
+
+Three rows are **not done**, and each is a refusal rather than an oversight:
+
+- **Temperature.** Fan speeds read from the SMC's registry node. CPU die
+  temperature on Apple Silicon needs `IOHIDEventSystemClient`, which is
+  private. The row is hidden rather than shown as a number Perch guessed —
+  and an unreadable sensor reads as `nil`, never as zero, so the "over 95°C"
+  alert cannot quietly report that everything is fine for ever (TC-SYS-005).
+- **GPU on Intel.** Utilisation comes from the accelerator's own
+  `PerformanceStatistics`, which is a public registry read and exists on
+  Apple Silicon. On Intel the match returns nothing and the tile is replaced
+  rather than zeroed. No Apple-Silicon-only API is called there at all
+  (TC-SYS-006).
+- **Disk throughput.** Free space per volume reads from the same figure
+  Finder shows. Per-volume read and write rates need `IOBlockStorageDriver`
+  statistics, which are readable but attribute to devices rather than to
+  volumes; a number that does not match the row it sits next to is worse
+  than no number.
+
+**The public-IP readout is the one network request in Perch** outside the
+Sparkle feed, and `CLAUDE.md` §5.2 names it as one of the two permitted
+exceptions. It is off, it is asked once rather than on a schedule, it carries
+no identifier, and the pane it lives in says all of that (TC-SYS-012). It
+lives in a file by itself so that every line of it is visible at once.
+
 ## 11. Weather — P1
 
 | Capability | Comes from | Notes |
