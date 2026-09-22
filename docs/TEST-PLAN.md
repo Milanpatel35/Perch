@@ -46,7 +46,7 @@ Levels:
 | TC-ISL-002 | U | Single activity submitted | Transitions `idle → peek`, auto-collapses after its TTL |
 | TC-ISL-003 | U | Higher-priority activity during a peek | Pre-empts immediately; lower one is re-queued, not dropped |
 | TC-ISL-004 | E | Hover over the notch | Expands within the spring duration |
-| TC-ISL-005 | E | Mouse leaves while expanded | Collapses after the grace period, not instantly |
+| TC-ISL-005 | U | Mouse leaves while expanded | Collapses to peek after the grace period, not instantly — and an activity that declared no TTL is **not** withdrawn by it |
 | TC-ISL-006 | U | Two equal-priority activities | Most recent wins; the other stays queued |
 | TC-ISL-007 | U | Activity cancelled while presented | Collapses cleanly; queue advances |
 | TC-ISL-008 | E | Click while expanded | Stays expanded and becomes interactive; does not steal key focus from the frontmost app |

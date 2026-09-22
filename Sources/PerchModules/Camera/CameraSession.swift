@@ -152,11 +152,9 @@ final class CameraSession: NSObject {
         // is why it is off the main thread — but the session object itself
         // is already built, so the view can attach to it immediately and the
         // preview appears as soon as frames do (TC-CAM-002).
-        // `AVCaptureSession` is documented as safe to use from any thread
-        // and is not marked `Sendable`, which Swift 6 cannot know.
-        nonisolated(unsafe) let starting = session
+        let starting = Unsafely(session)
         Task.detached(priority: .userInitiated) {
-            starting.startRunning()
+            starting.value.startRunning()
         }
 
         return nil
@@ -244,6 +242,22 @@ final class CameraSession: NSObject {
 
         guard let data else { return nil }
         return NSImage(data: data)
+    }
+}
+
+/// A value promised safe to cross an isolation boundary, said once.
+///
+/// `AVCaptureSession` is documented as safe to use from any thread and is
+/// not annotated `Sendable` in every SDK Perch builds against — the macOS 14
+/// one is not, which is why this built locally and on one CI runner and not
+/// the other. A box states the promise in a place it can be read, and it
+/// works on every compiler; `nonisolated(unsafe)` on a local does not,
+/// because the closure it is captured into is itself a `sending` parameter.
+private struct Unsafely<Value>: @unchecked Sendable {
+    let value: Value
+
+    init(_ value: Value) {
+        self.value = value
     }
 }
 
