@@ -351,6 +351,31 @@ when nobody is looking at them.
 | Per-app allow/deny list | ★ | |
 | Silent mode while a Focus session runs | ★ | |
 
+**Status — shipped in 0.6.0.** All four rows. Notifications mirror into the
+island grouped by app — nine messages from one person is one entry saying
+nine, not nine fighting over the notch. Inline reply types into the banner's
+own reply field, so it works wherever macOS offers one rather than only for
+apps Perch knows about. The per-app list works both ways round: everything
+except these, or only these. Notifications that arrive during a focus session
+are **held, not dropped**, and released grouped by app when it ends.
+
+**There is no API for this.** macOS hands an app its own notifications and
+nobody else's. Perch reads the banner itself through Accessibility —
+[ADR 0007](adr/0007-reading-the-banner-for-notifications.md) records why that
+rather than the notification database, which sits behind Full Disk Access.
+Perch never asks for Full Disk Access, and this module can never grow a
+notification history without revisiting that decision.
+
+It follows that Perch mirrors what is on screen and nothing more. Do Not
+Disturb needs no special handling: a banner macOS does not draw is one Perch
+never sees. An app whose name cannot be matched to a running application
+still mirrors, but cannot be filtered by app — and allow-list mode drops it,
+because "only these apps" has to mean what it says.
+
+Accessibility is asked for from the module's own settings pane, on a button,
+after it has explained itself. Never on switching the module on, and never at
+launch.
+
 ## 9. Camera — P0 ★ *(you asked for this)*
 
 Boring Notch has a mirror. Nobody has built it out. This is a cheap feature to

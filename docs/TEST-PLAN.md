@@ -176,6 +176,24 @@ rather than the converter.
 | TC-CAL-013 | U | Module disabled mid-countdown | Store released, wake-up cancelled, control poll stopped, island cleared |
 | TC-CAL-014 | E | Reminder completed from the island | Marked done in Reminders; the row leaves the list |
 
+## NTF — notification mirroring
+
+| ID | Level | Case | Expected |
+|---|---|---|---|
+| TC-NTF-001 | U | Notification from an app on the deny list | Never reaches the island |
+| TC-NTF-002 | U | Allow-list mode with one app listed | Only that app mirrors; everything else is dropped |
+| TC-NTF-003 | U | The same notification delivered twice | Shown once |
+| TC-NTF-004 | U | Several from one app in quick succession | Coalesced into one activity carrying a count |
+| TC-NTF-005 | U | Notification while a focus session runs | Held, not shown, and not lost |
+| TC-NTF-006 | U | Held notifications after the session ends | Released in order, still coalesced per app |
+| TC-NTF-007 | U | Notification while Do Not Disturb is on | Not mirrored — the system's answer wins |
+| TC-NTF-008 | E | Accessibility denied or revoked | Module explains it and the rest of the app is unaffected |
+| TC-NTF-009 | U | Module disabled | Observer removed, queue emptied, nothing on the island |
+| TC-NTF-010 | E | Inline reply to a message | Sent through the banner's own reply field; banner dismissed |
+| TC-NTF-011 | E | Reply field not found (app or macOS changed) | Degrades to "open the app", no crash and no hang |
+| TC-NTF-012 | U | Perch's own notifications | Never mirrored — the island does not announce itself |
+
+
 ## HUD — system HUD replacement
 
 | ID | Level | Case | Expected |

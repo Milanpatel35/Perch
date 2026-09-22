@@ -23,6 +23,30 @@ public enum PerchModuleRegistry {
         host.register(HUDService(island: island))
         host.register(FocusService(island: island))
         host.register(CalendarService(island: island))
+        host.register(NotificationService(island: island))
+
+        wireFocusToNotifications(in: host)
+    }
+
+    /// Lets the notification module know when a focus session is running.
+    ///
+    /// The one place two modules are connected, and it is here rather than
+    /// inside either of them: a module that reached into another would have
+    /// to know whether it was switched on, and `CLAUDE.md` §4 puts that
+    /// question in exactly one place. Both closures survive either module
+    /// being switched off, because `ModuleHost.service` returns `nil` for a
+    /// module that is not running.
+    @MainActor
+    private static func wireFocusToNotifications(in host: ModuleHost) {
+        guard let notifications = host.service(NotificationService.self) else { return }
+
+        notifications.isFocusSessionRunning = { [weak host] in
+            host?.service(FocusService.self)?.timer.isRunning ?? false
+        }
+
+        host.service(FocusService.self)?.onSessionEnded = { [weak host] in
+            host?.service(NotificationService.self)?.releaseHeldNotifications()
+        }
     }
 
     /// The Preferences pane for a module, if it has one yet.
@@ -66,6 +90,8 @@ public enum PerchModuleRegistry {
             batteryPane(in: host)
         case .calendar:
             calendarPane(in: host)
+        case .notifications:
+            notificationsPane(in: host)
         case .nowPlaying:
             AnyView(
                 NowPlayingSettingsView(
@@ -106,6 +132,21 @@ public enum PerchModuleRegistry {
                     isSuppressing: hud.isSuppressingStockHUD,
                     onToggle: { hud.setEnabled($0, $1) },
                     onSuppressionChange: { hud.setSuppressesStockHUD($0) }
+                )
+            )
+        }
+    }
+
+    @MainActor
+    private static func notificationsPane(in host: ModuleHost) -> AnyView? {
+        host.service(NotificationService.self).map { notifications in
+            AnyView(
+                NotificationSettingsView(
+                    isWatching: notifications.isWatching,
+                    configuration: notifications.policy.configuration,
+                    knownApps: notifications.knownApps,
+                    onChange: { notifications.setConfiguration($0) },
+                    onRequestAccessibility: { notifications.requestAccessibility() }
                 )
             )
         }

@@ -40,6 +40,13 @@ final class FocusService: ObservableObject, PerchModule {
     private var completion: Task<Void, Never>?
     private var observers: [NSObjectProtocol] = []
 
+    /// Called when a work phase finishes.
+    ///
+    /// The notification module holds notifications through a session and
+    /// releases them here (TC-NTF-006). Wired by `PerchModuleRegistry`, not
+    /// by either module — neither may reach into the other.
+    var onSessionEnded: (@MainActor () -> Void)?
+
     /// Injected so tests can drive the clock. Production passes `Date.init`.
     private let now: @MainActor () -> Date
 
@@ -181,6 +188,8 @@ final class FocusService: ObservableObject, PerchModule {
             streak.recordCompletedSession(at: now())
         }
         save()
+
+        onSessionEnded?()
 
         completion?.cancel()
         completion = nil
