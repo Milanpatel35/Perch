@@ -520,6 +520,32 @@ Needs Accessibility. Asked lazily.
 | URL scheme `perch://` | ★ | Same actions, for scripters |
 | CLI (`perch notify "…"`) | ★ | For developers piping build output into the notch |
 
+**Status — shipped, all four rows.** Up to six favourite Shortcuts appear as
+buttons on the island's home surface and run through `/usr/bin/shortcuts`,
+the tool macOS ships for exactly this; the island shows the run and its first
+line of output or its error. The Shortcuts app gets three Perch actions —
+Show Message in Island, Add to Shelf, Start Focus Session — and `perch://`
+and the `perch` CLI do the same three things.
+
+**One front door.** The Shortcuts actions and the CLI both build a `perch://`
+URL and open it, so every request from outside is checked by the same parser
+(`PerchURL.parse`). That parser has an allow-list of three actions, and
+**running a Shortcut is not one of them**: any web page can open a link, and a
+link that could run "Delete Files" is an arbitrary-execution path with a
+friendly name (TC-SHC-003). Only a click on the island runs a Shortcut. A
+message from outside can beat the music but can never take the two
+priorities a person has to trust — system alert and timer finishing
+(TC-SHC-002). Messages share one activity id, so a script or a page sending a
+hundred updates one line rather than queueing a hundred.
+
+The CLI is a POSIX shell script inside the app bundle, not a second binary:
+it percent-encodes through `osascript`, passes text through an environment
+variable so no quote can change what runs, reads the message from a pipe
+when none is given, and exits non-zero on nonsense. Linking it onto your
+`PATH` is one command, shown in the pane — Perch does not write to
+`/usr/local/bin` itself. Nothing runs while nothing is asked: the Shortcuts
+library is read when the pane opens, not at switch-on.
+
 ## 14. Notes and scratchpad — P2
 
 | Capability | Comes from | Notes |

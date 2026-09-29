@@ -91,6 +91,7 @@
       <button class="tab" aria-pressed="false" data-s="batt">Battery</button>
       <button class="tab" aria-pressed="false" data-s="cam">Camera</button>
       <button class="tab" aria-pressed="false" data-s="sys">System stats</button>
+      <button class="tab" aria-pressed="false" data-s="auto">Shortcuts</button>
       <button class="tab" aria-pressed="false" data-s="hide">Hide the notch</button>
     </div>
     <p class="tabhint">Click the island to collapse it, the way it behaves on your Mac.</p>
@@ -101,7 +102,7 @@
       <li>Free forever</li><li>Open source</li><li>No Electron</li><li>No fake notch</li>
       <li>Clipboard history</li><li>Meeting controls</li><li>macOS 13 and up</li><li>Universal binary</li>
       <li>Zero telemetry</li><li>Lazy permissions</li><li>System monitor</li><li>Camera, done properly</li>
-      <li>18 modules</li><li>Clipboard OCR</li><li>Hide the notch</li>
+      <li>18 modules</li><li>Clipboard OCR</li><li>Hide the notch</li><li>perch notify</li>
     </ul>
   </div>
 </section>
@@ -124,9 +125,9 @@
       <p>Everything happens on your Mac. Perch makes one request, to its own update feed, and you can turn that off too. There is exactly one other, and it is off unless you switch it on: the public-IP readout in the system monitor.</p>
     </div>
     <div class="stat">
-      <div class="n">11<span style="font-size:.45em;color:var(--sub)">/18</span></div>
+      <div class="n">12<span style="font-size:.45em;color:var(--sub)">/18</span></div>
       <h3>Modules built, each switchable</h3>
-      <p>Eleven work in the build you can download today; eighteen are specified, against a paid field that averages six. Turn one off and it stops existing — no observer, no timer, no CPU. <a href="#notyet">What is not built yet</a>.</p>
+      <p>Twelve work in the build you can download today; eighteen are specified, against a paid field that averages six. Turn one off and it stops existing — no observer, no timer, no CPU. <a href="#notyet">What is not built yet</a>.</p>
     </div>
     <div class="stat">
       <div class="n">$0</div>
@@ -266,6 +267,21 @@
 
     <div class="block flip">
       <div class="copy">
+        <p class="eyebrow">Shortcuts</p>
+        <h3>Your Shortcuts,<span class="soft">one click up.</span></h3>
+        <p class="body">Pick up to six Shortcuts and they sit as buttons on the island, with the result shown when each one finishes. The other way round, Perch adds three actions to the Shortcuts app &mdash; show a message in the island, add a file to the shelf, start a focus session &mdash; and the same three work as <code>perch://</code> links and from a terminal: <code>make test | tail -1 | perch notify</code>.</p>
+        <p class="body" style="font-size:.9rem;color:var(--sub)">A link cannot run a Shortcut. Any web page can open a <code>perch://</code> link, so the only way to run one is your own click on the island. A message from a script can outrank the music, never an alarm or a finished timer, and a hundred of them in a row are one line on the island, not a hundred.</p>
+      </div>
+      <div class="visual" style="min-height:200px;justify-content:flex-start">
+        <div class="clip"><span>▶️</span><span style="font-size:.9rem">Favourites as island buttons</span><em>up to six</em></div>
+        <div class="clip"><span>🧩</span><span style="font-size:.9rem">Three actions in the Shortcuts app</span><em>message · shelf · focus</em></div>
+        <div class="clip"><span>⌨️</span><span class="mono" style="font-size:.85rem">perch notify "build ok"</span><em>exits 0</em></div>
+        <div class="clip"><span>🔒</span><span style="font-size:.9rem">Links never run a Shortcut</span><em style="color:var(--green)">tested</em></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="copy">
         <p class="eyebrow">Hide the notch</p>
         <h3>Would rather not see it?<span class="soft">Then you won&rsquo;t.</span></h3>
         <p class="body">One switch paints the strip behind the menu bar black, and the notch vanishes into it. Menus, status items and the island all stay on top &mdash; the strip is drawn underneath the bar, never over it. Prefer colour to black? It can take the shade along the top of your wallpaper instead, and takes it again when the wallpaper changes. Each display gets its own switch.</p>
@@ -279,7 +295,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block flip">
       <div class="copy">
         <p class="eyebrow">Every Mac</p>
         <h3>No notch?<span class="soft">Still works.</span></h3>
@@ -303,8 +319,8 @@
     <p class="lead">Every other site in this category lists only what ships. Here is the other half, because you will find out anyway and it may as well be from us.</p>
     <div class="grid3">
       <div class="card">
-        <h3>Seven of the eighteen modules</h3>
-        <p><strong>Weather, window snapping, Shortcuts, notes, screenshots and voice typing are specified and not built.</strong> They are described in the repo's feature document and they are not in the build you can download. Everything shown above this section is; everything in this card is not.</p>
+        <h3>Six of the eighteen modules</h3>
+        <p><strong>Weather, window snapping, notes, screenshots and voice typing are specified and not built.</strong> They are described in the repo's feature document and they are not in the build you can download. Everything shown above this section is; everything in this card is not.</p>
       </div>
       <div class="card">
         <h3>Meeting controls, beyond Zoom</h3>
@@ -371,6 +387,7 @@
             <tr><th scope="row">Notification mirroring</th><td class="us y">Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td>Yes</td><td>Yes</td><td class="n">—</td></tr>
             <tr><th scope="row">System HUDs</th><td class="us y">Yes</td><td class="n">—</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td class="n">—</td></tr>
             <tr><th scope="row">Battery &amp; accessories</th><td class="us y">Yes</td><td class="n">—</td><td>Yes</td><td>Yes</td><td class="n">—</td><td>Alerts</td><td>Yes</td><td class="n">—</td></tr>
+            <tr><th scope="row">Shortcuts integration</th><td class="us y">Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td>Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
             <tr><th scope="row">System stats</th><td class="us y">Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
             <tr><th scope="row">Camera beyond a mirror</th><td class="us y">Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
             <tr><th scope="row">Works without a notch</th><td class="us y">Yes</td><td>Yes</td><td>Yes</td><td class="n">—</td><td class="n">—</td><td>Partial</td><td>Yes</td><td>n/a</td></tr>

@@ -1,0 +1,92 @@
+#!/bin/sh
+# perch — put something in the notch from a terminal.
+#
+#   perch notify "Build ok"                    one line
+#   perch notify "Build ok" "12s, 480 tests"   a title and a body
+#   make test 2>&1 | tail -1 | perch notify    the title from stdin
+#   perch shelf ./report.pdf                   add a file to the shelf
+#   perch focus                                start a focus session
+#
+# Options for notify: --urgency low|normal|high (default normal).
+#
+# This is a thin wrapper over the perch:// URL scheme: it builds a URL and
+# asks macOS to open it, in the background so the terminal keeps focus. All
+# checking happens in the app, in one place (PerchURL.parse), so this script
+# cannot do anything a link could not. Set PERCH_DRY_RUN=1 to print the URL
+# instead of opening it.
+#
+# Ships inside Perch.app. Link it onto your PATH:
+#   ln -s /Applications/Perch.app/Contents/Resources/perch /usr/local/bin/perch
+
+set -eu
+
+usage() {
+    sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'
+}
+
+# Percent-encodes $1. JavaScript's encodeURIComponent through osascript,
+# because it ships with every Mac and POSIX sh has nothing of the kind. The
+# text travels in an environment variable rather than in the script source,
+# so no quote or backslash in it can change what runs.
+encode() {
+    PERCH_TEXT="$1" /usr/bin/osascript -l JavaScript \
+        -e 'ObjC.import("stdlib"); encodeURIComponent($.getenv("PERCH_TEXT"))'
+}
+
+open_url() {
+    if [ "${PERCH_DRY_RUN:-}" = "1" ]; then
+        printf '%s\n' "$1"
+    else
+        /usr/bin/open -g "$1"
+    fi
+}
+
+command="${1:-}"
+[ $# -gt 0 ] && shift
+
+case "$command" in
+notify)
+    urgency=""
+    if [ "${1:-}" = "--urgency" ]; then
+        urgency="${2:-}"
+        shift 2 || { echo "perch: --urgency needs a value" >&2; exit 64; }
+    fi
+
+    title="${1:-}"
+    body="${2:-}"
+    # Nothing on the command line: read the title from a pipe, first line.
+    if [ -z "$title" ] && [ ! -t 0 ]; then
+        IFS= read -r title || true
+    fi
+    if [ -z "$title" ]; then
+        echo "perch: notify needs a message" >&2
+        exit 64
+    fi
+
+    url="perch://notify?title=$(encode "$title")"
+    [ -n "$body" ] && url="$url&body=$(encode "$body")"
+    [ -n "$urgency" ] && url="$url&urgency=$(encode "$urgency")"
+    open_url "$url"
+    ;;
+shelf)
+    file="${1:-}"
+    if [ -z "$file" ] || [ ! -e "$file" ]; then
+        echo "perch: shelf needs a file that exists" >&2
+        exit 66
+    fi
+    # Absolute, because the app does not share this shell's directory.
+    dir=$(cd "$(dirname "$file")" && pwd -P)
+    open_url "perch://shelf?path=$(encode "$dir/$(basename "$file")")"
+    ;;
+focus)
+    open_url "perch://focus"
+    ;;
+"" | help | -h | --help)
+    usage
+    ;;
+*)
+    echo "perch: unknown command '$command'" >&2
+    usage >&2
+    exit 64
+    ;;
+esac
