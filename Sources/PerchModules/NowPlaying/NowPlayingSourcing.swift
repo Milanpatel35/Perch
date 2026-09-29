@@ -3,7 +3,7 @@ import PerchCore
 
 /// Where "what is playing" comes from.
 ///
-/// `NowPlayingService` depends on this rather than on `MediaRemoteBridge`
+/// `NowPlayingService` depends on this rather than on `PlayerScriptingSource`
 /// directly, for one reason: `docs/TEST-PLAN.md` defines a level **U** test as
 /// having "no UI, no sleeping, **no real system services**", and a unit suite
 /// that opens a private system framework is none of those things. It is an
@@ -13,9 +13,9 @@ import PerchCore
 ///
 /// With the source injected, the module's own rules — when to peek, when to
 /// update in place, when to take the island back — are tested against a fake,
-/// deterministically, in milliseconds. The real MediaRemote path is exercised
+/// deterministically, in milliseconds. The real player path is exercised
 /// where it can only honestly be exercised: on a Mac that is playing
-/// something. See `MediaRemoteBridgeTests` and the manual checklist.
+/// something. See the manual checklist in `docs/TEST-PLAN.md`.
 @MainActor
 protocol NowPlayingSourcing: AnyObject {
 
@@ -43,8 +43,8 @@ protocol NowPlayingSourcing: AnyObject {
 
 /// The transport commands the island offers.
 ///
-/// A small enum rather than MediaRemote's raw numbers, so nothing outside the
-/// bridge has to know what `4` means.
+/// A small enum rather than each player's own AppleScript verbs, so nothing
+/// outside the source has to know them.
 enum NowPlayingCommand: Equatable, Sendable {
     case togglePlayPause
     case nextTrack

@@ -4,7 +4,7 @@ Date: 2026-09-20
 
 ## Status
 
-Accepted.
+Superseded by [ADR 0008](0008-music-and-spotify-for-now-playing.md) on 2026-09-29: from macOS 15.4 MediaRemote refuses third-party apps.
 
 ## Context
 

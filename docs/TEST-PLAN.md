@@ -73,6 +73,7 @@ Levels:
 | TC-MED-007 | U | Module disabled | All observers removed; zero notifications received |
 | TC-MED-008 | E | Two media apps playing at once | Only the system's active source is shown |
 | TC-MED-009 | U | Source reports itself unavailable | Module says so in its pane; no empty island, no crash |
+| TC-MED-010 | U | Music or Spotify announces a change | The player's own notification is read: title, artist, album, state, length, and Spotify's position; a stop or an untitled track clears the island |
 | TC-MED-010 | U | Module switched on and off four times | Source started and stopped the same number of times; nothing left watching |
 | TC-MED-011 | M | The real MediaRemote path, on a Mac that is playing something | Live playback appears, survives repeated enable/disable and repeated play/pause, and the app quits with no orphan process |
 
@@ -470,3 +471,12 @@ Added for Shortcuts and automation:
 - [ ] A `perch://run?name=…` link clicked in Safari for a Shortcut that
       exists: nothing runs, nothing appears (TC-SHC-003)
 - [ ] Module switched off: the same `perch notify` does nothing (TC-SHC-006)
+
+Added when Now Playing moved to Apple Music and Spotify (ADR 0008):
+
+- [ ] A song playing in Music: the island shows it within a second, with the
+      right position after the Automation prompt is allowed (TC-MED-010)
+- [ ] The same in Spotify, and switching between the two while both are open
+- [ ] Automation refused: the track still shows, without position or buttons
+- [ ] Play/pause, next and previous from the island reach the player
+- [ ] Audio in a browser tab: nothing on the island, and the pane says why

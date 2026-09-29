@@ -6,14 +6,13 @@ import PerchCore
 
 /// Module 1 — Now Playing.
 ///
-/// Owns the MediaRemote bridge, turns what it reports into a
-/// `NowPlayingSnapshot`, and decides — through `NowPlayingTransition`, which
+/// Owns the player source (Apple Music and Spotify — ADR 0008), turns what
+/// it reports into a `NowPlayingSnapshot`, and decides — through `NowPlayingTransition`, which
 /// is pure and tested — whether that warrants a peek, an in-place update, or
 /// taking the island back.
 ///
-/// Costs nothing when off: the bridge is closed, MediaRemote is
-/// unregistered, the observers are gone and the activity is withdrawn
-/// (TC-MED-007).
+/// Costs nothing when off: the player notifications are unobserved and the
+/// activity is withdrawn (TC-MED-007).
 @MainActor
 final class NowPlayingService: ObservableObject, PerchModule {
 
@@ -22,13 +21,11 @@ final class NowPlayingService: ObservableObject, PerchModule {
     /// What is playing right now, for the views to read.
     @Published private(set) var snapshot: NowPlayingSnapshot?
 
-    /// Every app seen holding the session this launch. Discovered rather than
-    /// hardcoded — a browser tab is as valid a source as Music.app, and in
-    /// practice is the common one.
+    /// Every player seen this launch, for the per-app source preference.
     @Published private(set) var knownSources: [NowPlayingSource] = []
 
-    /// False when MediaRemote is not available on this macOS. The view says
-    /// so plainly rather than showing an empty island.
+    /// False when the source cannot report anything on this Mac. The view
+    /// says so plainly rather than showing an empty island.
     @Published private(set) var isUnavailable = false
 
     private(set) var isActive = false
@@ -38,10 +35,10 @@ final class NowPlayingService: ObservableObject, PerchModule {
     private var refreshTask: Task<Void, Never>?
 
     /// The source is injected so the module's rules can be tested without a
-    /// private system framework in the loop — see `NowPlayingSourcing`.
+    /// real player in the loop — see `NowPlayingSourcing`.
     init(island: IslandController, source: (any NowPlayingSourcing)? = nil) {
         self.island = island
-        self.source = source ?? MediaRemoteBridge()
+        self.source = source ?? PlayerScriptingSource()
     }
 
     // MARK: - PerchModule
@@ -76,7 +73,7 @@ final class NowPlayingService: ObservableObject, PerchModule {
 
     // MARK: - Transport
     //
-    // Deliberately thin. MediaRemote is the source of truth for playback
+    // Deliberately thin. The player is the source of truth for playback
     // state, so a command is sent and the resulting notification is what
     // updates the island. Optimistically updating here would make the island
     // disagree with the player whenever a command was refused.
