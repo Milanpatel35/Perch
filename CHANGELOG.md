@@ -8,6 +8,10 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
+Nothing yet. Next up is the rest of Phase 2.6 — weather and windows.
+
+## [0.8.0] — 2026-09-29
+
 Phase 2.6, second of four — Shortcuts in both directions.
 
 ### Added
