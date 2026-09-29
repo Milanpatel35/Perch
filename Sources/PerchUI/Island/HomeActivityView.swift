@@ -55,8 +55,12 @@ private struct HomeSurface: View {
 
             Divider().overlay(Color.white.opacity(0.12))
 
-            if let batteryTile = modules.batteryTile() {
+            let batteryTile = modules.batteryTile()
+            let shortcutsTile = modules.shortcutsTile()
+
+            if batteryTile != nil || shortcutsTile != nil {
                 batteryTile
+                shortcutsTile
             } else {
                 Text("Every module you switch on appears here.")
                     .font(.system(size: 12))

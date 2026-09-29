@@ -60,6 +60,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         panel.teardown()
     }
 
+    /// Every `perch://` URL — from a link, the Shortcuts app's actions, or
+    /// the `perch` CLI. The Shortcuts module decides what is allowed; with
+    /// it switched off, a URL does nothing (TC-SHC-003).
+    func application(_ application: NSApplication, open urls: [URL]) {
+        for url in urls {
+            modules.handlePerchURL(url)
+        }
+    }
+
     /// A menu-bar app has nothing to reopen. Without this, clicking the app
     /// in Spotlight would try to make a window that does not exist.
     func applicationShouldHandleReopen(

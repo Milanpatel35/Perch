@@ -273,6 +273,8 @@ optional and they do not get skipped when the suite is slow.
 | TC-SHC-002 | U | Perch action invoked from Shortcuts | "Show message in island" presents with the right priority |
 | TC-SHC-003 | U | `perch://` URL with a malformed payload | Rejected safely; no arbitrary execution path |
 | TC-SHC-004 | E | CLI `perch notify "build ok"` | Appears in the island; exits zero |
+| TC-SHC-005 | U | Favourites chosen, reordered, renamed in the Shortcuts app | At most six, no duplicates, order kept; a renamed one is flagged, not dropped; library read only when asked |
+| TC-SHC-006 | U | Module disabled | A `perch://` URL does nothing; a run in progress is stopped; nothing left on the island |
 
 ## VOI — voice to text (P2)
 
@@ -454,3 +456,15 @@ most of it is judged by eye on a notched Mac:
       is gone while idle, hovering the top edge still opens it (TC-HID-006)
 - [ ] Module switched off: the menu bar is back to normal in the same frame,
       no black line left behind (TC-HID-005)
+
+Added for Shortcuts and automation:
+
+- [ ] A favourite pressed on the island runs, and its result or error shows
+      (TC-SHC-001)
+- [ ] Each of the three actions appears in the Shortcuts app's action list
+      and works from a Shortcut, with Perch already running and with it quit
+- [ ] `perch notify "build ok"` from a terminal, with the CLI linked onto the
+      PATH: appears in the island, exits zero (TC-SHC-004)
+- [ ] A `perch://run?name=…` link clicked in Safari for a Shortcut that
+      exists: nothing runs, nothing appears (TC-SHC-003)
+- [ ] Module switched off: the same `perch notify` does nothing (TC-SHC-006)

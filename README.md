@@ -38,7 +38,7 @@ it on: the public-IP readout inside the system monitor.
 
 ## What it does
 
-Eleven of the eighteen modules are built. The table below is the whole of 1.0;
+Twelve of the eighteen modules are built. The table below is the whole of 1.0;
 **Built** marks what is in the download today, and the rest is
 [docs/PLAN.md](docs/PLAN.md).
 
@@ -56,7 +56,7 @@ Eleven of the eighteen modules are built. The table below is the whole of 1.0;
 | **System stats** | CPU, GPU, memory, disk, network and fan speed — with alert thresholds | Built |
 | **Weather** | Conditions and hourly forecast, off by default | Planned |
 | **Windows** | Snap and tile by dragging a window to the notch | Planned |
-| **Shortcuts** | Run Shortcuts from the island, and drive Perch from Shortcuts | Planned |
+| **Shortcuts** | Favourite Shortcuts as buttons in the island; Perch actions in the Shortcuts app; `perch://` and a `perch notify` CLI for piping build output into the notch | Built |
 | **Hide it instead** | Prefer the notch gone? Black out the menu bar — or fill it from your wallpaper — and it disappears. Per display, plus an island that stays invisible until something happens | Built |
 | **No-notch mode** | A floating pill for Mac mini, Studio, iMac and external displays | Built |
 
@@ -70,10 +70,10 @@ and nobody has built the camera out past a plain mirror.
 
 ## Install
 
-> **Pre-1.0.** Eleven of the eighteen modules are built — Now Playing, the
+> **Pre-1.0.** Twelve of the eighteen modules are built — Now Playing, the
 > Shelf, the Clipboard, the Battery, the HUDs, the Focus timer, the Calendar,
-> Notifications, the Camera, System stats and hide-the-notch — plus the island
-> itself. The rest of
+> Notifications, the Camera, System stats, hide-the-notch and Shortcuts — plus
+> the island itself. The rest of
 > `docs/PLAN.md` is not done, and the Homebrew cask goes live with the first
 > signed release. The feature table below is what 1.0 is aiming at.
 >
@@ -128,7 +128,7 @@ it. The plan for it is [docs/WEBSITE-PLAN.md](docs/WEBSITE-PLAN.md).
 Prices checked September 2026 — confirm on each vendor's own site before
 buying, since they change faster than READMEs do.
 
-**Perch's column is 1.0, not today's build.** Eleven of the eighteen modules are
+**Perch's column is 1.0, not today's build.** Twelve of the eighteen modules are
 built; the rows that are not yet are marked Planned in the table above. Every
 rival's column is what that app does today.
 
