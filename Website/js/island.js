@@ -88,6 +88,14 @@ export const STATES = {
         trailing: '<span class="tag a">46%</span>',
         expanded: '<div class="bar"><i style="width:46%"></i></div>',
     },
+    auto: {
+        tint: "linear-gradient(145deg,#ff6a88,#6a5af9)",
+        title: "Build ok",
+        subtitle: "make test | tail -1 | perch notify",
+        trailing: '<span class="tag g">518 ✓</span>',
+        expanded:
+            '<div class="l2">Your favourite Shortcuts as buttons, Perch actions in the Shortcuts app, and a CLI for anything a terminal can pipe.</div>',
+    },
     hide: {
         tint: "#000",
         title: "Notch hidden",

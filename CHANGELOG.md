@@ -8,8 +8,26 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Nothing yet. Next up is the rest of Phase 2.6 — weather, windows and
-Shortcuts.
+Nothing yet. Next up is the rest of Phase 2.6 — weather and windows.
+
+## [0.8.0] — 2026-09-29
+
+Phase 2.6, second of four — Shortcuts in both directions.
+
+### Added
+
+- **Shortcuts and automation** (module 13). Up to six favourite Shortcuts as
+  buttons on the island's home surface; the island shows each run and its
+  result. Three actions in the Shortcuts app — Show Message in Island, Add to
+  Shelf, Start Focus Session. The same three as `perch://` URLs, and a
+  `perch` command-line tool inside the app for piping build output into the
+  notch: `make test | tail -1 | perch notify`.
+
+  Every request from outside goes through one parser, and a link cannot run
+  a Shortcut — any web page can open a `perch://` URL, so only a click on the
+  island runs one. An outside message can outrank the music but never a
+  system alert or a timer. Nothing runs while nothing is asked: switching the
+  module on starts no process, and the library is read when the pane opens.
 
 ## [0.7.0] — 2026-09-29
 

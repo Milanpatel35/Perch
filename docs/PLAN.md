@@ -294,6 +294,11 @@ menu — and why AppKit had to be told not to push it out from under the bar,
 the one bug that only showed up on a real screen. Weather, windows and
 Shortcuts are next.
 
+**Status: Shortcuts done.** Module 13 is shipped: favourites as island
+buttons, three actions in the Shortcuts app, `perch://` and a `perch` CLI —
+all four ways in going through one parser, which has no way to run a
+Shortcut from a link. Weather and windows are left.
+
 ---
 
 # Phase 3 — Shippable (weeks 15–17)
