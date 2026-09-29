@@ -59,13 +59,21 @@ free app.
 **Status — shipped in 0.2.0.** Artwork, title and artist in the collapsed
 island; the visualiser; expanded transport and a working seek scrubber;
 the output-device picker; per-app source switching; fullscreen presentation;
-the two-second sneak peek on track change; and swipe to skip. Built on
-`MediaRemote` — see [ADR 0002](adr/0002-mediaremote-for-now-playing.md).
+the two-second sneak peek on track change; and swipe to skip.
+
+**Since 0.9.0: Apple Music and Spotify only.** 0.2.0 read every app through
+the private `MediaRemote` framework. From macOS 15.4 that refuses third-party
+apps, and the island showed nothing whatever was playing — which no test
+caught, because the tests use a fake source. Perch now reads each player's
+own public announcement and asks it directly for position and artwork
+([ADR 0008](adr/0008-music-and-spotify-for-now-playing.md)). **Browser audio
+is not shown**, macOS asks once per player for Automation access, and
+Spotify has no artwork because fetching it would be a network request.
 
 Two rows are **not done**, and are recorded here rather than quietly dropped:
 
-- **Up Next queue** and **synced lyrics.** `MediaRemote` exposes neither, and
-  no other local interface exposes them for an arbitrary source — a browser
+- **Up Next queue** and **synced lyrics.** Neither player announces them, and
+  no local interface exposes them for an arbitrary source — a browser
   tab has no queue to read. Reachable only for Music.app, via
   `ScriptingBridge`, and only as static lyrics with no timings. Tracked for a
   later release; it is not a 1.0 blocker.

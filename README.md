@@ -44,7 +44,7 @@ Twelve of the eighteen modules are built. The table below is the whole of 1.0;
 
 | | | |
 |---|---|---|
-| **Now Playing** | Artwork, scrubbing, AirPlay target, swipe to skip, sneak peek on track change | Built |
+| **Now Playing** | Apple Music and Spotify: artwork, scrubbing, AirPlay target, swipe to skip, sneak peek on track change. Not browser audio — macOS closed that to other apps | Built |
 | **Shelf** | Drag files to the notch, hold, drop them anywhere else. AirDrop and quick format conversion built in | Built |
 | **Clipboard** | Searchable history with pinning, text, images, colours — and OCR on anything you screenshot | Built |
 | **Focus** | Pomodoro that counts down in the notch instead of stealing a window — and survives the lid being closed, because nothing is counting | Built |
