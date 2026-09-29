@@ -64,6 +64,10 @@ public struct IslandReducer<Activity: IslandActivity> {
 
         case .collapseRequested:
             return collapse(state: &state, queue: &queue)
+
+        case .gesturesChanged(let gestures):
+            state.gestures = gestures
+            return []
         }
     }
 
@@ -122,7 +126,9 @@ public struct IslandReducer<Activity: IslandActivity> {
     ) -> [IslandEffect] {
         state.isHovered = true
         guard let id = state.presentation.activityID else { return [] }
-        guard isExpandable(id, in: queue) else {
+        // Hover-to-expand off: the pointer resting on a peek still holds it
+        // while it is being read, but only a click opens it.
+        guard state.gestures.hoverExpands, isExpandable(id, in: queue) else {
             return [.cancelScheduledCollapse]
         }
         state.presentation = .expanded(id)
@@ -145,15 +151,34 @@ public struct IslandReducer<Activity: IslandActivity> {
 
         // A second click on a pinned island dismisses it.
         if state.isUserPinned {
-            state.isUserPinned = false
-            queue.withdraw(id)
-            return advance(state: &state, queue: &queue)
+            return dismiss(id, state: &state, queue: &queue)
+        }
+
+        guard state.gestures.clickPins else {
+            return toggleWithoutPinning(id, state: &state, queue: queue)
         }
 
         // Clicking makes it interactive and stops the clock. It must not steal
         // key focus from the frontmost app — that is the panel's job, not the
         // reducer's (TC-ISL-008).
         state.isUserPinned = true
+        state.presentation = .expanded(id)
+        return [.cancelScheduledCollapse, .animate(to: .expanded(id))]
+    }
+
+    /// Click-to-keep-open switched off: a click opens and closes the island
+    /// like a door, and leaving it closes it the way hovering does.
+    private func toggleWithoutPinning(
+        _ id: ActivityID,
+        state: inout IslandState,
+        queue: ActivityQueue<Activity>
+    ) -> [IslandEffect] {
+        if state.presentation == .expanded(id) {
+            state.presentation = .peek(id)
+            return [.animate(to: .peek(id))] + rearmCollapse(for: id, queue: queue)
+        }
+
+        guard isExpandable(id, in: queue) else { return [] }
         state.presentation = .expanded(id)
         return [.cancelScheduledCollapse, .animate(to: .expanded(id))]
     }
@@ -184,9 +209,35 @@ public struct IslandReducer<Activity: IslandActivity> {
         queue: inout ActivityQueue<Activity>
     ) -> [IslandEffect] {
         guard let id = state.presentation.activityID else { return [] }
+        return dismiss(id, state: &state, queue: &queue)
+    }
+
+    /// Closes what a person has finished looking at.
+    ///
+    /// **Only an activity with a time to live is thrown away.** One without
+    /// owns its own lifetime — the home surface, the music, a running timer,
+    /// the system monitor's gauge — and nothing but its module may withdraw
+    /// it. Closing one of those folds it back to its peek.
+    ///
+    /// This used to withdraw unconditionally, and a second click on the
+    /// open home surface removed it from the queue. Nothing ever submits the
+    /// home activity again short of a display change, so the island went
+    /// idle and stopped answering hover until Perch was relaunched.
+    private func dismiss(
+        _ id: ActivityID,
+        state: inout IslandState,
+        queue: inout ActivityQueue<Activity>
+    ) -> [IslandEffect] {
         state.isUserPinned = false
-        queue.withdraw(id)
-        return advance(state: &state, queue: &queue)
+
+        guard activity(id, in: queue)?.timeToLive == nil else {
+            queue.withdraw(id)
+            return advance(state: &state, queue: &queue)
+        }
+
+        guard state.presentation == .expanded(id) else { return [.cancelScheduledCollapse] }
+        state.presentation = .peek(id)
+        return [.cancelScheduledCollapse, .animate(to: .peek(id))]
     }
 
     // MARK: - Transitions
@@ -238,7 +289,7 @@ public struct IslandReducer<Activity: IslandActivity> {
         // Hovering the island while a new activity arrives means the person is
         // already looking at it — open it fully rather than flashing a peek.
         let presentation: IslandPresentation =
-            (state.isHovered && activity.isExpandable)
+            (state.isHovered && state.gestures.hoverExpands && activity.isExpandable)
             ? .expanded(activity.id)
             : .peek(activity.id)
 

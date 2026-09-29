@@ -217,6 +217,8 @@ public enum PerchModuleRegistry {
                     snapshot: stats.snapshot,
                     isPublicIPEnabled: stats.isPublicIPEnabled,
                     isSampling: stats.isSampling,
+                    showsBesideNotch: stats.showsBesideNotch,
+                    onBesideNotchChange: { stats.setShowsBesideNotch($0) },
                     onGaugesChange: { stats.setGauges($0) },
                     onAlertsChange: { stats.setAlertConfiguration($0) },
                     onPublicIPChange: { stats.setPublicIPEnabled($0) }

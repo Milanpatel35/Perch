@@ -15,21 +15,21 @@ public extension Defaults.Keys {
     /// eighteen modules asks for five permissions and looks like spyware;
     /// `docs/PLAN.md` §3.1 ships presets instead.
     static let enabledModules = Key<Set<ModuleID>>(
-        "modules.enabled",
+        "modules_enabled",
         default: [.nowPlaying, .shelf, .clipboard, .focus, .hud, .battery]
     )
 
     /// Which screen owns the island.
     static let islandScreenPolicy = Key<String>(
-        "island.screenPolicy",
+        "island_screenPolicy",
         default: "builtIn"
     )
 
     /// Gestures, each individually disableable (`docs/FEATURES.md` §18).
-    static let hoverToExpand = Key<Bool>("gesture.hoverToExpand", default: true)
-    static let clickToPin = Key<Bool>("gesture.clickToPin", default: true)
-    static let dragToOpenShelf = Key<Bool>("gesture.dragToOpenShelf", default: true)
-    static let swipeToSkip = Key<Bool>("gesture.swipeToSkip", default: true)
+    static let hoverToExpand = Key<Bool>("gesture_hoverToExpand", default: true)
+    static let clickToPin = Key<Bool>("gesture_clickToPin", default: true)
+    static let dragToOpenShelf = Key<Bool>("gesture_dragToOpenShelf", default: true)
+    static let swipeToSkip = Key<Bool>("gesture_swipeToSkip", default: true)
 }
 
 extension ModuleID: Defaults.Serializable {}

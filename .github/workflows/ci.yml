@@ -48,6 +48,15 @@ jobs:
         with:
           name: snapshot-failures-${{ matrix.os }}
           path: Tests/**/__Snapshots__/**/*.failure.png
+      # The test results, crash logs included. A test process that crashes
+      # shows up in the log only as xcodebuild quietly restarting the
+      # remaining tests; the reason is in here and nowhere else (#57).
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-results-${{ matrix.os }}
+          path: ~/Library/Developer/Xcode/DerivedData/Perch-*/Logs/Test/*.xcresult
+          retention-days: 14
 
   # ---------------------------------------------------------------------
   # A downloadable build for every commit.

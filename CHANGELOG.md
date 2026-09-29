@@ -10,6 +10,37 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 Nothing yet. Next up is the rest of Phase 2.6 — weather and windows.
 
+## [0.9.0] — 2026-09-29
+
+A release of fixes, not features. Every one below was found by using the
+app rather than by the test suite, which was green for all of them. The
+builds before this one are withdrawn.
+
+### Fixed
+
+- **Settings did nothing.** On macOS 14 and later the menu's Settings… item
+  sent an action macOS now refuses, so no module could be switched on or
+  off. Settings is now a window Perch owns, and it opens in front.
+- **Two clicks killed the island.** A second click on the open home surface
+  removed it, and the island ignored hover until relaunch. "Open Activity
+  Monitor" and "Join" did the same to their modules. Closing now folds an
+  activity back instead of throwing it away.
+- **Now Playing showed nothing.** From macOS 15.4 the private framework it
+  used refuses other apps. It now reads Apple Music and Spotify directly, and
+  says plainly that browser audio is not shown ([ADR 0008](docs/adr/0008-music-and-spotify-for-now-playing.md)).
+- **Three General switches were wired to nothing:** "Island lives on",
+  "Expand on hover" and "Click to keep open". All three now apply as soon as
+  you change them.
+- **Settings could not be observed.** Every preference name had a dot in it,
+  which the settings library cannot watch. They are renamed, and existing
+  settings carry over on first launch.
+- **System stats covered the menu bar.** Its gauge sat beside the notch for
+  good, over the end of the app's menus, and hid the home surface. It is
+  now a row on the home surface by default; the gauge is a setting.
+- **Unbuilt modules had switches.** Weather, Window Management, Notes,
+  Voice and Screenshots showed switches that did nothing. They are now
+  listed as not built yet, with no switch.
+
 ## [0.8.0] — 2026-09-29
 
 Phase 2.6, second of four — Shortcuts in both directions.

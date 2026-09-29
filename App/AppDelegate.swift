@@ -13,7 +13,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let motion = MotionPreferences()
     private let island = IslandController()
-    let switchboard = ModuleSwitchboard()
+
+    /// Lazy so that nothing reads a preference before
+    /// `applicationWillFinishLaunching` has moved the old dotted keys.
+    private(set) lazy var switchboard = ModuleSwitchboard()
 
     lazy var modules = ModuleHost(
         switchboard: switchboard,
@@ -27,6 +30,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     )
 
     private var menuBar: MenuBarController?
+    private var islandPreferences: IslandPreferences?
+
+    private(set) lazy var settings = SettingsWindowController { [unowned self] in
+        PreferencesView(
+            switchboard: switchboard,
+            paneProvider: { [unowned self] module in
+                PerchModuleRegistry.settingsPane(for: module, in: modules)
+            },
+            isBuilt: { [unowned self] module in modules.module(for: module) != nil }
+        )
+    }
+
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        PreferenceMigration.migrateDottedKeys()
+    }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         // No Dock icon, no main menu, no window on launch. The island is the
@@ -41,6 +59,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             )
         }
 
+        // Before `show()`, so the island is placed on the chosen screen the
+        // first time rather than moved there a moment later.
+        islandPreferences = IslandPreferences(island: island, panel: panel)
         panel.show()
 
         // Modules come up after the panel, so the first activity a module
@@ -48,7 +69,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // actually start.
         PerchModuleRegistry.registerAll(in: modules, island: island)
 
-        menuBar = MenuBarController(island: island)
+        menuBar = MenuBarController(island: island, settings: settings)
     }
 
     func applicationWillTerminate(_ notification: Notification) {
@@ -56,6 +77,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // (TC-UPD-004).
         menuBar?.teardown()
         menuBar = nil
+        islandPreferences?.stop()
         modules.deactivateAll()
         panel.teardown()
     }

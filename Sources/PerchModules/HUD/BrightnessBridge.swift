@@ -4,10 +4,10 @@ import PerchCore
 
 /// The bridge to `DisplayServices`, macOS's display brightness service.
 ///
-/// The second private framework in Perch, and the second file to be alone in
-/// its folder for the same reason as `MediaRemoteBridge`: it is the piece a
-/// future macOS is most likely to break, and it should be readable, auditable
-/// and replaceable without touching the module around it.
+/// A private framework, alone in its own file because it is the piece a
+/// future macOS is most likely to break — as macOS 15.4 broke MediaRemote,
+/// which Now Playing used to use (ADR 0008). It should be readable,
+/// auditable and replaceable without touching the module around it.
 /// [ADR 0005](../../../docs/adr/0005-private-apis-for-the-hud.md) is the
 /// decision.
 ///

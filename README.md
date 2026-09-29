@@ -18,7 +18,7 @@ between states. No video, no install.
 [![macOS 13+](https://img.shields.io/badge/macOS-13%2B-black.svg)]()
 [![Universal](https://img.shields.io/badge/arch-Apple%20Silicon%20%2B%20Intel-black.svg)]()
 
-[**Website**](https://milanpatel35.github.io/Perch/) · [**Download**](https://github.com/Milanpatel35/Perch/releases/download/build-0.8.0/Perch-0.8.0-unsigned.zip) · [Features](#what-it-does) · [Why Perch](#how-it-compares) · [Contributing](CONTRIBUTING.md) · [Roadmap](docs/PLAN.md) · [Full feature list](docs/FEATURES.md)
+[**Website**](https://milanpatel35.github.io/Perch/) · [**Download**](https://github.com/Milanpatel35/Perch/releases/download/build-0.9.0/Perch-0.9.0-unsigned.zip) · [Features](#what-it-does) · [Why Perch](#how-it-compares) · [Contributing](CONTRIBUTING.md) · [Roadmap](docs/PLAN.md) · [Full feature list](docs/FEATURES.md)
 
 </div>
 
@@ -44,7 +44,7 @@ Twelve of the eighteen modules are built. The table below is the whole of 1.0;
 
 | | | |
 |---|---|---|
-| **Now Playing** | Artwork, scrubbing, AirPlay target, swipe to skip, sneak peek on track change | Built |
+| **Now Playing** | Apple Music and Spotify: artwork, scrubbing, AirPlay target, swipe to skip, sneak peek on track change. Not browser audio — macOS closed that to other apps | Built |
 | **Shelf** | Drag files to the notch, hold, drop them anywhere else. AirDrop and quick format conversion built in | Built |
 | **Clipboard** | Searchable history with pinning, text, images, colours — and OCR on anything you screenshot | Built |
 | **Focus** | Pomodoro that counts down in the notch instead of stealing a window — and survives the lid being closed, because nothing is counting | Built |
@@ -83,7 +83,7 @@ and nobody has built the camera out past a plain mirror.
 > the banner through Accessibility, never from the notification database —
 > Perch does not ask for Full Disk Access and never will.
 
-**Download the app** — [Perch 0.8.0, universal](https://github.com/Milanpatel35/Perch/releases/download/build-0.8.0/Perch-0.8.0-unsigned.zip)
+**Download the app** — [Perch 0.9.0, universal](https://github.com/Milanpatel35/Perch/releases/download/build-0.9.0/Perch-0.9.0-unsigned.zip)
 
 Apple Silicon and Intel, macOS 13+. **Not yet signed**: macOS will refuse it
 on a double-click, so right-click the app → Open and confirm once. You only

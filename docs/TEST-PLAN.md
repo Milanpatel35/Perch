@@ -57,6 +57,8 @@ Levels:
 | TC-ISL-013 | U | Type-erased activity | Identity, priority and TTL survive erasure; re-wrapping does not nest the box |
 | TC-ISL-014 | U | Home surface present when a module activity arrives | Anything above `ambient` pre-empts it; the home surface returns when that activity is withdrawn |
 | TC-ISL-015 | U | Runtime applies the reducer's effects | Exactly one collapse is ever pending; a new activity replaces it rather than adding a second |
+| TC-ISL-016 | U | Closing something that owns its lifetime — a second click on the home surface, a module asking to collapse | It folds back to its peek and stays queued; only an activity with a time to live is thrown away. Hover still opens it afterwards |
+| TC-ISL-017 | U | "Expand on hover" or "Click to keep open" switched off | Hover holds a peek but does not open it; a click opens and a second click closes without pinning, and leaving closes it |
 
 ## MED — Now Playing
 
@@ -71,6 +73,7 @@ Levels:
 | TC-MED-007 | U | Module disabled | All observers removed; zero notifications received |
 | TC-MED-008 | E | Two media apps playing at once | Only the system's active source is shown |
 | TC-MED-009 | U | Source reports itself unavailable | Module says so in its pane; no empty island, no crash |
+| TC-MED-010 | U | Music or Spotify announces a change | The player's own notification is read: title, artist, album, state, length, and Spotify's position; a stop or an untitled track clears the island |
 | TC-MED-010 | U | Module switched on and off four times | Source started and stopped the same number of times; nothing left watching |
 | TC-MED-011 | M | The real MediaRemote path, on a Mac that is playing something | Live playback appears, survives repeated enable/disable and repeated play/pause, and the app quits with no orphan process |
 
@@ -254,6 +257,7 @@ optional and they do not get skipped when the suite is slow.
 | TC-SYS-013 | E | Public IP enabled | The one request is made, disclosed, and fails silently offline |
 | TC-SYS-014 | S | Sparkline with 60 points | Renders without clipping; flat line when idle, not a blank box |
 | TC-SYS-015 | M | Sustained heavy load for 10 minutes | Perch's own CPU stays under 1%; the monitor does not become the problem |
+| TC-SYS-016 | U | Module on, default settings | Nothing sits beside the notch; the monitor is a home-surface row that samples only while shown. The beside-notch gauge is an explicit choice, remembered |
 
 ## WIN — window management
 
@@ -468,3 +472,12 @@ Added for Shortcuts and automation:
 - [ ] A `perch://run?name=…` link clicked in Safari for a Shortcut that
       exists: nothing runs, nothing appears (TC-SHC-003)
 - [ ] Module switched off: the same `perch notify` does nothing (TC-SHC-006)
+
+Added when Now Playing moved to Apple Music and Spotify (ADR 0008):
+
+- [ ] A song playing in Music: the island shows it within a second, with the
+      right position after the Automation prompt is allowed (TC-MED-010)
+- [ ] The same in Spotify, and switching between the two while both are open
+- [ ] Automation refused: the track still shows, without position or buttons
+- [ ] Play/pause, next and previous from the island reach the player
+- [ ] Audio in a browser tab: nothing on the island, and the pane says why

@@ -8,20 +8,20 @@ extension Defaults.Keys {
     /// thing that makes the island feel alive — but it stops dead on pause,
     /// because a perpetual animation is a perpetual wakeup (`CLAUDE.md` §5.1).
     static let nowPlayingVisualiser = Key<Bool>(
-        "nowPlaying.visualiser",
+        "nowPlaying_visualiser",
         default: true
     )
 
     /// A two-second peek when the track changes.
     static let nowPlayingSneakPeek = Key<Bool>(
-        "nowPlaying.sneakPeek",
+        "nowPlaying_sneakPeek",
         default: true
     )
 
     /// Which app owns the island when more than one is playing. Empty means
     /// "whichever the system says is active", which is almost always right.
     static let nowPlayingPreferredSource = Key<String>(
-        "nowPlaying.preferredSource",
+        "nowPlaying_preferredSource",
         default: ""
     )
 }
@@ -33,8 +33,7 @@ struct NowPlayingSettingsView: View {
     @Default(.nowPlayingSneakPeek) private var sneakPeek
     @Default(.nowPlayingPreferredSource) private var preferredSource
 
-    /// Apps seen holding the media session this session. Discovered, not
-    /// hardcoded — a browser tab is as valid a source as Music.app.
+    /// Players seen this session — Music and Spotify (ADR 0008).
     let knownSources: [NowPlayingSource]
 
     var body: some View {
@@ -50,12 +49,28 @@ struct NowPlayingSettingsView: View {
 
             Section("When more than one app is playing") {
                 Picker("Follow", selection: $preferredSource) {
-                    Text("Whichever macOS says is active").tag("")
+                    Text("Whichever changed last").tag("")
                     ForEach(knownSources) { source in
                         Text(source.name).tag(source.bundleID)
                     }
                 }
                 .pickerStyle(.radioGroup)
+            }
+
+            Section {
+                Text(
+                    """
+                    Perch shows Apple Music and Spotify. Since macOS 15.4 only \
+                    Apple's own apps may read what any app is playing, so audio \
+                    in a browser tab does not appear. The first time a song \
+                    plays, macOS asks whether Perch may talk to the player — \
+                    that is for the position and the play and skip buttons.
+                    """
+                )
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            } header: {
+                Text("Which apps")
             }
         }
         .formStyle(.grouped)

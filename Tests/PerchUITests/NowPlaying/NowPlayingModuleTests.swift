@@ -79,7 +79,7 @@ final class NowPlayingModuleTests: XCTestCase {
         let service = NowPlayingService(island: island, source: source)
 
         service.activate()
-        // Whether MediaRemote is available on this machine or not, switching
+        // Whatever the source can report on this machine, switching
         // the module on must never leave `isActive` disagreeing with reality.
         XCTAssertTrue(service.isActive)
 
@@ -96,11 +96,8 @@ final class NowPlayingModuleTests: XCTestCase {
     }
 
     func test_TC_MED_007_theModuleSurvivesBeingSwitchedOnAndOffRepeatedly() {
-        // Somebody flicking the switch in Preferences. This used to crash on
-        // the second cycle: the bridge `dlclose`d MediaRemote, and unloading
-        // that image out from under its process-wide registration takes the
-        // app with it. Cheap to test, and the kind of bug a user finds in
-        // about ten seconds.
+        // Somebody flicking the switch in Preferences. Cheap to test, and the
+        // kind of bug a user finds in about ten seconds.
         let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
         let source = FakeNowPlayingSource()
         let service = NowPlayingService(island: island, source: source)

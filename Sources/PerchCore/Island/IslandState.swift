@@ -50,7 +50,28 @@ public struct IslandState: Equatable, Sendable {
     /// person deliberately opened.
     public var isUserPinned: Bool = false
 
+    /// Which pointer gestures the person has left switched on
+    /// (`docs/FEATURES.md` §18). Part of the state rather than a check in the
+    /// view, so that "off" is a reducer rule with a test behind it.
+    public var gestures = IslandGestures()
+
     public init() {}
+}
+
+/// The island's pointer gestures, each individually switchable in General.
+public struct IslandGestures: Equatable, Sendable {
+
+    /// Hovering the island opens it. Off, only a click does.
+    public var hoverExpands = true
+
+    /// A click keeps the island open until a second click. Off, a click opens
+    /// it the same way hovering does, and it closes when the pointer leaves.
+    public var clickPins = true
+
+    public init(hoverExpands: Bool = true, clickPins: Bool = true) {
+        self.hoverExpands = hoverExpands
+        self.clickPins = clickPins
+    }
 }
 
 /// Everything that can move the island.
@@ -64,6 +85,7 @@ public enum IslandEvent: Equatable, Sendable {
     case dragEntered
     case moduleDisabled(ModuleID)
     case collapseRequested
+    case gesturesChanged(IslandGestures)
 }
 
 /// What the UI layer must do as a result of a transition.
