@@ -28,6 +28,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private var menuBar: MenuBarController?
 
+    private(set) lazy var settings = SettingsWindowController { [unowned self] in
+        PreferencesView(
+            switchboard: switchboard,
+            paneProvider: { [unowned self] module in
+                PerchModuleRegistry.settingsPane(for: module, in: modules)
+            }
+        )
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         // No Dock icon, no main menu, no window on launch. The island is the
         // app (TC-UPD-003).
@@ -48,7 +57,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // actually start.
         PerchModuleRegistry.registerAll(in: modules, island: island)
 
-        menuBar = MenuBarController(island: island)
+        menuBar = MenuBarController(island: island, settings: settings)
     }
 
     func applicationWillTerminate(_ notification: Notification) {

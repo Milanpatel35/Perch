@@ -11,10 +11,12 @@ import PerchUI
 final class MenuBarController: NSObject {
 
     private let island: IslandController
+    private let settings: SettingsWindowController
     private let statusItem: NSStatusItem
 
-    init(island: IslandController) {
+    init(island: IslandController, settings: SettingsWindowController) {
         self.island = island
+        self.settings = settings
         self.statusItem = NSStatusBar.system.statusItem(
             withLength: NSStatusItem.variableLength
         )
@@ -75,18 +77,7 @@ final class MenuBarController: NSObject {
     }
 
     @objc private func openSettings() {
-        // The app is an accessory, so it has to come forward before its
-        // settings window can take focus.
-        NSApp.activate(ignoringOtherApps: true)
-        if #available(macOS 14.0, *) {
-            NSApp.sendAction(
-                Selector(("showSettingsWindow:")), to: nil, from: nil
-            )
-        } else {
-            NSApp.sendAction(
-                Selector(("showPreferencesWindow:")), to: nil, from: nil
-            )
-        }
+        settings.show()
     }
 
     @objc private func quit() {
