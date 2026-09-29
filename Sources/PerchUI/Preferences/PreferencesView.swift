@@ -54,7 +54,7 @@ public struct PreferencesView: View {
             Label("General", systemImage: "gearshape").tag(Section.general)
 
             SwiftUI.Section("Modules") {
-                ForEach(listedModules.filter(isBuilt), id: \.self) { module in
+                ForEach(listedModules.filter { isBuilt($0) }, id: \.self) { module in
                     row(for: module).tag(Section.module(module))
                 }
             }
