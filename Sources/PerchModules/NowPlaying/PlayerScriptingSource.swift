@@ -134,8 +134,8 @@ final class PlayerScriptingSource: NowPlayingSourcing {
     private func seedFromRunningPlayer() {
         for player in MusicPlayer.allCases where isRunning(player) {
             Task { [weak self, runner] in
-                guard let info = await runner.currentTrack(in: player) else { return }
-                self?.heard(player, PlayerNotification.parse(player: player, userInfo: info))
+                guard let note = await runner.currentTrack(in: player) else { return }
+                self?.heard(player, note)
             }
         }
     }
@@ -151,54 +151,62 @@ final class PlayerScriptingSource: NowPlayingSourcing {
 /// `with timeout of 2 seconds` is the point: an Apple Event to a player that
 /// is busy or hung otherwise waits two minutes, and `readSnapshot` must
 /// always return.
+///
+/// Every result is turned into a `Sendable` value *on the runner's queue*,
+/// inside `execute`. An `NSAppleEventDescriptor` or a `[AnyHashable: Any]`
+/// is not safe to hand to another thread, and the compiler on the macOS 14
+/// runner says so.
 private final class AppleScriptRunner: @unchecked Sendable {
 
     private let queue = DispatchQueue(label: "app.perch.nowplaying.applescript")
 
     func run(_ command: String, in player: MusicPlayer) async {
-        _ = await execute("\(command)", in: player)
+        _ = await execute(command, in: player) { _ in true }
     }
 
     func number(_ expression: String, in player: MusicPlayer) async -> Double? {
-        await execute("get \(expression)", in: player).flatMap { descriptor in
+        await execute("get \(expression)", in: player) { descriptor in
             descriptor.descriptorType == typeNull ? nil : descriptor.doubleValue
         }
     }
 
     func data(_ expression: String, in player: MusicPlayer) async -> Data? {
-        await execute("get \(expression)", in: player).flatMap { descriptor in
-            let data = descriptor.data
-            return data.isEmpty ? nil : data
+        await execute("get \(expression)", in: player) { descriptor in
+            descriptor.data.isEmpty ? nil : descriptor.data
         }
     }
 
-    /// The current track, in the same shape as the player's notification, so
-    /// the one parser reads both.
-    func currentTrack(in player: MusicPlayer) async -> [AnyHashable: Any]? {
+    /// The current track, read into the shape of the player's own
+    /// notification so the one parser reads both.
+    func currentTrack(in player: MusicPlayer) async -> PlayerNotification? {
         let script = """
-            if player state is stopped then return {"Stopped", "", "", "", 0}
+            if player state is stopped then return {"stopped", "", "", "", 0}
             set t to current track
             return {player state as text, name of t, artist of t, album of t, duration of t}
             """
-        guard let list = await execute(script, in: player), list.numberOfItems >= 5 else {
-            return nil
+        return await execute(script, in: player) { list in
+            guard list.numberOfItems >= 5 else { return nil }
+
+            // Music reports duration in seconds; Spotify in milliseconds.
+            let rawDuration = list.atIndex(5)?.doubleValue ?? 0
+            let milliseconds = player == .music ? rawDuration * 1_000 : rawDuration
+
+            let info: [AnyHashable: Any] = [
+                "Player State": (list.atIndex(1)?.stringValue ?? "stopped").capitalized,
+                "Name": list.atIndex(2)?.stringValue ?? "",
+                "Artist": list.atIndex(3)?.stringValue ?? "",
+                "Album": list.atIndex(4)?.stringValue ?? "",
+                "Total Time": milliseconds
+            ]
+            return PlayerNotification.parse(player: player, userInfo: info)
         }
-
-        let state = list.atIndex(1)?.stringValue ?? "stopped"
-        // Music reports duration in seconds; Spotify in milliseconds.
-        let rawDuration = list.atIndex(5)?.doubleValue ?? 0
-        let milliseconds = player == .music ? rawDuration * 1_000 : rawDuration
-
-        return [
-            "Player State": state.capitalized,
-            "Name": list.atIndex(2)?.stringValue ?? "",
-            "Artist": list.atIndex(3)?.stringValue ?? "",
-            "Album": list.atIndex(4)?.stringValue ?? "",
-            "Total Time": milliseconds
-        ]
     }
 
-    private func execute(_ body: String, in player: MusicPlayer) async -> NSAppleEventDescriptor? {
+    private func execute<Result: Sendable>(
+        _ body: String,
+        in player: MusicPlayer,
+        read: @escaping @Sendable (NSAppleEventDescriptor) -> Result?
+    ) async -> Result? {
         let source = """
             with timeout of 2 seconds
                 tell application "\(player.scriptingName)"
@@ -210,8 +218,9 @@ private final class AppleScriptRunner: @unchecked Sendable {
         return await withCheckedContinuation { continuation in
             queue.async {
                 var error: NSDictionary?
-                let result = NSAppleScript(source: source)?.executeAndReturnError(&error)
-                continuation.resume(returning: error == nil ? result : nil)
+                let descriptor = NSAppleScript(source: source)?.executeAndReturnError(&error)
+                let result = error == nil ? descriptor.flatMap(read) : nil
+                continuation.resume(returning: result)
             }
         }
     }
