@@ -13,6 +13,11 @@ public struct PreferencesView: View {
     /// `PerchUI` does not have to know what the modules are.
     public typealias PaneProvider = @MainActor (ModuleID) -> AnyView?
 
+    /// Whether a module exists in this build. One that does not gets no
+    /// switch: a switch that does nothing is a bug report waiting to happen,
+    /// and five of them were.
+    public typealias BuiltCheck = @MainActor (ModuleID) -> Bool
+
     private enum Section: Hashable {
         case general
         case module(ModuleID)
@@ -22,14 +27,17 @@ public struct PreferencesView: View {
     @ObservedObject private var switchboard: ModuleSwitchboard
 
     private let paneProvider: PaneProvider
+    private let isBuilt: BuiltCheck
     @State private var selection: Section? = .general
 
     public init(
         switchboard: ModuleSwitchboard,
-        paneProvider: @escaping PaneProvider
+        paneProvider: @escaping PaneProvider,
+        isBuilt: @escaping BuiltCheck = { _ in true }
     ) {
         self.switchboard = switchboard
         self.paneProvider = paneProvider
+        self.isBuilt = isBuilt
     }
 
     public var body: some View {
@@ -46,8 +54,19 @@ public struct PreferencesView: View {
             Label("General", systemImage: "gearshape").tag(Section.general)
 
             SwiftUI.Section("Modules") {
-                ForEach(listedModules, id: \.self) { module in
+                ForEach(listedModules.filter(isBuilt), id: \.self) { module in
                     row(for: module).tag(Section.module(module))
+                }
+            }
+
+            let later = listedModules.filter { !isBuilt($0) }
+            if !later.isEmpty {
+                SwiftUI.Section("Not built yet") {
+                    ForEach(later, id: \.self) { module in
+                        Label(module.displayName, systemImage: module.symbolName)
+                            .foregroundStyle(.secondary)
+                            .tag(Section.module(module))
+                    }
                 }
             }
 
@@ -85,6 +104,7 @@ public struct PreferencesView: View {
         case .module(let module):
             ModulePane(
                 module: module,
+                isBuilt: isBuilt(module),
                 isEnabled: binding(for: module),
                 content: paneProvider(module)
             )
@@ -110,6 +130,7 @@ public struct PreferencesView: View {
 private struct ModulePane: View {
 
     let module: ModuleID
+    let isBuilt: Bool
     @Binding var isEnabled: Bool
     let content: AnyView?
 
@@ -126,10 +147,12 @@ private struct ModulePane: View {
 
                 Spacer()
 
-                Toggle("", isOn: $isEnabled)
-                    .labelsHidden()
-                    .toggleStyle(.switch)
-                    .accessibilityLabel(Text("Enable \(module.displayName)"))
+                if isBuilt {
+                    Toggle("", isOn: $isEnabled)
+                        .labelsHidden()
+                        .toggleStyle(.switch)
+                        .accessibilityLabel(Text("Enable \(module.displayName)"))
+                }
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 16)
@@ -156,11 +179,17 @@ private struct ContentUnavailable: View {
             Image(systemName: "hammer")
                 .font(.system(size: 24))
                 .foregroundStyle(.tertiary)
-            Text("\(module.displayName) is on the way")
+            Text("\(module.displayName) is not built yet")
                 .font(.callout)
-            Text("It is in docs/PLAN.md, and it will be free when it lands.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            Text(
+                """
+                There is nothing to switch on in this version. It is in \
+                docs/PLAN.md, and it will be free when it lands.
+                """
+            )
+            .multilineTextAlignment(.center)
+            .font(.caption)
+            .foregroundStyle(.secondary)
             Spacer()
         }
         .frame(maxWidth: .infinity)
