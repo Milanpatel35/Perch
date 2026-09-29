@@ -81,5 +81,5 @@ extension Defaults.Keys {
 
     /// **Off.** The only switch in Perch that enables a network request, and
     /// the pane it lives in says so in as many words (TC-SYS-012).
-    static let publicIPReadout = Key<Bool>("systemstats.publicIP", default: false)
+    static let publicIPReadout = Key<Bool>("systemstats_publicIP", default: false)
 }

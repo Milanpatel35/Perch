@@ -9,7 +9,7 @@ extension Defaults.Keys {
     /// Which of the six HUDs are on. All of them, by default — a HUD module
     /// that replaces nothing is not a module.
     static let enabledHUDs = Key<Set<HUDKind>>(
-        "hud.enabled",
+        "hud_enabled",
         default: Set(HUDKind.allCases)
     )
 
@@ -20,7 +20,7 @@ extension Defaults.Keys {
     /// because it is the one thing Perch does to the rest of the system, and
     /// anybody who would rather it did not should be able to say so —
     /// [ADR 0005](../../../docs/adr/0005-private-apis-for-the-hud.md).
-    static let hudSuppressesStockHUD = Key<Bool>("hud.suppressesStockHUD", default: true)
+    static let hudSuppressesStockHUD = Key<Bool>("hud_suppressesStockHUD", default: true)
 }
 
 /// The HUD pane in Preferences.

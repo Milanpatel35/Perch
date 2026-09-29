@@ -10,7 +10,7 @@ extension Defaults.Keys {
     /// 25/5/15, four sessions to the long break — the Pomodoro technique's
     /// own numbers, and what every other app defaults to.
     static let pomodoroConfiguration = Key<PomodoroTimer.Configuration>(
-        "focus.configuration",
+        "focus_configuration",
         default: PomodoroTimer.Configuration()
     )
 }

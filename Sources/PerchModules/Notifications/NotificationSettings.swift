@@ -7,7 +7,7 @@ extension NotificationPolicy.Configuration: Defaults.Serializable {}
 extension Defaults.Keys {
 
     static let notificationPolicy = Key<NotificationPolicy.Configuration>(
-        "notifications.policy",
+        "notifications_policy",
         default: NotificationPolicy.Configuration()
     )
 }

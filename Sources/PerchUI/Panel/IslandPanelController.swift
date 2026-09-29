@@ -152,6 +152,20 @@ public final class IslandPanelController {
             .sink { [weak self] _ in self?.reanchor() }
             .store(in: &cancellables)
 
+        // "The active display" means the one you are working on, and that
+        // changes when you switch to an app on another screen — not only
+        // when a display is plugged in. Filtered here rather than
+        // subscribed and unsubscribed, because a policy change is rare and a
+        // `guard` is free.
+        NSWorkspace.shared.notificationCenter
+            .publisher(for: NSWorkspace.didActivateApplicationNotification)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                guard self?.screenPolicy == .active else { return }
+                self?.reanchor()
+            }
+            .store(in: &cancellables)
+
         // Waking from sleep can restore a different arrangement than the one
         // the Mac went to sleep with.
         NSWorkspace.shared.notificationCenter

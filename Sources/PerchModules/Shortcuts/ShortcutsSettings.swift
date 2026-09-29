@@ -7,7 +7,7 @@ extension ShortcutFavourites: Defaults.Serializable {}
 
 extension Defaults.Keys {
     static let shortcutFavourites = Key<ShortcutFavourites>(
-        "shortcuts.favourites",
+        "shortcuts_favourites",
         default: ShortcutFavourites()
     )
 }

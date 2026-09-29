@@ -9,7 +9,7 @@ extension Defaults.Keys {
     /// **Off by default, deliberately.** A shelf that empties itself without
     /// being asked has lost somebody's file, and they will not know where it
     /// went (`docs/FEATURES.md` §2, TC-SHF-008).
-    static let shelfClearOnQuit = Key<Bool>("shelf.clearOnQuit", default: false)
+    static let shelfClearOnQuit = Key<Bool>("shelf_clearOnQuit", default: false)
 }
 
 /// The Shelf pane in Preferences.

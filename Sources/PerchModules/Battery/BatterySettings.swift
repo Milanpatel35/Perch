@@ -6,18 +6,18 @@ extension Defaults.Keys {
 
     /// Where the low-battery warning fires. Matches what macOS itself warns
     /// at, so the two do not disagree by a few points and look broken.
-    static let batteryLowThreshold = Key<Int>("battery.lowThreshold", default: 20)
+    static let batteryLowThreshold = Key<Int>("battery_lowThreshold", default: 20)
 
     /// Each announcement is individually switchable, the way every HUD is
     /// (`docs/FEATURES.md` §6). Somebody who wants the low warning and
     /// nothing else should not have to switch the module off to get it.
-    static let batteryAnnounceLow = Key<Bool>("battery.announceLow", default: true)
+    static let batteryAnnounceLow = Key<Bool>("battery_announceLow", default: true)
     static let batteryAnnouncePowerChanges = Key<Bool>(
-        "battery.announcePowerChanges",
+        "battery_announcePowerChanges",
         default: true
     )
     static let batteryAnnounceCharged = Key<Bool>(
-        "battery.announceCharged",
+        "battery_announceCharged",
         default: true
     )
 }

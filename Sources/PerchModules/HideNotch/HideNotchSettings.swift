@@ -6,7 +6,7 @@ extension HideNotchConfiguration: Defaults.Serializable {}
 
 extension Defaults.Keys {
     static let hideNotch = Key<HideNotchConfiguration>(
-        "hideNotch.configuration",
+        "hideNotch_configuration",
         default: HideNotchConfiguration()
     )
 }
