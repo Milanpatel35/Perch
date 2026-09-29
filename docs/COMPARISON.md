@@ -65,8 +65,11 @@ into it, which works remarkably well on mini-LED displays. No island, no
 features, no maintenance burden.
 
 **Threat to us:** none directly, but it reveals a real audience segment —
-people who want the notch gone, not used. Worth a settings option that makes
-Perch's island near-invisible when idle.
+people who want the notch gone, not used. **Answered by module 17,** which is
+TopNotch's feature set as one Preferences pane — a black or wallpaper-matched
+strip behind the menu bar, chosen per display, and an island that draws
+nothing until it has something to show. Someone who wants the notch gone and
+nothing else can switch every other module off.
 
 ### NotchBay — $9 one-time, closed source, macOS 14+
 Meeting-centric, and the cheapest paid entry in the field. Calendar join,
@@ -171,7 +174,7 @@ Rows marked ★ are where nothing in the field competes.
 | Voice to text | Backlog | — | Yes | — | — | — | Yes | — |
 | Lock Screen presence | Backlog | — | — | Yes | — | — | — | — |
 | Works without a notch | Yes | Yes | Yes | — | — | Partial | — | n/a |
-| Hides the notch instead | Option | — | — | — | — | — | — | Yes |
+| Hides the notch instead | Yes | — | — | — | — | — | — | Yes |
 | Telemetry | None | None | None | ? | ? | ? | ? | None |
 
 Module counts are our reading of each vendor's own feature list, not a

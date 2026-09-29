@@ -16,6 +16,7 @@
     "System stats",
     "Camera beyond a mirror",
     "Works without a notch",
+    "Hides the notch instead",
     "Telemetry"
   ],
   "apps": [
@@ -27,6 +28,7 @@
         "Free",
         "Yes",
         "13",
+        "Yes",
         "Yes",
         "Yes",
         "Yes",
@@ -60,6 +62,7 @@
         "—",
         "—",
         "Yes",
+        "—",
         "None"
       ],
       "credit": "Free, open source, and made by people doing the same thing for the same reason. If you only want music in the notch, it is a good answer and you should use it.",
@@ -84,6 +87,7 @@
         "—",
         "—",
         "Yes",
+        "—",
         "None"
       ],
       "credit": "On-device voice-to-text, which Perch does not have at 1.0 and which is the hardest thing on our roadmap. If dictation is why you are here, Seam has it and we do not.",
@@ -108,6 +112,7 @@
         "—",
         "—",
         "—",
+        "—",
         "Not stated"
       ],
       "credit": "The best motion in the category. Its HUD replacements are the reference implementation and its animation is better than ours at launch — that is a matter of iteration, and we are iterating.",
@@ -128,6 +133,7 @@
         "Peek",
         "—",
         "Yes",
+        "—",
         "—",
         "—",
         "—",
@@ -156,6 +162,7 @@
         "—",
         "—",
         "Partial",
+        "—",
         "Not stated"
       ],
       "credit": "Window snapping from the notch is genuinely good, and its file shelf with AirDrop and format conversion is the one Perch's is measured against.",
@@ -180,6 +187,7 @@
         "—",
         "—",
         "Yes",
+        "—",
         "Not stated"
       ],
       "credit": "The cheapest paid option, and its in-call mute, camera and leave controls are the stickiest feature in the category. Its tray reads text out of copied screenshots, which is where Perch's OCR idea came from.",
@@ -204,6 +212,7 @@
         "—",
         "—",
         "n/a",
+        "Yes",
         "None"
       ],
       "credit": "Solves the opposite problem, free, and does it perfectly: it blacks out the menu bar so the notch disappears. If that is what you want, it is the right tool.",

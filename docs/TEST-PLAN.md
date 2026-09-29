@@ -292,6 +292,8 @@ optional and they do not get skipped when the suite is slow.
 | TC-HID-003 | E | Per-display setting | Applies only to the chosen display |
 | TC-HID-004 | E | Blackout plus an island activity | Activity still presents, then the strip returns to black |
 | TC-HID-005 | E | Disable | Menu bar returns to normal immediately, no artefacts |
+| TC-HID-006 | U | "Invisible until something happens" | Idle and collapsed-home island draw nothing; every activity, and the home island hovered open, still draws |
+| TC-HID-007 | U | Module disabled, or on with blackout off | No strip window, no screen observer, no wallpaper watch; island visibility restored |
 
 ## PRF — performance and resources
 
@@ -433,3 +435,22 @@ Added for the Focus module:
       correct on waking, not frozen where it was (TC-FOC-004)
 - [ ] A session finishing while music is playing takes the island (TC-FOC-002)
 - [ ] Four sessions in a row produce one day of streak, not four (TC-FOC-005)
+
+Added for hide-the-notch. The whole point is what a menu bar looks like, so
+most of it is judged by eye on a notched Mac:
+
+- [ ] Blackout on: the notch disappears into the bar, and every menu and
+      status item is still on top and readable (TC-HID-001)
+- [ ] The strip starts at the very top of the screen, not one bar-height
+      down — AppKit pushes windows out from under the menu bar unless told
+      not to, and that is the bug this line exists for
+- [ ] Wallpaper changed with "Match the wallpaper" on: the bar re-colours
+      without relaunching; a video wallpaper gives black, not a guess (TC-HID-002)
+- [ ] External display attached: no strip there until its switch is turned
+      on, then only there (TC-HID-003)
+- [ ] A full-screen app: no strip in its Space, and the bar comes back with
+      the strip when leaving it
+- [ ] "Invisible until something happens" on a no-notch display: the pill
+      is gone while idle, hovering the top edge still opens it (TC-HID-006)
+- [ ] Module switched off: the menu bar is back to normal in the same frame,
+      no black line left behind (TC-HID-005)

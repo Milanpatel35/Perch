@@ -422,9 +422,9 @@ The **pre-call check** needs the Calendar module. With it off, nothing fires
 and nothing breaks; the settings pane says which, rather than offering a
 switch that silently does nothing.
 
-The pinned pill is the one window in Perch that is not `IslandPanel`, because
-it has to outlive the island collapsing — `CLAUDE.md` §9's rule, and the one
-documented exception to it.
+The pinned pill is one of two windows in Perch that are not `IslandPanel`,
+because it has to outlive the island collapsing — `CLAUDE.md` §9's rule, and
+a documented exception to it. The other is hide-the-notch's strip (§17).
 
 ## 10. System stats — P0 ★ *(you asked for this)*
 
@@ -558,6 +558,28 @@ Shipping it costs almost nothing and removes a reason to install a second app.
 | Match the menu-bar strip to the wallpaper's top edge | TN | Re-computed on wallpaper change |
 | Per-display setting | TN | |
 | "Invisible until something happens" island mode | TN + ★ | Island draws nothing when idle, appears only for activities |
+
+**Status — shipped, all four rows.** A strip is drawn *behind* the menu bar —
+one window level below it, never over it — so the bar's own translucency
+lands on a solid fill and the notch disappears into it. The menus, status
+items and the island all stay on top, and macOS switches the menu text to
+white by itself. The fill is black, or a flat colour averaged from the top
+edge of the wallpaper. Every display has its own switch, keyed by display
+UUID so a dock reconnect does not forget it; displays with a notch are on by
+default and the rest are off. "Invisible until something happens" hides the
+idle and collapsed-home island, and hovering the notch still opens it.
+
+**There is no public "wallpaper changed" event.** The module watches the
+directory macOS keeps the choice in (a kqueue, as `FocusWatcher` does) and
+listens for Space switches, and only while the fill is set to match the
+wallpaper. A dynamic or video wallpaper whose URL is not an image falls back
+to black rather than a guessed colour. Colours come from a 256px thumbnail,
+cached by URL, never from the full image.
+
+This is the one module with no activity: it changes how the menu bar and the
+idle island look and never puts anything on the island. The strip is the
+second window in Perch that is not `IslandPanel` (`CLAUDE.md` §9); it has to
+sit *under* the menu bar, and the island's panel sits over it.
 
 ## 18. Appearance and gestures — P0/P1
 
