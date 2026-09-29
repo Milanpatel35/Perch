@@ -12,15 +12,12 @@ struct PerchApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
 
     var body: some Scene {
-        // The one real scene. `Settings` gives the preferences window its
-        // standard ⌘, behaviour, placement and restoration for free.
+        // A SwiftUI app has to declare a scene, and this one is empty on
+        // purpose. The real Settings window is `SettingsWindowController`,
+        // because from macOS 14 this scene can only be opened by a
+        // `SettingsLink` in a view, and a menu-bar menu has none.
         Settings {
-            PreferencesView(
-                switchboard: delegate.switchboard,
-                paneProvider: { module in
-                    PerchModuleRegistry.settingsPane(for: module, in: delegate.modules)
-                }
-            )
+            EmptyView()
         }
     }
 }
