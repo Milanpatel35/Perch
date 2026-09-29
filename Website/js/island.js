@@ -10,7 +10,7 @@
  * collapsed, and something extra once it opens.
  */
 
-/** @typedef {{ tint: string, title: string, subtitle: string, trailing: string, expanded: string }} IslandState */
+/** @typedef {{ tint: string, title: string, subtitle: string, trailing: string, expanded: string, blackout?: boolean }} IslandState */
 
 /** @type {Record<string, IslandState>} */
 export const STATES = {
@@ -26,7 +26,15 @@ export const STATES = {
         title: "Standup in 4 min",
         subtitle: "Google Meet · 6 attendees",
         trailing: '<span class="tag g">Join</span>',
-        expanded: '<div class="l2">Mute, camera and leave stay up here once you are in.</div>',
+        expanded: '<div class="l2">Mute, camera and leave stay up here once you are in — read from the meeting app itself, so the two never disagree.</div>',
+    },
+    notif: {
+        tint: "linear-gradient(145deg,#f093fb,#f5576c)",
+        title: "Priya",
+        subtitle: "Messages · on my way, five minutes",
+        trailing: '<span class="tag">9</span>',
+        expanded:
+            '<div class="l2">Grouped by app, so nine messages is one line. Reply without leaving what you are doing.</div>',
     },
     shelf: {
         tint: "linear-gradient(145deg,#4facfe,#2b78e4)",
@@ -80,6 +88,15 @@ export const STATES = {
         trailing: '<span class="tag a">46%</span>',
         expanded: '<div class="bar"><i style="width:46%"></i></div>',
     },
+    hide: {
+        tint: "#000",
+        title: "Notch hidden",
+        subtitle: "Menu bar blacked out · built-in display",
+        trailing: '<span class="tag">Idle</span>',
+        expanded:
+            '<div class="l2">The bar behind the menus goes black, per display. The island stays invisible until something happens.</div>',
+        blackout: true,
+    },
 };
 
 const escapeHTML = (value) =>
@@ -115,6 +132,11 @@ export function createIsland({ island, row, tabs, live }) {
         // Announced politely rather than assertively: the island changing
         // state is information, not an interruption (WEBSITE-PLAN §7).
         if (live) live.textContent = `${state.title}. ${state.subtitle}`;
+
+        // Hide-the-notch is the one state that changes the screen rather than
+        // the island. No transition, same as the app: the strip is either
+        // there or it is not.
+        island.parentElement?.classList.toggle("blackout", Boolean(state.blackout));
     }
 
     function open(isOpen) {

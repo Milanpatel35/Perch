@@ -58,6 +58,9 @@ public struct IslandRootView: View {
                 .clipShape(shape)
         }
         .frame(width: size.width, height: size.height)
+        // Opacity rather than removing the view: the notch has to stay
+        // hoverable while it draws nothing, or "invisible" means "gone".
+        .opacity(isDrawn ? 1 : 0)
         .contentShape(shape)
         .onHover { hovering in
             controller.send(hovering ? .hoverBegan : .hoverEnded)
@@ -132,6 +135,14 @@ public struct IslandRootView: View {
 
     private var presenting: (any IslandActivityPresenting)? {
         controller.presented?.base as? any IslandActivityPresenting
+    }
+
+    private var isDrawn: Bool {
+        IdleVisibility.isDrawn(
+            controller.state.presentation,
+            showsHome: controller.presented?.id == HomeActivity.identifier,
+            invisibleWhenIdle: controller.hidesIdleIsland
+        )
     }
 
     private var isOpen: Bool {

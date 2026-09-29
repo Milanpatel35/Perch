@@ -37,6 +37,13 @@ public final class IslandController: ObservableObject {
     /// it lowers it again the moment the picker closes.
     @Published public private(set) var requiresKeyFocus = false
 
+    /// Whether the island draws nothing while it has nothing to say.
+    ///
+    /// Hide-the-notch mode's "invisible until something happens"
+    /// (`docs/FEATURES.md` §17). Raised and lowered by that module only; the
+    /// rule for what counts as "nothing to say" is `IdleVisibility`, in Core.
+    @Published public private(set) var hidesIdleIsland = false
+
     /// The motion token for the transition the island is currently making.
     ///
     /// Held here rather than derived in the view because the view only sees
@@ -97,6 +104,11 @@ public final class IslandController: ObservableObject {
     public func setRequiresKeyFocus(_ required: Bool) {
         guard requiresKeyFocus != required else { return }
         requiresKeyFocus = required
+    }
+
+    public func setHidesIdleIsland(_ hides: Bool) {
+        guard hidesIdleIsland != hides else { return }
+        hidesIdleIsland = hides
     }
 
     // MARK: - Input

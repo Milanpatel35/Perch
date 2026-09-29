@@ -18,7 +18,7 @@ between states. No video, no install.
 [![macOS 13+](https://img.shields.io/badge/macOS-13%2B-black.svg)]()
 [![Universal](https://img.shields.io/badge/arch-Apple%20Silicon%20%2B%20Intel-black.svg)]()
 
-[**Website**](https://milanpatel35.github.io/Perch/) · [**Download**](https://github.com/Milanpatel35/Perch/releases/download/build-0.5.0/Perch-0.5.0-unsigned.zip) · [Features](#what-it-does) · [Why Perch](#how-it-compares) · [Contributing](CONTRIBUTING.md) · [Roadmap](docs/PLAN.md) · [Full feature list](docs/FEATURES.md)
+[**Website**](https://milanpatel35.github.io/Perch/) · [**Download**](https://github.com/Milanpatel35/Perch/releases/download/build-0.6.0/Perch-0.6.0-unsigned.zip) · [Features](#what-it-does) · [Why Perch](#how-it-compares) · [Contributing](CONTRIBUTING.md) · [Roadmap](docs/PLAN.md) · [Full feature list](docs/FEATURES.md)
 
 </div>
 
@@ -32,28 +32,33 @@ free open-source option covers media playback and not much else.
 
 Perch is the attempt at the missing option: the full feature set of the paid
 apps, open source, with nothing held back behind a licence key. No Pro tier,
-no subscription, no account, no telemetry, no network calls beyond checking for
-updates.
+no subscription, no account, no telemetry. Perch makes one network request, to
+its own update feed. There is exactly one other and it is off unless you switch
+it on: the public-IP readout inside the system monitor.
 
 ## What it does
 
-| | |
-|---|---|
-| **Now Playing** | Artwork, scrubbing, AirPlay target, Up Next queue, synced lyrics |
-| **Shelf** | Drag files to the notch, hold, drop them anywhere else. AirDrop and quick format conversion built in |
-| **Clipboard** | Searchable history with pinning, text, images, colours — and OCR on anything you screenshot |
-| **Focus** | Pomodoro that counts down in the notch instead of stealing a window — and survives the lid being closed, because nothing is counting |
-| **Calendar** | Next meeting, countdown, one-click join — then mute, camera and leave without finding the window |
-| **HUDs** | Volume, brightness, charging, Bluetooth, Focus and the camera-in-use dot — in the notch, with the macOS overlay suspended while the module is on |
-| **Battery** | Mac, AirPods, mouse, keyboard, trackpad — charge state, time remaining, and one low warning per discharge cycle rather than one per wobble |
-| **Notifications** | Mirrored into the island, with inline reply |
-| **Camera** | Live preview under the notch. Fires automatically before a meeting so you see yourself before they do. Pin it while presenting |
-| **System stats** | CPU, GPU, memory, disk, network, temperature and fans — with alert thresholds |
-| **Weather** | Conditions and hourly forecast, off by default |
-| **Windows** | Snap and tile by dragging a window to the notch |
-| **Shortcuts** | Run Shortcuts from the island, and drive Perch from Shortcuts |
-| **Hide it instead** | Prefer the notch gone? Black out the menu bar and it disappears |
-| **No-notch mode** | A floating pill for Mac mini, Studio, iMac and external displays |
+Eleven of the eighteen modules are built. The table below is the whole of 1.0;
+**Built** marks what is in the download today, and the rest is
+[docs/PLAN.md](docs/PLAN.md).
+
+| | | |
+|---|---|---|
+| **Now Playing** | Artwork, scrubbing, AirPlay target, swipe to skip, sneak peek on track change | Built |
+| **Shelf** | Drag files to the notch, hold, drop them anywhere else. AirDrop and quick format conversion built in | Built |
+| **Clipboard** | Searchable history with pinning, text, images, colours — and OCR on anything you screenshot | Built |
+| **Focus** | Pomodoro that counts down in the notch instead of stealing a window — and survives the lid being closed, because nothing is counting | Built |
+| **Calendar** | Next meeting, countdown, one-click join for six services — then mute, camera and leave without finding the window (Zoom verified) | Built |
+| **HUDs** | Volume, brightness, charging, Bluetooth, Focus and the camera-in-use dot — in the notch, with the macOS overlay suspended while the module is on | Built |
+| **Battery** | Mac, AirPods, mouse, keyboard, trackpad — charge state, time remaining, and one low warning per discharge cycle rather than one per wobble | Built |
+| **Notifications** | Mirrored into the island, with inline reply | Built |
+| **Camera** | Live preview under the notch. Fires automatically before a meeting so you see yourself before they do. Pin it while presenting | Built |
+| **System stats** | CPU, GPU, memory, disk, network and fan speed — with alert thresholds | Built |
+| **Weather** | Conditions and hourly forecast, off by default | Planned |
+| **Windows** | Snap and tile by dragging a window to the notch | Planned |
+| **Shortcuts** | Run Shortcuts from the island, and drive Perch from Shortcuts | Planned |
+| **Hide it instead** | Prefer the notch gone? Black out the menu bar — or fill it from your wallpaper — and it disappears. Per display, plus an island that stays invisible until something happens | Built |
+| **No-notch mode** | A floating pill for Mac mini, Studio, iMac and external displays | Built |
 
 Eighteen modules. The paid apps average six. Every one is individually
 switchable and costs nothing when off — see [docs/FEATURES.md](docs/FEATURES.md)
@@ -65,13 +70,20 @@ and nobody has built the camera out past a plain mirror.
 
 ## Install
 
-> **Pre-1.0.** Six of the eighteen modules are built — Now Playing, the
-> Shelf, the Clipboard, the Battery, the HUDs and the Focus timer — plus the
-> island itself. The rest of
+> **Pre-1.0.** Eleven of the eighteen modules are built — Now Playing, the
+> Shelf, the Clipboard, the Battery, the HUDs, the Focus timer, the Calendar,
+> Notifications, the Camera, System stats and hide-the-notch — plus the island
+> itself. The rest of
 > `docs/PLAN.md` is not done, and the Homebrew cask goes live with the first
 > signed release. The feature table below is what 1.0 is aiming at.
+>
+> The Calendar's call controls drive Zoom's menu bar and are verified there;
+> Teams and Webex are best effort, and Meet, Around and Whereby have none at
+> all — a browser tab has no menu bar to drive. Notifications are read from
+> the banner through Accessibility, never from the notification database —
+> Perch does not ask for Full Disk Access and never will.
 
-**Download the app** — [Perch 0.5.0, universal](https://github.com/Milanpatel35/Perch/releases/download/build-0.5.0/Perch-0.5.0-unsigned.zip)
+**Download the app** — [Perch 0.6.0, universal](https://github.com/Milanpatel35/Perch/releases/download/build-0.6.0/Perch-0.6.0-unsigned.zip)
 
 Apple Silicon and Intel, macOS 13+. **Not yet signed**: macOS will refuse it
 on a double-click, so right-click the app → Open and confirm once. You only
@@ -116,6 +128,10 @@ it. The plan for it is [docs/WEBSITE-PLAN.md](docs/WEBSITE-PLAN.md).
 Prices checked September 2026 — confirm on each vendor's own site before
 buying, since they change faster than READMEs do.
 
+**Perch's column is 1.0, not today's build.** Eleven of the eighteen modules are
+built; the rows that are not yet are marked Planned in the table above. Every
+rival's column is what that app does today.
+
 | | Perch | Boring Notch | Seam | Alcove | NotchNook | DynamicLake Pro | NotchBay | TopNotch |
 |---|---|---|---|---|---|---|---|---|
 | Price | **Free** | Free | $19.90 | ~$15–17 | $25 / $3 mo | $13.99 | $9 | Free |
@@ -132,7 +148,7 @@ buying, since they change faster than READMEs do.
 | **Camera beyond a mirror** | **Yes** | — | — | — | — | — | — | — |
 | Window snapping | Yes | — | — | — | — | Yes | — | — |
 | Works without a notch | Yes | Yes | Yes | — | — | Partial | — | n/a |
-| Hides the notch instead | Option | — | — | — | — | — | — | Yes |
+| Hides the notch instead | Yes | — | — | — | — | — | — | Yes |
 
 Full write-up with sources: [docs/COMPARISON.md](docs/COMPARISON.md).
 

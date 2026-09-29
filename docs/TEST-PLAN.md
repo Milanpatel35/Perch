@@ -46,7 +46,7 @@ Levels:
 | TC-ISL-002 | U | Single activity submitted | Transitions `idle → peek`, auto-collapses after its TTL |
 | TC-ISL-003 | U | Higher-priority activity during a peek | Pre-empts immediately; lower one is re-queued, not dropped |
 | TC-ISL-004 | E | Hover over the notch | Expands within the spring duration |
-| TC-ISL-005 | E | Mouse leaves while expanded | Collapses after the grace period, not instantly |
+| TC-ISL-005 | U | Mouse leaves while expanded | Collapses to peek after the grace period, not instantly — and an activity that declared no TTL is **not** withdrawn by it |
 | TC-ISL-006 | U | Two equal-priority activities | Most recent wins; the other stays queued |
 | TC-ISL-007 | U | Activity cancelled while presented | Collapses cleanly; queue advances |
 | TC-ISL-008 | E | Click while expanded | Stays expanded and becomes interactive; does not steal key focus from the frontmost app |
@@ -173,6 +173,26 @@ rather than the converter.
 | TC-CAL-010 | E | Leave from the island | Call ends, island collapses, controls withdrawn |
 | TC-CAL-011 | E | Meeting app updated / element tree changed | Controls degrade to "unavailable", app does not crash or hang |
 | TC-CAL-012 | E | Accessibility permission revoked mid-call | Controls disabled with an explanation, rest of the app unaffected |
+| TC-CAL-013 | U | Module disabled mid-countdown | Store released, wake-up cancelled, control poll stopped, island cleared |
+| TC-CAL-014 | E | Reminder completed from the island | Marked done in Reminders; the row leaves the list |
+
+## NTF — notification mirroring
+
+| ID | Level | Case | Expected |
+|---|---|---|---|
+| TC-NTF-001 | U | Notification from an app on the deny list | Never reaches the island |
+| TC-NTF-002 | U | Allow-list mode with one app listed | Only that app mirrors; everything else is dropped |
+| TC-NTF-003 | U | The same notification delivered twice | Shown once |
+| TC-NTF-004 | U | Several from one app in quick succession | Coalesced into one activity carrying a count |
+| TC-NTF-005 | U | Notification while a focus session runs | Held, not shown, and not lost |
+| TC-NTF-006 | U | Held notifications after the session ends | Released in order, still coalesced per app |
+| TC-NTF-007 | U | Notification while Do Not Disturb is on | Not mirrored — the system's answer wins |
+| TC-NTF-008 | E | Accessibility denied or revoked | Module explains it and the rest of the app is unaffected |
+| TC-NTF-009 | U | Module disabled | Observer removed, queue emptied, nothing on the island |
+| TC-NTF-010 | E | Inline reply to a message | Sent through the banner's own reply field; banner dismissed |
+| TC-NTF-011 | E | Reply field not found (app or macOS changed) | Degrades to "open the app", no crash and no hang |
+| TC-NTF-012 | U | Perch's own notifications | Never mirrored — the island does not announce itself |
+
 
 ## HUD — system HUD replacement
 
@@ -272,6 +292,8 @@ optional and they do not get skipped when the suite is slow.
 | TC-HID-003 | E | Per-display setting | Applies only to the chosen display |
 | TC-HID-004 | E | Blackout plus an island activity | Activity still presents, then the strip returns to black |
 | TC-HID-005 | E | Disable | Menu bar returns to normal immediately, no artefacts |
+| TC-HID-006 | U | "Invisible until something happens" | Idle and collapsed-home island draw nothing; every activity, and the home island hovered open, still draws |
+| TC-HID-007 | U | Module disabled, or on with blackout off | No strip window, no screen observer, no wallpaper watch; island visibility restored |
 
 ## PRF — performance and resources
 
@@ -413,3 +435,22 @@ Added for the Focus module:
       correct on waking, not frozen where it was (TC-FOC-004)
 - [ ] A session finishing while music is playing takes the island (TC-FOC-002)
 - [ ] Four sessions in a row produce one day of streak, not four (TC-FOC-005)
+
+Added for hide-the-notch. The whole point is what a menu bar looks like, so
+most of it is judged by eye on a notched Mac:
+
+- [ ] Blackout on: the notch disappears into the bar, and every menu and
+      status item is still on top and readable (TC-HID-001)
+- [ ] The strip starts at the very top of the screen, not one bar-height
+      down — AppKit pushes windows out from under the menu bar unless told
+      not to, and that is the bug this line exists for
+- [ ] Wallpaper changed with "Match the wallpaper" on: the bar re-colours
+      without relaunching; a video wallpaper gives black, not a guess (TC-HID-002)
+- [ ] External display attached: no strip there until its switch is turned
+      on, then only there (TC-HID-003)
+- [ ] A full-screen app: no strip in its Space, and the bar comes back with
+      the strip when leaving it
+- [ ] "Invisible until something happens" on a no-notch display: the pill
+      is gone while idle, hovering the top edge still opens it (TC-HID-006)
+- [ ] Module switched off: the menu bar is back to normal in the same frame,
+      no black line left behind (TC-HID-005)

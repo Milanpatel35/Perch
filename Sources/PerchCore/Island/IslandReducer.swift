@@ -89,16 +89,29 @@ public struct IslandReducer<Activity: IslandActivity> {
     ) -> [IslandEffect] {
         // Ignore a stale timer for something no longer presented.
         guard state.presentation.activityID == id else { return [] }
-        // An activity that declared no TTL owns its own lifetime — a focus
-        // timer mid-session, a shelf holding files. No expiry event may close
-        // it, however it arrived: a stale timer from a previous activity that
-        // reused this id would otherwise silently stop a running session.
-        guard activity(id, in: queue)?.timeToLive != nil else { return [] }
         // A person hovering, or having deliberately opened it, outranks the
         // clock. Re-arm rather than yanking it away mid-read.
         guard !state.isHovered, !state.isUserPinned else {
             return rearmCollapse(for: id, queue: queue)
         }
+
+        // An activity that declared no TTL owns its own lifetime — a focus
+        // timer mid-session, a shelf holding files, the home surface. No
+        // expiry event may *close* one, however it arrived: a stale timer
+        // from a previous activity that reused this id would otherwise
+        // silently stop a running session.
+        //
+        // It must still collapse, though. This event is also how the grace
+        // period after the pointer leaves arrives (TC-ISL-005), and without
+        // this branch an island opened by hovering the home surface stayed
+        // expanded for ever — there was no path back to a peek that did not
+        // also withdraw the activity.
+        guard activity(id, in: queue)?.timeToLive != nil else {
+            guard state.presentation == .expanded(id) else { return [] }
+            state.presentation = .peek(id)
+            return [.animate(to: .peek(id))]
+        }
+
         queue.withdraw(id)
         return advance(state: &state, queue: &queue)
     }
