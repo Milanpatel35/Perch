@@ -6,12 +6,12 @@ import SwiftUI
 extension Defaults.Keys {
 
     /// Read text out of copied images, on-device.
-    static let clipboardOCR = Key<Bool>("clipboard.ocr", default: true)
+    static let clipboardOCR = Key<Bool>("clipboard_ocr", default: true)
 
-    static let clipboardMaximumCount = Key<Int>("clipboard.maximumCount", default: 200)
+    static let clipboardMaximumCount = Key<Int>("clipboard_maximumCount", default: 200)
 
     /// Days to keep an unpinned entry. Zero means forever.
-    static let clipboardMaximumDays = Key<Int>("clipboard.maximumDays", default: 7)
+    static let clipboardMaximumDays = Key<Int>("clipboard_maximumDays", default: 7)
 }
 
 /// The Clipboard pane in Preferences.

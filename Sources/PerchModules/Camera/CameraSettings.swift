@@ -9,18 +9,18 @@ extension PreCallCheck.Configuration: Defaults.Serializable {}
 extension Defaults.Keys {
 
     static let cameraPresentation = Key<CameraPresentation>(
-        "camera.presentation",
+        "camera_presentation",
         default: CameraPresentation()
     )
 
     static let preCallCheck = Key<PreCallCheck.Configuration>(
-        "camera.preCallCheck",
+        "camera_preCallCheck",
         default: PreCallCheck.Configuration()
     )
 
     /// The remembered camera. A `String?` rather than a device, because the
     /// device may not be plugged in when this is read.
-    static let cameraDeviceID = Key<String?>("camera.deviceID", default: nil)
+    static let cameraDeviceID = Key<String?>("camera_deviceID", default: nil)
 }
 
 /// The Camera pane in Preferences.

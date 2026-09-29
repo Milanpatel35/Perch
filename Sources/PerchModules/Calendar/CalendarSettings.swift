@@ -8,7 +8,7 @@ extension Agenda.Configuration: Defaults.Serializable {}
 extension Defaults.Keys {
 
     static let agendaConfiguration = Key<Agenda.Configuration>(
-        "calendar.agenda",
+        "calendar_agenda",
         default: Agenda.Configuration()
     )
 }

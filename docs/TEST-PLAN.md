@@ -57,6 +57,8 @@ Levels:
 | TC-ISL-013 | U | Type-erased activity | Identity, priority and TTL survive erasure; re-wrapping does not nest the box |
 | TC-ISL-014 | U | Home surface present when a module activity arrives | Anything above `ambient` pre-empts it; the home surface returns when that activity is withdrawn |
 | TC-ISL-015 | U | Runtime applies the reducer's effects | Exactly one collapse is ever pending; a new activity replaces it rather than adding a second |
+| TC-ISL-016 | U | Closing something that owns its lifetime — a second click on the home surface, a module asking to collapse | It folds back to its peek and stays queued; only an activity with a time to live is thrown away. Hover still opens it afterwards |
+| TC-ISL-017 | U | "Expand on hover" or "Click to keep open" switched off | Hover holds a peek but does not open it; a click opens and a second click closes without pinning, and leaving closes it |
 
 ## MED — Now Playing
 

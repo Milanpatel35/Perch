@@ -220,4 +220,107 @@ final class IslandReducerTests: XCTestCase {
         send(.timeToLiveExpired("timer"))
         XCTAssertEqual(state.presentation, .peek("timer"))
     }
+
+    // MARK: - TC-ISL-016
+
+    /// The bug a real screen found: click the home surface open, click it
+    /// again to close, and the island never answered hover again.
+    func test_TC_ISL_016_closingTheHomeSurfaceByClickKeepsItOnTheIsland() {
+        submit(TestActivity("home", timeToLive: nil))
+        send(.clicked)
+        XCTAssertEqual(state.presentation, .expanded("home"))
+
+        send(.clicked)
+
+        XCTAssertEqual(state.presentation, .peek("home"))
+        XCTAssertEqual(queue.ordered.map(\.id), ["home"], "the home surface is still queued")
+
+        send(.hoverBegan)
+        XCTAssertEqual(state.presentation, .expanded("home"), "and hovering opens it again")
+    }
+
+    func test_TC_ISL_016_aModuleAskingToCollapseDoesNotThrowAwayAHeldActivity() {
+        submit(TestActivity("gauge", priority: .ambient, timeToLive: nil))
+        send(.hoverBegan)
+        XCTAssertEqual(state.presentation, .expanded("gauge"))
+
+        send(.collapseRequested)
+
+        XCTAssertEqual(state.presentation, .peek("gauge"))
+        XCTAssertEqual(queue.ordered.map(\.id), ["gauge"])
+        XCTAssertFalse(state.isUserPinned)
+    }
+
+    /// Something with a clock is still dismissed outright by a second click,
+    /// as before — a banner you have read is done with.
+    func test_TC_ISL_016_anActivityWithATimeToLiveIsStillDismissed() {
+        submit(TestActivity("home", timeToLive: nil))
+        submit(TestActivity("alert", priority: .systemAlert, timeToLive: .seconds(3)))
+        send(.clicked)
+        send(.clicked)
+
+        XCTAssertEqual(
+            state.presentation, .peek("home"), "the alert is gone, the home surface is back")
+        XCTAssertFalse(queue.ordered.contains { $0.id == "alert" })
+    }
+
+    func test_TC_ISL_016_collapsingAPeekIsHarmless() {
+        submit(TestActivity("home", timeToLive: nil))
+
+        XCTAssertEqual(send(.collapseRequested), [.cancelScheduledCollapse])
+        XCTAssertEqual(state.presentation, .peek("home"))
+    }
+
+    // MARK: - TC-ISL-017
+
+    func test_TC_ISL_017_hoverToExpandOffMeansHoverDoesNotOpen() {
+        send(.gesturesChanged(IslandGestures(hoverExpands: false)))
+        submit(TestActivity("home", timeToLive: nil))
+
+        send(.hoverBegan)
+        XCTAssertEqual(state.presentation, .peek("home"))
+
+        send(.clicked)
+        XCTAssertEqual(state.presentation, .expanded("home"), "a click still opens it")
+    }
+
+    func test_TC_ISL_017_hoverToExpandOffStillHoldsAPeekBeingRead() {
+        send(.gesturesChanged(IslandGestures(hoverExpands: false)))
+        submit(TestActivity("banner", timeToLive: .seconds(3)))
+
+        XCTAssertEqual(send(.hoverBegan), [.cancelScheduledCollapse])
+        XCTAssertEqual(state.presentation, .peek("banner"))
+    }
+
+    func test_TC_ISL_017_anArrivalWhileHoveredOnlyPeeksWhenHoverIsOff() {
+        send(.gesturesChanged(IslandGestures(hoverExpands: false)))
+        send(.hoverBegan)
+
+        submit(TestActivity("banner", timeToLive: .seconds(3)))
+        XCTAssertEqual(state.presentation, .peek("banner"))
+    }
+
+    func test_TC_ISL_017_clickToKeepOpenOffMakesAClickOpenAndCloseWithoutPinning() {
+        send(.gesturesChanged(IslandGestures(clickPins: false)))
+        submit(TestActivity("home", timeToLive: nil))
+
+        send(.clicked)
+        XCTAssertEqual(state.presentation, .expanded("home"))
+        XCTAssertFalse(state.isUserPinned)
+
+        send(.clicked)
+        XCTAssertEqual(state.presentation, .peek("home"))
+        XCTAssertEqual(queue.ordered.map(\.id), ["home"])
+    }
+
+    func test_TC_ISL_017_withClickToKeepOpenOffLeavingClosesIt() {
+        send(.gesturesChanged(IslandGestures(clickPins: false)))
+        submit(TestActivity("home", timeToLive: nil))
+        send(.clicked)
+
+        XCTAssertEqual(
+            send(.hoverEnded),
+            [.scheduleCollapse("home", after: IslandReducer<TestActivity>.hoverGracePeriod)]
+        )
+    }
 }

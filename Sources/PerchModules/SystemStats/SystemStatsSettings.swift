@@ -7,10 +7,10 @@ extension GaugeKind: Defaults.Serializable {}
 
 extension Defaults.Keys {
 
-    static let systemGauges = Key<[GaugeKind]>("systemstats.gauges", default: [.cpu, .memory])
+    static let systemGauges = Key<[GaugeKind]>("systemstats_gauges", default: [.cpu, .memory])
 
     static let statAlerts = Key<StatAlerts.Configuration>(
-        "systemstats.alerts",
+        "systemstats_alerts",
         default: StatAlerts.Configuration()
     )
 }

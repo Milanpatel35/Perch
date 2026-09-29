@@ -8,20 +8,20 @@ extension Defaults.Keys {
     /// thing that makes the island feel alive — but it stops dead on pause,
     /// because a perpetual animation is a perpetual wakeup (`CLAUDE.md` §5.1).
     static let nowPlayingVisualiser = Key<Bool>(
-        "nowPlaying.visualiser",
+        "nowPlaying_visualiser",
         default: true
     )
 
     /// A two-second peek when the track changes.
     static let nowPlayingSneakPeek = Key<Bool>(
-        "nowPlaying.sneakPeek",
+        "nowPlaying_sneakPeek",
         default: true
     )
 
     /// Which app owns the island when more than one is playing. Empty means
     /// "whichever the system says is active", which is almost always right.
     static let nowPlayingPreferredSource = Key<String>(
-        "nowPlaying.preferredSource",
+        "nowPlaying_preferredSource",
         default: ""
     )
 }
