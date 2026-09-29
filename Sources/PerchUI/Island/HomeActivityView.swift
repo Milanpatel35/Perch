@@ -55,17 +55,21 @@ private struct HomeSurface: View {
 
             Divider().overlay(Color.white.opacity(0.12))
 
-            let batteryTile = modules.batteryTile()
-            let shortcutsTile = modules.shortcutsTile()
+            let tiles = [
+                modules.batteryTile(),
+                modules.systemStatsTile(),
+                modules.shortcutsTile()
+            ].compactMap { $0 }
 
-            if batteryTile != nil || shortcutsTile != nil {
-                batteryTile
-                shortcutsTile
-            } else {
+            if tiles.isEmpty {
                 Text("Every module you switch on appears here.")
                     .font(.system(size: 12))
                     .foregroundStyle(.white.opacity(0.55))
                     .fixedSize(horizontal: false, vertical: true)
+            } else {
+                ForEach(tiles.indices, id: \.self) { index in
+                    tiles[index]
+                }
             }
 
             Spacer(minLength: 0)

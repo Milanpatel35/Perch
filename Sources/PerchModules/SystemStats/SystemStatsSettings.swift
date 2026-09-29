@@ -9,6 +9,12 @@ extension Defaults.Keys {
 
     static let systemGauges = Key<[GaugeKind]>("systemstats_gauges", default: [.cpu, .memory])
 
+    /// The two-readout gauge either side of the notch. Off by default: it is
+    /// wider than the notch, so it sits over the end of the app's menus and
+    /// the start of the status items, all the time. With it off the monitor
+    /// lives on the home surface instead.
+    static let systemGaugeBesideNotch = Key<Bool>("systemstats_besideNotch", default: false)
+
     static let statAlerts = Key<StatAlerts.Configuration>(
         "systemstats_alerts",
         default: StatAlerts.Configuration()
@@ -23,6 +29,8 @@ struct SystemStatsSettingsView: View {
     let snapshot: SystemSnapshot
     let isPublicIPEnabled: Bool
     let isSampling: Bool
+    let showsBesideNotch: Bool
+    let onBesideNotchChange: (Bool) -> Void
     let onGaugesChange: ([GaugeKind]) -> Void
     let onAlertsChange: (StatAlerts.Configuration) -> Void
     let onPublicIPChange: (Bool) -> Void
@@ -30,27 +38,26 @@ struct SystemStatsSettingsView: View {
     var body: some View {
         Form {
             Section {
-                ForEach(GaugeKind.allCases) { kind in
-                    Toggle(
-                        kind.displayName,
-                        isOn: Binding(
-                            get: { gauges.contains(kind) },
-                            set: { isOn in toggle(kind, isOn) }
+                Toggle("Show readouts beside the notch", isOn: besideNotchBinding)
+
+                if showsBesideNotch {
+                    ForEach(GaugeKind.allCases) { kind in
+                        Toggle(
+                            kind.displayName,
+                            isOn: Binding(
+                                get: { gauges.contains(kind) },
+                                set: { isOn in toggle(kind, isOn) }
+                            )
                         )
-                    )
-                    .disabled(!gauges.contains(kind) && gauges.count >= 2)
+                        .disabled(!gauges.contains(kind) && gauges.count >= 2)
+                    }
                 }
             } header: {
                 Text("In the collapsed island")
             } footer: {
-                Text(
-                    """
-                    Pick two. The space beside the notch fits two readouts; a \
-                    third would mean type too small to read.
-                    """
-                )
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                Text(showsBesideNotch ? Self.besideNotchOn : Self.besideNotchOff)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
 
             alertsSection
@@ -139,6 +146,26 @@ struct SystemStatsSettingsView: View {
 
     /// Two at a time. Turning a third on drops the oldest rather than
     /// refusing the click, which is what somebody who just pressed it means.
+    private static let besideNotchOn = String(
+        localized: """
+            Pick two. They sit either side of the notch and cover that part \
+            of the menu bar while the module is on. Alerts are checked while \
+            they are showing.
+            """
+    )
+
+    private static let besideNotchOff = String(
+        localized: """
+            Off: the monitor is a row on the island's home surface, sampled \
+            only while you look at it, and nothing covers the menu bar. Alerts \
+            need the readouts on.
+            """
+    )
+
+    private var besideNotchBinding: Binding<Bool> {
+        Binding(get: { showsBesideNotch }, set: { onBesideNotchChange($0) })
+    }
+
     private func toggle(_ kind: GaugeKind, _ isOn: Bool) {
         var updated = gauges
 
