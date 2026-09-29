@@ -8,8 +8,25 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Nothing yet. Next up is Phase 2.6 — weather, windows, Shortcuts and
-hide-the-notch, the P1 tier that closes Phase 2.
+Phase 2.6, first of four — the notch, gone, for the people who would rather
+not see it.
+
+### Added
+
+- **Hide-the-notch mode** (module 17). A strip behind the menu bar makes the
+  notch disappear into it: solid black, or a flat colour taken from the top
+  edge of the wallpaper and re-taken when the wallpaper changes. Every display
+  has its own switch — on by default where there is a notch, off everywhere
+  else — and the choice survives a dock being unplugged and replugged.
+  "Invisible until something happens" makes the island draw nothing while
+  idle; hovering the notch still opens it.
+
+  The strip sits one window level *below* the menu bar, never over it, so
+  menus, status items and the island all stay on top. Nothing polls: the
+  strip moves when the display arrangement changes, and the wallpaper is
+  watched with a kqueue on the directory macOS keeps it in — only while the
+  wallpaper fill is chosen. Switched off, or on with blackout off, the module
+  holds no window and no observer.
 
 ## [0.6.0] — 2026-09-22
 

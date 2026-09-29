@@ -286,6 +286,14 @@ settings toggle. **Tests:** WIN, SHC, HID.
 
 **Done when:** a TopNotch user has no reason to keep TopNotch installed.
 
+**Status: hide-the-notch done.** Module 17 is shipped: a black or
+wallpaper-matched strip behind the menu bar, chosen per display, and an
+island that draws nothing until it has something to show. The strip is a
+window one level *below* the menu bar, which is why it can never cover a
+menu — and why AppKit had to be told not to push it out from under the bar,
+the one bug that only showed up on a real screen. Weather, windows and
+Shortcuts are next.
+
 ---
 
 # Phase 3 — Shippable (weeks 15–17)

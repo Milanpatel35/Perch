@@ -91,6 +91,7 @@
       <button class="tab" aria-pressed="false" data-s="batt">Battery</button>
       <button class="tab" aria-pressed="false" data-s="cam">Camera</button>
       <button class="tab" aria-pressed="false" data-s="sys">System stats</button>
+      <button class="tab" aria-pressed="false" data-s="hide">Hide the notch</button>
     </div>
     <p class="tabhint">Click the island to collapse it, the way it behaves on your Mac.</p>
   </div>
@@ -100,7 +101,7 @@
       <li>Free forever</li><li>Open source</li><li>No Electron</li><li>No fake notch</li>
       <li>Clipboard history</li><li>Meeting controls</li><li>macOS 13 and up</li><li>Universal binary</li>
       <li>Zero telemetry</li><li>Lazy permissions</li><li>System monitor</li><li>Camera, done properly</li>
-      <li>18 modules</li><li>Clipboard OCR</li>
+      <li>18 modules</li><li>Clipboard OCR</li><li>Hide the notch</li>
     </ul>
   </div>
 </section>
@@ -123,9 +124,9 @@
       <p>Everything happens on your Mac. Perch makes one request, to its own update feed, and you can turn that off too. There is exactly one other, and it is off unless you switch it on: the public-IP readout in the system monitor.</p>
     </div>
     <div class="stat">
-      <div class="n">10<span style="font-size:.45em;color:var(--sub)">/18</span></div>
+      <div class="n">11<span style="font-size:.45em;color:var(--sub)">/18</span></div>
       <h3>Modules built, each switchable</h3>
-      <p>Ten work in the build you can download today; eighteen are specified, against a paid field that averages six. Turn one off and it stops existing — no observer, no timer, no CPU. <a href="#notyet">What is not built yet</a>.</p>
+      <p>Eleven work in the build you can download today; eighteen are specified, against a paid field that averages six. Turn one off and it stops existing — no observer, no timer, no CPU. <a href="#notyet">What is not built yet</a>.</p>
     </div>
     <div class="stat">
       <div class="n">$0</div>
@@ -265,6 +266,21 @@
 
     <div class="block flip">
       <div class="copy">
+        <p class="eyebrow">Hide the notch</p>
+        <h3>Would rather not see it?<span class="soft">Then you won&rsquo;t.</span></h3>
+        <p class="body">One switch paints the strip behind the menu bar black, and the notch vanishes into it. Menus, status items and the island all stay on top &mdash; the strip is drawn underneath the bar, never over it. Prefer colour to black? It can take the shade along the top of your wallpaper instead, and takes it again when the wallpaper changes. Each display gets its own switch.</p>
+        <p class="body" style="font-size:.9rem;color:var(--sub)">Add &ldquo;invisible until something happens&rdquo; and the island draws nothing at all while idle, then appears for a track change, a meeting or a timer. Switch every other module off and Perch is just this. Nothing polls: the strip moves when your displays change and at no other time.</p>
+      </div>
+      <div class="visual" style="min-height:200px;justify-content:flex-start">
+        <div class="clip"><span>⬛️</span><span style="font-size:.9rem">Black, edge to edge</span><em>behind the bar</em></div>
+        <div class="clip"><span>🖼</span><span style="font-size:.9rem">Or matched to the wallpaper</span><em>re-taken on change</em></div>
+        <div class="clip"><span>🖥</span><span style="font-size:.9rem">Chosen per display</span><em>notched ones on</em></div>
+        <div class="clip"><span>🫥</span><span style="font-size:.9rem">Island invisible when idle</span><em>optional</em></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="copy">
         <p class="eyebrow">Every Mac</p>
         <h3>No notch?<span class="soft">Still works.</span></h3>
         <p class="body">On a Mac mini, a Studio, an iMac or any external display, Perch draws a floating island at the top of the screen. It never paints a fake notch over your wallpaper. And it runs on macOS 13 Ventura, which most of the paid apps dropped.</p>
@@ -287,8 +303,8 @@
     <p class="lead">Every other site in this category lists only what ships. Here is the other half, because you will find out anyway and it may as well be from us.</p>
     <div class="grid3">
       <div class="card">
-        <h3>Eight of the eighteen modules</h3>
-        <p><strong>Weather, window snapping, Shortcuts, hide-the-notch, notes, screenshots and voice typing are specified and not built.</strong> They are described in the repo's feature document and they are not in the build you can download. Everything shown above this section is; everything in this card is not.</p>
+        <h3>Seven of the eighteen modules</h3>
+        <p><strong>Weather, window snapping, Shortcuts, notes, screenshots and voice typing are specified and not built.</strong> They are described in the repo's feature document and they are not in the build you can download. Everything shown above this section is; everything in this card is not.</p>
       </div>
       <div class="card">
         <h3>Meeting controls, beyond Zoom</h3>
@@ -358,12 +374,13 @@
             <tr><th scope="row">System stats</th><td class="us y">Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
             <tr><th scope="row">Camera beyond a mirror</th><td class="us y">Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
             <tr><th scope="row">Works without a notch</th><td class="us y">Yes</td><td>Yes</td><td>Yes</td><td class="n">—</td><td class="n">—</td><td>Partial</td><td>Yes</td><td>n/a</td></tr>
+            <tr><th scope="row">Hides the notch instead</th><td class="us y">Yes</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td>Yes</td></tr>
             <tr><th scope="row">Telemetry</th><td class="us y">None</td><td>None</td><td>None</td><td>Not stated</td><td>Not stated</td><td>Not stated</td><td>Not stated</td><td>None</td></tr>
           </tbody>
         </table>
       </div>
     </div>
-    <p style="font-size:.85rem;color:var(--sub);margin-top:16px">TopNotch is listed for completeness but solves the opposite problem — it hides the notch by blacking out the menu bar. If that's what you want, use it. It's very good at it.</p>
+    <p style="font-size:.85rem;color:var(--sub);margin-top:16px">TopNotch solves the opposite problem — it hides the notch by blacking out the menu bar. Perch now does the same as one module you can run on its own, but if that is all you want, TopNotch is very good at it.</p>
   </div>
 </section>
 
@@ -499,7 +516,7 @@
 
     <p class="srcmeta">
       MIT licence · version <span data-gh="version">0.6.0</span> ·
-      <span data-gh="issuesPhrase">2 open issues</span> ·
+      <span data-gh="issuesPhrase">3 open issues</span> ·
       <a href="https://github.com/Milanpatel35/Perch/blob/dev/LICENSE">Read the licence</a>
     </p>
   </div>

@@ -26,6 +26,7 @@ public enum PerchModuleRegistry {
         host.register(NotificationService(island: island))
         host.register(CameraService(island: island))
         host.register(SystemStatsService(island: island))
+        host.register(HideNotchService(island: island))
 
         wireFocusToNotifications(in: host)
         wireCalendarToCamera(in: host)
@@ -132,6 +133,8 @@ public enum PerchModuleRegistry {
             cameraPane(in: host)
         case .systemStats:
             systemStatsPane(in: host)
+        case .hideNotch:
+            hideNotchPane(in: host)
         default:
             nil
         }
@@ -213,6 +216,20 @@ public enum PerchModuleRegistry {
                     onGaugesChange: { stats.setGauges($0) },
                     onAlertsChange: { stats.setAlertConfiguration($0) },
                     onPublicIPChange: { stats.setPublicIPEnabled($0) }
+                )
+            )
+        }
+    }
+
+    @MainActor
+    private static func hideNotchPane(in host: ModuleHost) -> AnyView? {
+        host.service(HideNotchService.self).map { hideNotch in
+            AnyView(
+                HideNotchSettingsView(
+                    configuration: hideNotch.configuration,
+                    displays: hideNotch.displays,
+                    onChange: { hideNotch.setConfiguration($0) },
+                    onDisplayChange: { hideNotch.setShowsStrip($1, onDisplay: $0) }
                 )
             )
         }

@@ -143,6 +143,8 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:100;padding:10px
   color:rgba(255,255,255,.92);background:#1b2432;z-index:3;
 }
 .mb .l{display:flex;gap:14px}
+/* Hide-the-notch demo: the strip behind the bar, black edge to edge. */
+.screen.blackout .mb{background:#000}
 .mb .l b{font-weight:600}
 .base{height:11px;background:linear-gradient(180deg,#1c1c1e,#3a3a3e);border-radius:0 0 4px 4px}
 .foot{height:13px;width:36%;margin:0 auto;background:linear-gradient(180deg,#c9ccd1,#8e9297);border-radius:0 0 12px 12px}
