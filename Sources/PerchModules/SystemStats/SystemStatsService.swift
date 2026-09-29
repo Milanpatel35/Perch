@@ -35,6 +35,7 @@ final class SystemStatsService: ObservableObject, PerchModule {
     @Published private(set) var networkHistory = StatHistory()
 
     @Published private(set) var gauges: [GaugeKind] = [.cpu, .memory]
+    @Published private(set) var showsBesideNotch = false
 
     private(set) var isActive = false
 
@@ -56,6 +57,7 @@ final class SystemStatsService: ObservableObject, PerchModule {
         self.island = island
         self.now = now
         self.gauges = Defaults[.systemGauges]
+        self.showsBesideNotch = Defaults[.systemGaugeBesideNotch]
         self.alerts = StatAlerts(configuration: Defaults[.statAlerts])
     }
 
@@ -66,9 +68,12 @@ final class SystemStatsService: ObservableObject, PerchModule {
         isActive = true
 
         // No sampler starts here, and that is the whole design. Switching
-        // the module on puts a gauge on the island; the gauge's *view*
-        // appearing is what starts sampling (TC-SYS-009).
-        island.submit(SystemStatsActivity(gauges: gauges))
+        // the module on puts a gauge on the island, or a row on the home
+        // surface; that *view* appearing is what starts sampling
+        // (TC-SYS-009).
+        if showsBesideNotch {
+            island.submit(SystemStatsActivity(gauges: gauges))
+        }
     }
 
     func deactivate() {
@@ -196,8 +201,23 @@ final class SystemStatsService: ObservableObject, PerchModule {
         self.gauges = Array(gauges.prefix(2))
         Defaults[.systemGauges] = self.gauges
 
-        guard isActive else { return }
+        guard isActive, showsBesideNotch else { return }
         island.submit(SystemStatsActivity(gauges: self.gauges))
+    }
+
+    /// Puts the gauge beside the notch, or takes it away and leaves the
+    /// home-surface row. Taking it away withdraws it outright: it is the
+    /// module's own activity, and only the module may.
+    func setShowsBesideNotch(_ shows: Bool) {
+        showsBesideNotch = shows
+        Defaults[.systemGaugeBesideNotch] = shows
+
+        guard isActive else { return }
+        if shows {
+            island.submit(SystemStatsActivity(gauges: gauges))
+        } else {
+            island.withdraw(SystemStatsActivity.identifier)
+        }
     }
 
     func setAlertConfiguration(_ configuration: StatAlerts.Configuration) {

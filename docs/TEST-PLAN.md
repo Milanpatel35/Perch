@@ -256,6 +256,7 @@ optional and they do not get skipped when the suite is slow.
 | TC-SYS-013 | E | Public IP enabled | The one request is made, disclosed, and fails silently offline |
 | TC-SYS-014 | S | Sparkline with 60 points | Renders without clipping; flat line when idle, not a blank box |
 | TC-SYS-015 | M | Sustained heavy load for 10 minutes | Perch's own CPU stays under 1%; the monitor does not become the problem |
+| TC-SYS-016 | U | Module on, default settings | Nothing sits beside the notch; the monitor is a home-surface row that samples only while shown. The beside-notch gauge is an explicit choice, remembered |
 
 ## WIN — window management
 
