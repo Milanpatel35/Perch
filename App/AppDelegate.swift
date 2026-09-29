@@ -37,7 +37,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             switchboard: switchboard,
             paneProvider: { [unowned self] module in
                 PerchModuleRegistry.settingsPane(for: module, in: modules)
-            }
+            },
+            isBuilt: { [unowned self] module in modules.module(for: module) != nil }
         )
     }
 
