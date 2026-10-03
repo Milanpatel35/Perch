@@ -91,6 +91,10 @@ do that the first time, and it stops once there is a Developer ID certificate
 to sign with — at which point this becomes a notarised `.dmg` that Gatekeeper
 opens without a word.
 
+Unzip it and **drag Perch into Applications** before opening it. Run
+straight from Downloads, macOS starts a temporary copy, and Perch cannot
+open at login from there — the welcome screen and Settings will say so.
+
 [All builds](https://github.com/Milanpatel35/Perch/releases).
 
 **Latest build, right now** — every commit on `dev` produces a universal

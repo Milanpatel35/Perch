@@ -8,6 +8,18 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
+### Added
+
+- **A welcome on first launch.** Three short screens: how to use the
+  island, a choice of four starting points — Music, Work, Everything, or
+  Just hide the notch — and whether Perch opens at login. Each choice says
+  which permissions it may ask for before you pick it. Nothing is asked for
+  by the welcome itself.
+- **Open at login**, in the welcome and in Settings ▸ General. If Perch is
+  running straight from Downloads, the switch explains that it needs to be
+  in Applications first, rather than switching on and silently not working
+  after a restart.
+
 ### Fixed
 
 - **Closing the camera preview left the camera on.** A second click on the
