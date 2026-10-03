@@ -6,7 +6,19 @@ extension HomeActivity: IslandActivityPresenting {
 
     public var peekSize: CGSize { collapsedSize }
 
-    public var expandedSize: CGSize { CGSize(width: 420, height: 180) }
+    /// The size with no module rows. The island root view asks
+    /// `expandedSize(rows:)` instead, because only it can see which modules
+    /// are on; this answers the protocol for anything that cannot.
+    public var expandedSize: CGSize { Self.expandedSize(rows: 1) }
+
+    /// Tall enough for the header and `rows` module rows, and no taller.
+    /// A fixed 180pt left a band of empty black under one or two rows.
+    public static func expandedSize(rows: Int) -> CGSize {
+        let rows = max(rows, 1)
+        let chrome: CGFloat = 14 + 18 + 10 + 1 + 10 + 12
+        let height = chrome + CGFloat(rows) * 18 + CGFloat(rows - 1) * 10
+        return CGSize(width: 420, height: height)
+    }
 
     public func peekView() -> AnyView {
         // Nothing. On a notched Mac the home peek *is* the cutout.
@@ -55,11 +67,7 @@ private struct HomeSurface: View {
 
             Divider().overlay(Color.white.opacity(0.12))
 
-            let tiles = [
-                modules.batteryTile(),
-                modules.systemStatsTile(),
-                modules.shortcutsTile()
-            ].compactMap { $0 }
+            let tiles = modules.homeTiles()
 
             if tiles.isEmpty {
                 Text("Every module you switch on appears here.")
