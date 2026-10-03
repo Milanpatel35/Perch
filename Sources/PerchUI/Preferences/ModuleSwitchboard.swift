@@ -42,6 +42,19 @@ public final class ModuleSwitchboard: ObservableObject {
         changes.send((module, isOn))
     }
 
+    /// Switches on exactly `modules` among those that exist, and off the
+    /// rest of them. Used by the first run's presets. One module at a time,
+    /// through `setEnabled`, so every module hears about its own switch the
+    /// same way it would from Settings.
+    public func apply(_ modules: Set<ModuleID>, among built: Set<ModuleID>) {
+        for module in built.subtracting(modules) {
+            setEnabled(module, false)
+        }
+        for module in modules.intersection(built) {
+            setEnabled(module, true)
+        }
+    }
+
     public func toggle(_ module: ModuleID) {
         setEnabled(module, !isEnabled(module))
     }

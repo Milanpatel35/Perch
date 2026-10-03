@@ -25,6 +25,7 @@ public struct PreferencesView: View {
     }
 
     @ObservedObject private var switchboard: ModuleSwitchboard
+    private let launchAtLogin: LaunchAtLogin
 
     private let paneProvider: PaneProvider
     private let isBuilt: BuiltCheck
@@ -32,10 +33,12 @@ public struct PreferencesView: View {
 
     public init(
         switchboard: ModuleSwitchboard,
+        launchAtLogin: LaunchAtLogin,
         paneProvider: @escaping PaneProvider,
         isBuilt: @escaping BuiltCheck = { _ in true }
     ) {
         self.switchboard = switchboard
+        self.launchAtLogin = launchAtLogin
         self.paneProvider = paneProvider
         self.isBuilt = isBuilt
     }
@@ -98,7 +101,7 @@ public struct PreferencesView: View {
     private var detail: some View {
         switch selection {
         case .general, .none:
-            GeneralSettingsView()
+            GeneralSettingsView(launchAtLogin: launchAtLogin)
         case .about:
             AboutSettingsView()
         case .module(let module):

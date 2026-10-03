@@ -315,6 +315,21 @@ Shortcut from a link. Weather and windows are left.
    Increase Contrast. **Tests:** A11Y.
 5. Localisation scaffolding, English complete.
 
+**Status: the first run and launch at login done, ahead of the rest of 2.6.**
+Pulled forward because a hands-on pass showed what a stranger got: a menu
+bar icon, an island that said nothing about itself, and an app that was gone
+after the next restart. Three screens — the gestures, four presets, open at
+login — and nothing asked for: each card says which permissions its modules
+*may* ask for, and each module still asks for its own when it needs it.
+`ModulePreset` and `InstallLocation` are in Core (TC-ONB-001 … 004).
+Open at login is `SMAppService.mainApp`, which is macOS 13, and it refuses
+to switch on for a copy run straight from Downloads — App Translocation runs
+it from a path that is gone after a restart, so the switch would lie. The
+welcome window's hosting view accepts first mouse: macOS 14+ often keeps an
+accessory app in the background, and the preset cards ignored every click
+until it did (TC-ONB-006). Sparkle is still to come, with the signing work
+in #25.
+
 ## 3.2 — Release engineering
 
 1. Code sign, notarise, staple. Homebrew cask submission.
