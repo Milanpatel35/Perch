@@ -8,6 +8,13 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
+Nothing yet. Next up is the rest of Phase 2.6 — weather and windows.
+
+## [0.10.0] — 2026-10-03
+
+A first run, open at login, and the fixes from using the app on a real
+notched MacBook — one of which left the camera on.
+
 ### Added
 
 - **A welcome on first launch.** Three short screens: how to use the
@@ -34,6 +41,11 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
   meeting, the system monitor's warnings, and the battery and clipboard
   labels were centred on the notch, where the camera housing hides them.
   They now sit beside it.
+- **The volume and brightness icons were cut off.** The HUD was too narrow
+  for the notch, so only the level bar showed. It is wider, and the bar now
+  fits the space beside whatever notch the Mac has.
+- **The home surface had a band of empty black** under one or two module
+  rows. It now sizes to the rows it is showing.
 
 ## [0.9.0] — 2026-09-29
 
