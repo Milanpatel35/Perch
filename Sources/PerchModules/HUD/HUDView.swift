@@ -3,9 +3,10 @@ import SwiftUI
 
 extension HUDActivity: IslandActivityPresenting {
 
-    /// Narrow. A HUD is a glance, and the stock one it replaces is about this
-    /// wide — matching it is the point.
-    var peekSize: CGSize { CGSize(width: 280, height: 34) }
+    /// Narrow — a HUD is a glance — but wide enough that both sides of the
+    /// notch have room. At 280pt a 14" notch left ~47pt a side, the level bar
+    /// alone is 92pt, and SwiftUI squeezed the speaker glyph off the edge.
+    var peekSize: CGSize { CGSize(width: HUDPeek.width, height: 34) }
 
     /// Never opened, because `isExpandable` is false: your hand is on the
     /// keyboard, not the trackpad. The size is here because the protocol asks
@@ -21,7 +22,9 @@ extension HUDActivity: IslandActivityPresenting {
     }
 }
 
-private struct HUDPeek: View {
+struct HUDPeek: View {
+
+    static let width: CGFloat = 360
 
     let reading: HUDReading
 
@@ -52,7 +55,7 @@ private struct HUDPeek: View {
     @ViewBuilder
     private var trailing: some View {
         if reading.kind.showsLevel, let level = reading.level {
-            HUDLevelBar(level: level, isMuted: reading.isMuted)
+            HUDLevelBar(level: level, isMuted: reading.isMuted, width: barWidth)
         } else {
             VStack(alignment: .trailing, spacing: 0) {
                 Text(reading.title)
@@ -66,6 +69,13 @@ private struct HUDPeek: View {
             }
             .lineLimit(1)
         }
+    }
+
+    /// The bar fills the space beside the notch, less the margins, so it
+    /// fits whatever notch the Mac has rather than assuming one.
+    private var barWidth: CGFloat {
+        let side = (Self.width - metrics.collapsedSize.width) / 2 - 24
+        return min(max(side, 40), 92)
     }
 
     private var symbol: String {
@@ -107,8 +117,7 @@ struct HUDLevelBar: View {
 
     let level: Double
     var isMuted: Bool = false
-
-    private let width: CGFloat = 92
+    var width: CGFloat = 92
     private let height: CGFloat = 5
 
     var body: some View {

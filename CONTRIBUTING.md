@@ -229,7 +229,7 @@ the hardest for us to reproduce. Detail is appreciated.
 ## Security
 
 Do not open a public issue for a security problem. Email
-`security@<domain>` instead. See [SECURITY.md](SECURITY.md).
+`patelmilan3435@gmail.com` instead. See [SECURITY.md](SECURITY.md).
 
 ## Translations
 

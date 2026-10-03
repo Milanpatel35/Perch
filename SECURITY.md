@@ -8,7 +8,7 @@ The latest released version is supported. Older versions are not patched.
 
 Do not open a public issue.
 
-Email `security@<domain>` with a description, reproduction steps, and the
+Email `patelmilan3435@gmail.com` with a description, reproduction steps, and the
 version and macOS version affected. You will get an acknowledgement within 72
 hours and an assessment within seven days.
 
