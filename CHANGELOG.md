@@ -8,7 +8,20 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Nothing yet. Next up is the rest of Phase 2.6 — weather and windows.
+### Fixed
+
+- **Closing the camera preview left the camera on.** A second click on the
+  open preview folded it to its small view instead of closing it, and the
+  device stayed open with the green light on. Closing it now closes the
+  camera, as the website promises.
+- **The battery list and the clipboard picker never went away.** Opened
+  from the home surface or a shortcut, they stayed on the island as a wide
+  black shape until Perch was relaunched, and the clipboard picker kept the
+  keyboard. Moving away or clicking again now closes them.
+- **Four alerts were written under the camera.** "Starting now" for a
+  meeting, the system monitor's warnings, and the battery and clipboard
+  labels were centred on the notch, where the camera housing hides them.
+  They now sit beside it.
 
 ## [0.9.0] — 2026-09-29
 

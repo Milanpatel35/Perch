@@ -110,7 +110,10 @@ public struct IslandReducer<Activity: IslandActivity> {
         // this branch an island opened by hovering the home surface stayed
         // expanded for ever — there was no path back to a peek that did not
         // also withdraw the activity.
-        guard activity(id, in: queue)?.timeToLive != nil else {
+        //
+        // A panel somebody opened is the exception: leaving it is closing it
+        // (TC-ISL-018).
+        guard activity(id, in: queue)?.endsWhenClosed ?? false else {
             guard state.presentation == .expanded(id) else { return [] }
             state.presentation = .peek(id)
             return [.animate(to: .peek(id))]
@@ -214,8 +217,9 @@ public struct IslandReducer<Activity: IslandActivity> {
 
     /// Closes what a person has finished looking at.
     ///
-    /// **Only an activity with a time to live is thrown away.** One without
-    /// owns its own lifetime — the home surface, the music, a running timer,
+    /// **Only an activity that ends when closed is thrown away** — one with a
+    /// time to live, or a panel somebody opened (TC-ISL-018). The rest
+    /// own their own lifetime — the home surface, the music, a running timer,
     /// the system monitor's gauge — and nothing but its module may withdraw
     /// it. Closing one of those folds it back to its peek.
     ///
@@ -230,7 +234,7 @@ public struct IslandReducer<Activity: IslandActivity> {
     ) -> [IslandEffect] {
         state.isUserPinned = false
 
-        guard activity(id, in: queue)?.timeToLive == nil else {
+        guard !(activity(id, in: queue)?.endsWhenClosed ?? false) else {
             queue.withdraw(id)
             return advance(state: &state, queue: &queue)
         }

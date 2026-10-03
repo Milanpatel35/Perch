@@ -63,10 +63,17 @@ extension ClipboardPickerActivity: IslandActivityPresenting {
 
     func peekView() -> AnyView {
         AnyView(
-            Text("Clipboard")
-                .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            NotchFlanks {
+                Image(systemName: "doc.on.clipboard")
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(.white)
+            } trailing: {
+                Text("Clipboard")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.9))
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text("Clipboard"))
         )
     }
 

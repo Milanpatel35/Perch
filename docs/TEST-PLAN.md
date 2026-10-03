@@ -59,6 +59,7 @@ Levels:
 | TC-ISL-015 | U | Runtime applies the reducer's effects | Exactly one collapse is ever pending; a new activity replaces it rather than adding a second |
 | TC-ISL-016 | U | Closing something that owns its lifetime — a second click on the home surface, a module asking to collapse | It folds back to its peek and stays queued; only an activity with a time to live is thrown away. Hover still opens it afterwards |
 | TC-ISL-017 | U | "Expand on hover" or "Click to keep open" switched off | Hover holds a peek but does not open it; a click opens and a second click closes without pinning, and leaving closes it |
+| TC-ISL-018 | U | Closing a panel somebody opened — the battery list from its tile, the clipboard picker, the camera preview — by a second click, by moving away, or by a module asking to collapse | It is withdrawn and the island returns to what was under it; it never folds to a peek that nothing will withdraw. The camera's id leaves the island, which is what releases the device (TC-CAM-006) |
 
 ## MED — Now Playing
 

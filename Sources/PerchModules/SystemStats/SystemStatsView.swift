@@ -284,21 +284,22 @@ private struct Sparkline: View {
 
 extension SystemAlertActivity: IslandActivityPresenting {
 
-    var peekSize: CGSize { CGSize(width: 320, height: 34) }
+    var peekSize: CGSize { CGSize(width: 360, height: 34) }
     var expandedSize: CGSize { CGSize(width: 340, height: 120) }
 
     func peekView() -> AnyView {
         AnyView(
-            HStack(spacing: 8) {
+            NotchFlanks {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 12))
                     .foregroundStyle(.orange)
+            } trailing: {
                 Text(headline)
-                    .font(.system(size: 12, weight: .semibold))
+                    .font(.system(size: 11, weight: .semibold))
                     .foregroundStyle(.white)
-                    .lineLimit(1)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text("\(headline): \(detail)"))
         )
     }
 

@@ -9,7 +9,7 @@ import Foundation
 ///
 /// It carries the original value untouched in `base`, which is how `PerchUI`
 /// recovers a module's own activity type to build its view. Core never looks
-/// inside — it only reads the four properties the reducer needs, which is
+/// inside — it only reads the five properties the reducer needs, which is
 /// what keeps the state machine ignorant of what a module is.
 public struct AnyIslandActivity: IslandActivity {
 
@@ -21,6 +21,7 @@ public struct AnyIslandActivity: IslandActivity {
     public var priority: ActivityPriority { base.priority }
     public var timeToLive: Duration? { base.timeToLive }
     public var isExpandable: Bool { base.isExpandable }
+    public var endsWhenClosed: Bool { base.endsWhenClosed }
 
     /// Wrapping an already-wrapped activity returns the inner value rather
     /// than nesting. Without this, a module that round-trips an activity
