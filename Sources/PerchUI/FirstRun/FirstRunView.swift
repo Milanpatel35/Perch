@@ -187,9 +187,9 @@ public struct FirstRunView: View {
     /// What is switched on now asks for — after the preset was applied, so
     /// it describes the island somebody is about to use.
     private var askedFor: [ModulePermission] {
-        let enabled = Set(built.filter(switchboard.isEnabled))
+        let enabled = Set(built.filter { switchboard.isEnabled($0) })
         let asked = Set(enabled.flatMap(\.permissions))
-        return ModulePermission.allCases.filter(asked.contains)
+        return ModulePermission.allCases.filter { asked.contains($0) }
     }
 
     // MARK: - Footer

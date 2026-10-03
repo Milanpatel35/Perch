@@ -26,7 +26,7 @@ public enum ModulePreset: String, CaseIterable, Sendable {
     /// card can say so before anybody picks it.
     public func permissions(built: Set<ModuleID>) -> [ModulePermission] {
         let asked = Set(modules(built: built).flatMap(\.permissions))
-        return ModulePermission.allCases.filter(asked.contains)
+        return ModulePermission.allCases.filter { asked.contains($0) }
     }
 
     private var wanted: Set<ModuleID> {
