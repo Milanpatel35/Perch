@@ -43,5 +43,9 @@ struct ClipboardPickerActivity: IslandActivity {
     /// Stays until dismissed. It has a text field in it.
     let timeToLive: Duration? = nil
 
+    /// Dismissing it closes it rather than leaving a peek that still holds
+    /// the keyboard (TC-ISL-018).
+    let endsWhenClosed = true
+
     var entries: [ClipboardEntry]
 }

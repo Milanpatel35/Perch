@@ -81,7 +81,7 @@ private struct BatteryPeek: View {
 
 extension BatteryStatusActivity: IslandActivityPresenting {
 
-    var peekSize: CGSize { CGSize(width: 300, height: 34) }
+    var peekSize: CGSize { CGSize(width: 320, height: 34) }
 
     var expandedSize: CGSize {
         CGSize(
@@ -95,10 +95,17 @@ extension BatteryStatusActivity: IslandActivityPresenting {
 
     func peekView() -> AnyView {
         AnyView(
-            Text("Battery")
-                .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            NotchFlanks {
+                Image(systemName: "battery.100")
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(.white)
+            } trailing: {
+                Text("Battery")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.9))
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text("Battery"))
         )
     }
 

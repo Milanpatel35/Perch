@@ -271,6 +271,64 @@ final class IslandReducerTests: XCTestCase {
         XCTAssertEqual(state.presentation, .peek("home"))
     }
 
+    // MARK: - TC-ISL-018
+
+    /// A panel somebody opened from a tile has no clock — it stays while it
+    /// is read — but nothing else will ever withdraw it. Folded to a peek,
+    /// the battery list sat above the home surface until relaunch.
+    func test_TC_ISL_018_aSecondClickThrowsAwayAnOpenedPanel() {
+        submit(TestActivity("home", timeToLive: nil))
+        submit(TestActivity("battery", priority: .fileDrop, timeToLive: nil, endsWhenClosed: true))
+        send(.clicked)
+        XCTAssertEqual(state.presentation, .expanded("battery"))
+
+        send(.clicked)
+
+        XCTAssertEqual(state.presentation, .peek("home"))
+        XCTAssertEqual(queue.ordered.map(\.id), ["home"])
+    }
+
+    func test_TC_ISL_018_leavingAnOpenedPanelThrowsItAway() {
+        submit(TestActivity("home", timeToLive: nil))
+        send(.hoverBegan)
+        submit(TestActivity("battery", priority: .fileDrop, timeToLive: nil, endsWhenClosed: true))
+        XCTAssertEqual(state.presentation, .expanded("battery"))
+
+        XCTAssertEqual(
+            send(.hoverEnded),
+            [.scheduleCollapse("battery", after: IslandReducer<TestActivity>.hoverGracePeriod)]
+        )
+        send(.timeToLiveExpired("battery"))
+
+        XCTAssertEqual(
+            state.presentation, .peek("home"),
+            "back to the home surface, not a stuck peek"
+        )
+        XCTAssertEqual(queue.ordered.map(\.id), ["home"])
+    }
+
+    /// The camera closes when the island stops showing it (TC-CAM-006).
+    /// Folding the preview to its peek kept the id on screen, so the device
+    /// stayed open with the light on.
+    func test_TC_ISL_018_closingTheCameraTakesItsIdOffTheIsland() {
+        submit(TestActivity("home", timeToLive: nil))
+        submit(TestActivity("camera", timeToLive: nil, endsWhenClosed: true))
+        send(.clicked)
+
+        send(.collapseRequested)
+
+        XCTAssertNotEqual(state.presentation.activityID, "camera")
+    }
+
+    func test_TC_ISL_018_aModuleOwnedActivityStillFolds() {
+        submit(TestActivity("timer", timeToLive: nil))
+        send(.clicked)
+        send(.clicked)
+
+        XCTAssertEqual(state.presentation, .peek("timer"))
+        XCTAssertEqual(queue.ordered.map(\.id), ["timer"])
+    }
+
     // MARK: - TC-ISL-017
 
     func test_TC_ISL_017_hoverToExpandOffMeansHoverDoesNotOpen() {

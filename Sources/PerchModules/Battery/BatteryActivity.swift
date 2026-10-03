@@ -78,6 +78,11 @@ struct BatteryStatusActivity: IslandActivity {
 
     let timeToLive: Duration? = nil
 
+    /// Leaving it or clicking it again closes it. Nothing else withdraws it,
+    /// and folded to its peek it sat on the island until relaunch
+    /// (TC-ISL-018).
+    let endsWhenClosed = true
+
     let power: PowerSnapshot
     let accessories: [AccessoryBattery]
 }

@@ -21,6 +21,10 @@ struct CameraActivity: IslandActivity {
 
     let timeToLive: Duration? = nil
 
+    /// Closing the island takes the preview off it, which is what releases
+    /// the device. A preview folded to its peek kept the light on (TC-ISL-018).
+    let endsWhenClosed = true
+
     let presentation: CameraPresentation
 
     /// The device being shown, for the label and for the picker.

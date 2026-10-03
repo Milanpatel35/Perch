@@ -10,19 +10,22 @@ struct TestActivity: IslandActivity {
     let priority: ActivityPriority
     let timeToLive: Duration?
     let isExpandable: Bool
+    let endsWhenClosed: Bool
 
     init(
         _ id: String,
         source: ModuleID = .nowPlaying,
         priority: ActivityPriority = .ambient,
         timeToLive: Duration? = .seconds(3),
-        isExpandable: Bool = true
+        isExpandable: Bool = true,
+        endsWhenClosed: Bool? = nil
     ) {
         self.id = ActivityID(id)
         self.source = source
         self.priority = priority
         self.timeToLive = timeToLive
         self.isExpandable = isExpandable
+        self.endsWhenClosed = endsWhenClosed ?? (timeToLive != nil)
     }
 }
 

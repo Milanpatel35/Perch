@@ -282,21 +282,25 @@ private struct CalendarPanel: View {
 
 extension MeetingStartingActivity: IslandActivityPresenting {
 
-    var peekSize: CGSize { CGSize(width: 320, height: 36) }
+    var peekSize: CGSize { CGSize(width: 360, height: 36) }
     var expandedSize: CGSize { CGSize(width: 360, height: 130) }
 
+    /// "Starting now" beside the notch, and the title when it opens. A
+    /// title does not fit in the width either side of the cutout, and
+    /// centred it sat under the camera, where nobody could read it.
     func peekView() -> AnyView {
         AnyView(
-            HStack(spacing: 8) {
+            NotchFlanks {
                 Image(systemName: "video.badge.waveform")
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(.green)
-                Text(event.title)
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .lineLimit(1)
+            } trailing: {
+                Text("Starting now")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(.green)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text("\(event.title) is starting now"))
         )
     }
 

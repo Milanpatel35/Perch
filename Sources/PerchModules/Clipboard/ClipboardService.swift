@@ -29,6 +29,7 @@ final class ClipboardService: ObservableObject, PerchModule {
     /// Whether the picker is open. It takes the keyboard, so the panel has to
     /// know (see `IslandPanel.allowsKeyFocus`).
     @Published private(set) var isPickerOpen = false
+    private var pickerObservation: AnyCancellable?
 
     private(set) var isActive = false
 
@@ -271,11 +272,24 @@ final class ClipboardService: ObservableObject, PerchModule {
         // Perch that asks the panel for the keyboard.
         island.setRequiresKeyFocus(true)
         island.submit(ClipboardPickerActivity(entries: history.entries))
+        observePickerClosing()
+    }
+
+    /// The island closes the picker itself when somebody clicks it shut or
+    /// moves away (TC-ISL-018). The keyboard has to go back to the app in
+    /// front when that happens, not on the next shortcut press.
+    private func observePickerClosing() {
+        pickerObservation = island.$queued
+            .map { $0.contains { $0.id == ClipboardPickerActivity.identifier } }
+            .removeDuplicates()
+            .filter { !$0 }
+            .sink { [weak self] _ in self?.closePicker() }
     }
 
     func closePicker() {
         guard isPickerOpen else { return }
         isPickerOpen = false
+        pickerObservation = nil
         island.setRequiresKeyFocus(false)
         island.withdraw(ClipboardPickerActivity.identifier)
     }
