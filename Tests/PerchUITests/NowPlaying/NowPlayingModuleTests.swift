@@ -29,6 +29,25 @@ final class NowPlayingModuleTests: XCTestCase {
         )
     }
 
+    /// Waits for the service's coalesced read to land.
+    ///
+    /// **Synchronous on purpose.** These tests were `async` and awaited the
+    /// read directly, and about one CI run in four the test process died
+    /// with `abort()` in `swift_task_dealloc_specific`, under XCTest's own
+    /// async-test harness on the main actor (#57) — a runtime fault, not a
+    /// failed assertion, and never once reproduced locally in 2,500 runs.
+    /// Awaiting inside a spawned task and blocking on an expectation keeps
+    /// the test method off that path entirely; the main run loop still
+    /// turns while `wait` blocks, so the main-actor read completes as before.
+    private func waitForRefresh(_ service: NowPlayingService) {
+        let done = expectation(description: "the read landed")
+        Task {
+            await service.awaitPendingRefresh()
+            done.fulfill()
+        }
+        wait(for: [done], timeout: 5)
+    }
+
     // MARK: - TC-MED-003
 
     func test_TC_MED_003_everyTrackSharesOneActivityIdentity() {
@@ -117,47 +136,47 @@ final class NowPlayingModuleTests: XCTestCase {
     }
 
     /// The module's whole job, end to end, with a source it can be given.
-    func test_TC_MED_001_playbackStartingPutsTheTrackOnTheIsland() async {
+    func test_TC_MED_001_playbackStartingPutsTheTrackOnTheIsland() {
         let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
         let source = FakeNowPlayingSource()
         let service = NowPlayingService(island: island, source: source)
 
         source.snapshot = snapshot(title: "So What")
         service.activate()
-        await service.awaitPendingRefresh()
+        waitForRefresh(service)
 
         XCTAssertEqual(service.snapshot?.title, "So What")
         XCTAssertEqual(island.presented?.id, NowPlayingActivity.identifier)
     }
 
-    func test_TC_MED_003_aTrackChangeUpdatesInPlaceRatherThanQueueingASecond() async {
+    func test_TC_MED_003_aTrackChangeUpdatesInPlaceRatherThanQueueingASecond() {
         let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
         let source = FakeNowPlayingSource()
         let service = NowPlayingService(island: island, source: source)
 
         source.snapshot = snapshot(title: "So What")
         service.activate()
-        await service.awaitPendingRefresh()
+        waitForRefresh(service)
 
         source.emitChange(snapshot(title: "Blue in Green"))
-        await service.awaitPendingRefresh()
+        waitForRefresh(service)
 
         XCTAssertEqual(service.snapshot?.title, "Blue in Green")
         XCTAssertEqual(island.queued.filter { $0.source == .nowPlaying }.count, 1)
     }
 
-    func test_playbackStoppingTakesTheIslandBack() async {
+    func test_playbackStoppingTakesTheIslandBack() {
         let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
         let source = FakeNowPlayingSource()
         let service = NowPlayingService(island: island, source: source)
 
         source.snapshot = snapshot()
         service.activate()
-        await service.awaitPendingRefresh()
+        waitForRefresh(service)
         XCTAssertNotNil(island.presented)
 
         source.emitChange(nil)
-        await service.awaitPendingRefresh()
+        waitForRefresh(service)
 
         XCTAssertNil(service.snapshot)
         XCTAssertTrue(island.state.presentation.isIdle)
