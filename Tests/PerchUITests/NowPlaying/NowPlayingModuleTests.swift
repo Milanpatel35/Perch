@@ -1,3 +1,4 @@
+import Defaults
 import PerchCore
 import XCTest
 
@@ -10,6 +11,28 @@ import XCTest
 final class NowPlayingModuleTests: XCTestCase {
 
     private let epoch = Date(timeIntervalSinceReferenceDate: 1_000_000)
+
+    private var savedSneakPeek = true
+
+    /// Sneak peek off for every test here, and that is the fix for #57.
+    ///
+    /// With it on, the first track gives its activity a two-second time to
+    /// live, and the island schedules a collapse as a `Task`. A test that
+    /// then withdrew the track — `test_playbackStoppingTakesTheIslandBack`,
+    /// and only that one — cancelled that task *inside* the test method,
+    /// and about one CI run in four the Swift runtime aborted in
+    /// `swift_task_dealloc_specific` beneath XCTest's harness. Never
+    /// reproduced locally. With no time to live, no collapse task exists,
+    /// so there is nothing to cancel; the peek behaviour itself is covered
+    /// by `test_TC_MED_003_onlyASneakPeekExpires` without a service.
+    override func setUp() async throws {
+        savedSneakPeek = Defaults[.nowPlayingSneakPeek]
+        Defaults[.nowPlayingSneakPeek] = false
+    }
+
+    override func tearDown() async throws {
+        Defaults[.nowPlayingSneakPeek] = savedSneakPeek
+    }
 
     private func snapshot(
         title: String = "So What",
@@ -29,16 +52,8 @@ final class NowPlayingModuleTests: XCTestCase {
         )
     }
 
-    /// Waits for the service's coalesced read to land.
-    ///
-    /// **Synchronous on purpose.** These tests were `async` and awaited the
-    /// read directly, and about one CI run in four the test process died
-    /// with `abort()` in `swift_task_dealloc_specific`, under XCTest's own
-    /// async-test harness on the main actor (#57) — a runtime fault, not a
-    /// failed assertion, and never once reproduced locally in 2,500 runs.
-    /// Awaiting inside a spawned task and blocking on an expectation keeps
-    /// the test method off that path entirely; the main run loop still
-    /// turns while `wait` blocks, so the main-actor read completes as before.
+    /// Waits for the service's coalesced read to land. The main run loop
+    /// keeps turning while `wait` blocks, so the main-actor read completes.
     private func waitForRefresh(_ service: NowPlayingService) {
         let done = expectation(description: "the read landed")
         Task {
@@ -147,6 +162,7 @@ final class NowPlayingModuleTests: XCTestCase {
 
         XCTAssertEqual(service.snapshot?.title, "So What")
         XCTAssertEqual(island.presented?.id, NowPlayingActivity.identifier)
+        service.deactivate()
     }
 
     func test_TC_MED_003_aTrackChangeUpdatesInPlaceRatherThanQueueingASecond() {
@@ -163,6 +179,7 @@ final class NowPlayingModuleTests: XCTestCase {
 
         XCTAssertEqual(service.snapshot?.title, "Blue in Green")
         XCTAssertEqual(island.queued.filter { $0.source == .nowPlaying }.count, 1)
+        service.deactivate()
     }
 
     func test_playbackStoppingTakesTheIslandBack() {
@@ -180,6 +197,7 @@ final class NowPlayingModuleTests: XCTestCase {
 
         XCTAssertNil(service.snapshot)
         XCTAssertTrue(island.state.presentation.isIdle)
+        service.deactivate()
     }
 
     func test_transportButtonsReachTheSource() {
