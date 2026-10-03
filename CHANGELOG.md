@@ -10,6 +10,43 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 Nothing yet. Next up is the rest of Phase 2.6 — weather and windows.
 
+## [0.10.0] — 2026-10-03
+
+A first run, open at login, and the fixes from using the app on a real
+notched MacBook — one of which left the camera on.
+
+### Added
+
+- **A welcome on first launch.** Three short screens: how to use the
+  island, a choice of four starting points — Music, Work, Everything, or
+  Just hide the notch — and whether Perch opens at login. Each choice says
+  which permissions it may ask for before you pick it. Nothing is asked for
+  by the welcome itself.
+- **Open at login**, in the welcome and in Settings ▸ General. If Perch is
+  running straight from Downloads, the switch explains that it needs to be
+  in Applications first, rather than switching on and silently not working
+  after a restart.
+
+### Fixed
+
+- **Closing the camera preview left the camera on.** A second click on the
+  open preview folded it to its small view instead of closing it, and the
+  device stayed open with the green light on. Closing it now closes the
+  camera, as the website promises.
+- **The battery list and the clipboard picker never went away.** Opened
+  from the home surface or a shortcut, they stayed on the island as a wide
+  black shape until Perch was relaunched, and the clipboard picker kept the
+  keyboard. Moving away or clicking again now closes them.
+- **Four alerts were written under the camera.** "Starting now" for a
+  meeting, the system monitor's warnings, and the battery and clipboard
+  labels were centred on the notch, where the camera housing hides them.
+  They now sit beside it.
+- **The volume and brightness icons were cut off.** The HUD was too narrow
+  for the notch, so only the level bar showed. It is wider, and the bar now
+  fits the space beside whatever notch the Mac has.
+- **The home surface had a band of empty black** under one or two module
+  rows. It now sizes to the rows it is showing.
+
 ## [0.9.0] — 2026-09-29
 
 A release of fixes, not features. Every one below was found by using the

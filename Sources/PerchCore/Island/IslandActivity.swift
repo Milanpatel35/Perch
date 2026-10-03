@@ -32,11 +32,24 @@ public protocol IslandActivity: Sendable, Identifiable where ID == ActivityID {
 
     /// Whether hovering should expand this beyond its peek presentation.
     var isExpandable: Bool { get }
+
+    /// Whether closing it throws it away rather than folding it to its peek.
+    ///
+    /// True for anything with a time to live, and for a panel somebody
+    /// opened on purpose — the battery list, the clipboard picker, the
+    /// camera. Those have no clock, because they stay while they are read,
+    /// but nothing else will ever withdraw them: folded to a peek, they sat
+    /// on the island until relaunch, and the camera kept its light on.
+    ///
+    /// False for what a module owns — the home surface, the music, a
+    /// running timer. Closing one of those folds it back (TC-ISL-016).
+    var endsWhenClosed: Bool { get }
 }
 
 public extension IslandActivity {
     var isExpandable: Bool { true }
     var timeToLive: Duration? { .seconds(3) }
+    var endsWhenClosed: Bool { timeToLive != nil }
 }
 
 /// Identity for an activity. Modules mint these; the queue only compares them.

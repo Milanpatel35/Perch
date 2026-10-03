@@ -59,6 +59,7 @@ Levels:
 | TC-ISL-015 | U | Runtime applies the reducer's effects | Exactly one collapse is ever pending; a new activity replaces it rather than adding a second |
 | TC-ISL-016 | U | Closing something that owns its lifetime — a second click on the home surface, a module asking to collapse | It folds back to its peek and stays queued; only an activity with a time to live is thrown away. Hover still opens it afterwards |
 | TC-ISL-017 | U | "Expand on hover" or "Click to keep open" switched off | Hover holds a peek but does not open it; a click opens and a second click closes without pinning, and leaving closes it |
+| TC-ISL-018 | U | Closing a panel somebody opened — the battery list from its tile, the clipboard picker, the camera preview — by a second click, by moving away, or by a module asking to collapse | It is withdrawn and the island returns to what was under it; it never folds to a peek that nothing will withdraw. The camera's id leaves the island, which is what releases the device (TC-CAM-006) |
 
 ## MED — Now Playing
 
@@ -301,6 +302,17 @@ optional and they do not get skipped when the suite is slow.
 | TC-HID-006 | U | "Invisible until something happens" | Idle and collapsed-home island draw nothing; every activity, and the home island hovered open, still draws |
 | TC-HID-007 | U | Module disabled, or on with blackout off | No strip window, no screen observer, no wallpaper watch; island visibility restored |
 
+## ONB — first run
+
+| ID | Level | Case | Expected |
+|---|---|---|---|
+| TC-ONB-001 | U | Every preset, against the modules this build has | Switches on only built modules, and at least one |
+| TC-ONB-002 | U | Hide-the-notch in presets | Only "Just hide the notch" includes it; "Everything" does not repaint the menu bar |
+| TC-ONB-003 | U | What each preset may ask for | Music and Just hide the notch ask for nothing; Work lists Calendar and Accessibility; the default modules ask for nothing (TC-PRV-002) |
+| TC-ONB-004 | U | Perch run straight from Downloads (App Translocation) | Open at login is unavailable and says to move Perch to Applications; `/Applications` and `~/Applications` are recognised |
+| TC-ONB-005 | E | Fresh install | The welcome shows once; closing it early counts as seen; skipping the presets leaves the defaults; no permission prompt until a preset that needs one is applied |
+| TC-ONB-006 | E | Welcome open while another app stays in front | Preset cards and buttons respond to the first click — the window may never become key |
+
 ## PRF — performance and resources
 
 | ID | Level | Case | Expected |
@@ -366,6 +378,8 @@ Run before tagging any release on `main`.
 - [ ] Every module toggled off, then on, then off again
 - [ ] Fresh install on a Mac that has never run Perch (permission flow)
 - [ ] Upgrade install over the previous version (settings migrate)
+- [ ] Open at login switched on from `/Applications`, Mac restarted: the
+      island is back and no window opens (TC-UPD-003)
 - [ ] `.dmg` signed, notarised, stapled; Gatekeeper opens it without a warning
 
 Added for the Camera and System stats modules — do not skip these, they are

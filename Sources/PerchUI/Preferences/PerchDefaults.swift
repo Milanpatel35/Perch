@@ -19,6 +19,11 @@ public extension Defaults.Keys {
         default: [.nowPlaying, .shelf, .clipboard, .focus, .hud, .battery]
     )
 
+    /// Whether the first run has been seen through, or closed. Shown once;
+    /// closing it early counts, because a welcome that comes back after
+    /// being dismissed is nagging.
+    static let firstRunCompleted = Key<Bool>("firstRun_completed", default: false)
+
     /// Which screen owns the island.
     static let islandScreenPolicy = Key<String>(
         "island_screenPolicy",

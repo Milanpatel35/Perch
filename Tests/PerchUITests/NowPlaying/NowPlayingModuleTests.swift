@@ -1,3 +1,4 @@
+import Defaults
 import PerchCore
 import XCTest
 
@@ -10,6 +11,28 @@ import XCTest
 final class NowPlayingModuleTests: XCTestCase {
 
     private let epoch = Date(timeIntervalSinceReferenceDate: 1_000_000)
+
+    private var savedSneakPeek = true
+
+    /// Sneak peek off for every test here, and that is the fix for #57.
+    ///
+    /// With it on, the first track gives its activity a two-second time to
+    /// live, and the island schedules a collapse as a `Task`. A test that
+    /// then withdrew the track — `test_playbackStoppingTakesTheIslandBack`,
+    /// and only that one — cancelled that task *inside* the test method,
+    /// and about one CI run in four the Swift runtime aborted in
+    /// `swift_task_dealloc_specific` beneath XCTest's harness. Never
+    /// reproduced locally. With no time to live, no collapse task exists,
+    /// so there is nothing to cancel; the peek behaviour itself is covered
+    /// by `test_TC_MED_003_onlyASneakPeekExpires` without a service.
+    override func setUp() async throws {
+        savedSneakPeek = Defaults[.nowPlayingSneakPeek]
+        Defaults[.nowPlayingSneakPeek] = false
+    }
+
+    override func tearDown() async throws {
+        Defaults[.nowPlayingSneakPeek] = savedSneakPeek
+    }
 
     private func snapshot(
         title: String = "So What",
@@ -27,6 +50,17 @@ final class NowPlayingModuleTests: XCTestCase {
             ),
             sourceBundleID: "com.apple.Music"
         )
+    }
+
+    /// Waits for the service's coalesced read to land. The main run loop
+    /// keeps turning while `wait` blocks, so the main-actor read completes.
+    private func waitForRefresh(_ service: NowPlayingService) {
+        let done = expectation(description: "the read landed")
+        Task {
+            await service.awaitPendingRefresh()
+            done.fulfill()
+        }
+        wait(for: [done], timeout: 5)
     }
 
     // MARK: - TC-MED-003
@@ -117,50 +151,53 @@ final class NowPlayingModuleTests: XCTestCase {
     }
 
     /// The module's whole job, end to end, with a source it can be given.
-    func test_TC_MED_001_playbackStartingPutsTheTrackOnTheIsland() async {
+    func test_TC_MED_001_playbackStartingPutsTheTrackOnTheIsland() {
         let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
         let source = FakeNowPlayingSource()
         let service = NowPlayingService(island: island, source: source)
 
         source.snapshot = snapshot(title: "So What")
         service.activate()
-        await service.awaitPendingRefresh()
+        waitForRefresh(service)
 
         XCTAssertEqual(service.snapshot?.title, "So What")
         XCTAssertEqual(island.presented?.id, NowPlayingActivity.identifier)
+        service.deactivate()
     }
 
-    func test_TC_MED_003_aTrackChangeUpdatesInPlaceRatherThanQueueingASecond() async {
+    func test_TC_MED_003_aTrackChangeUpdatesInPlaceRatherThanQueueingASecond() {
         let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
         let source = FakeNowPlayingSource()
         let service = NowPlayingService(island: island, source: source)
 
         source.snapshot = snapshot(title: "So What")
         service.activate()
-        await service.awaitPendingRefresh()
+        waitForRefresh(service)
 
         source.emitChange(snapshot(title: "Blue in Green"))
-        await service.awaitPendingRefresh()
+        waitForRefresh(service)
 
         XCTAssertEqual(service.snapshot?.title, "Blue in Green")
         XCTAssertEqual(island.queued.filter { $0.source == .nowPlaying }.count, 1)
+        service.deactivate()
     }
 
-    func test_playbackStoppingTakesTheIslandBack() async {
+    func test_playbackStoppingTakesTheIslandBack() {
         let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
         let source = FakeNowPlayingSource()
         let service = NowPlayingService(island: island, source: source)
 
         source.snapshot = snapshot()
         service.activate()
-        await service.awaitPendingRefresh()
+        waitForRefresh(service)
         XCTAssertNotNil(island.presented)
 
         source.emitChange(nil)
-        await service.awaitPendingRefresh()
+        waitForRefresh(service)
 
         XCTAssertNil(service.snapshot)
         XCTAssertTrue(island.state.presentation.isIdle)
+        service.deactivate()
     }
 
     func test_transportButtonsReachTheSource() {

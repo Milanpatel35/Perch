@@ -29,16 +29,29 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         modules: modules
     )
 
+    private let launchAtLogin = LaunchAtLogin()
+
     private var menuBar: MenuBarController?
     private var islandPreferences: IslandPreferences?
 
     private(set) lazy var settings = SettingsWindowController { [unowned self] in
         PreferencesView(
             switchboard: switchboard,
+            launchAtLogin: launchAtLogin,
             paneProvider: { [unowned self] module in
                 PerchModuleRegistry.settingsPane(for: module, in: modules)
             },
             isBuilt: { [unowned self] module in modules.module(for: module) != nil }
+        )
+    }
+
+    private lazy var firstRun = FirstRunWindowController { [unowned self] done in
+        FirstRunView(
+            switchboard: switchboard,
+            launchAtLogin: launchAtLogin,
+            built: Set(ModuleID.allCases.filter { modules.module(for: $0) != nil }),
+            onOpenSettings: { [unowned self] in settings.show() },
+            onDone: done
         )
     }
 
@@ -70,6 +83,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         PerchModuleRegistry.registerAll(in: modules, island: island)
 
         menuBar = MenuBarController(island: island, settings: settings)
+
+        // After the modules, so the presets know which ones are built.
+        firstRun.showIfNeeded()
     }
 
     func applicationWillTerminate(_ notification: Notification) {
