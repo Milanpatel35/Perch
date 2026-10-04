@@ -50,7 +50,7 @@ notch it draws a floating island instead.
 
 ### Option 1: download the app
 
-<a href="https://github.com/Milanpatel35/Perch/releases/download/build-0.13.0/Perch-0.13.0-unsigned.zip"><img src="https://img.shields.io/badge/Download%20for%20macOS-Perch%200.13.0-black?style=for-the-badge&logo=apple" alt="Download Perch 0.13.0 for macOS" height="44"></a>
+<a href="https://github.com/Milanpatel35/Perch/releases/download/build-0.14.0/Perch-0.14.0-unsigned.zip"><img src="https://img.shields.io/badge/Download%20for%20macOS-Perch%200.14.0-black?style=for-the-badge&logo=apple" alt="Download Perch 0.14.0 for macOS" height="44"></a>
 
 1. Unzip it and **drag Perch into Applications.** Run straight from
    Downloads, macOS starts a temporary copy and Perch cannot open at login.
@@ -118,7 +118,7 @@ on <http://localhost:8000>.
 | **Menu bar icon → Settings…** | Switch modules on and off, one by one |
 
 <p align="center">
-  <img src="Website/assets/img/shots/island-home-rows.png" alt="The Perch home surface with the capture buttons Area, Window, Screen, Text and Pin" width="452">
+  <img src="Website/assets/img/shots/island-home-rows.png" alt="The Perch home surface with two rows: Area, Window, Screen, Text and Pin; then Colour, Measure and Scan" width="452">
   <br><sub>The home surface — what hovering the notch shows, with a row for each module that has one.</sub>
 </p>
 
@@ -158,7 +158,7 @@ screenshots` — not a mockup.
 | **Camera** | Live preview under the notch; opens itself before a meeting; pin it while presenting | ✅ Live |
 | **System stats** | CPU, GPU, memory, disk, network and fans — with alert thresholds | ✅ Live |
 | **Shortcuts** | Favourite Shortcuts as island buttons; Perch actions in the Shortcuts app; `perch://` and a `perch notify` CLI | ✅ Live |
-| **Screenshots** | An area, a window or the screen, into the shelf. Copy the text in an area on-device, or pin one above everything | ✅ Live |
+| **Screenshots** | An area, a window or the screen, into the shelf. Copy the text in an area on-device, pin one above everything — and pick a colour, measure an area or scan a QR code | ✅ Live |
 | **Hide the notch** | Black out the menu bar — or fill it from your wallpaper — per display, plus an island that stays invisible until something happens | ✅ Live |
 | **No-notch mode** | A floating island for Mac mini, Studio, iMac and external displays | ✅ Live |
 | **Weather** | Conditions and hourly forecast, off by default | 🔜 Coming soon |

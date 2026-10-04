@@ -95,7 +95,16 @@ final class IslandSnapshots: XCTestCase {
             ("now-playing", NowPlayingActivity(snapshot: .demo)),
             ("shelf", ShelfActivity(items: .demo)),
             ("volume", HUDActivity(reading: .demo)),
-            ("screenshot-text", ScreenshotActivity(outcome: .copiedText(characters: 1_204)))
+            ("screenshot-text", ScreenshotActivity(outcome: .copiedText(characters: 1_204))),
+            (
+                "screenshot-colour",
+                ScreenshotActivity(
+                    outcome: .copiedColor(
+                        text: "#1B3A6B",
+                        color: SampledColor(red: 27 / 255, green: 58 / 255, blue: 107 / 255)
+                    )
+                )
+            )
         ]
 
         for shot in shots {

@@ -8,7 +8,22 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Nothing yet. Next up: the capture extras — colour, measure, QR and GIF.
+Nothing yet. Next up: recording an area as a GIF.
+
+## [0.14.0] — 2026-10-04
+
+Colour, measure and scan, from the notch.
+
+### Added
+
+- **A tools row on the island**, under the screenshot buttons:
+  - **Colour** — the system's colour loupe; the colour is copied as HEX,
+    RGB or HSL (Settings ▸ Screenshots), with a swatch beside the notch. It
+    needs no Screen Recording permission.
+  - **Measure** — drag out an area and its size is copied in points, the
+    same on a Retina screen and an external one.
+  - **Scan** — read a QR code or barcode in an area, on this Mac. A web
+    address opens; anything else is copied and never opened.
 
 ## [0.13.0] — 2026-10-04
 
