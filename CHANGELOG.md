@@ -8,6 +8,10 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
+Nothing yet. Next up: recording an area as a GIF.
+
+## [0.14.1] — 2026-10-04
+
 ### Fixed
 
 - **Clicks near the notch did nothing.** Perch's window covered a 568 × 304
