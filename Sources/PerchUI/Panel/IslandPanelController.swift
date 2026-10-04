@@ -40,6 +40,10 @@ public final class IslandPanelController {
     /// when nothing about the geometry actually changed.
     private var layout: IslandLayout?
 
+    /// The one pending shrink. Replaced, never stacked, whenever the island
+    /// changes size again before the last transition has settled.
+    private var shrinkTask: Task<Void, Never>?
+
     /// Called every time the island is placed or re-placed, including the
     /// first time. The app uses it to keep the home activity's collapsed size
     /// in step with whatever screen the island is on — a 14" notch and a 16"
@@ -68,6 +72,8 @@ public final class IslandPanelController {
     /// Tears the panel down completely. Called on quit, so no orphan window
     /// outlives the app (TC-UPD-004).
     public func teardown() {
+        shrinkTask?.cancel()
+        shrinkTask = nil
         cancellables.removeAll()
         panel?.orderOut(nil)
         panel?.contentView = nil
@@ -98,7 +104,10 @@ public final class IslandPanelController {
         if next == layout, let panel, panel.isVisible { return }
         layout = next
 
-        let frame = CGRect.fromDisplaySpace(next.panelFrame)
+        shrinkTask?.cancel()
+        shrinkTask = nil
+        let frame = CGRect.fromDisplaySpace(
+            next.windowFrame(islandSize: currentIslandSize(in: next)))
         let panel = panel ?? makePanel(frame: frame, layout: next)
         panel.setFrame(frame, display: true)
 
@@ -175,7 +184,65 @@ public final class IslandPanelController {
             .store(in: &cancellables)
     }
 
+    // MARK: - The window around the island
+
+    private func currentIslandSize(in layout: IslandLayout) -> CGSize {
+        IslandSizing.islandSize(
+            for: controller.state.presentation,
+            presented: controller.presented,
+            modules: modules,
+            layout: layout
+        )
+    }
+
+    /// Fits the window to the island, so clicks beside it reach the app
+    /// underneath (TC-GEO-013, TC-ISL-020).
+    ///
+    /// Grows at once — before the island's animation draws its first frame,
+    /// so nothing is clipped on the way out. Shrinks only once the
+    /// transition has settled, so a collapse is never cut off on the way in
+    /// (TC-ISL-019). Twice per transition, never per frame: the animation
+    /// itself still runs inside a window that is standing still.
+    private func fitWindowToIsland() {
+        guard let panel, let layout else { return }
+
+        let target = CGRect.fromDisplaySpace(
+            layout.windowFrame(islandSize: currentIslandSize(in: layout)))
+        let current = panel.frame
+
+        shrinkTask?.cancel()
+        shrinkTask = nil
+
+        let covering = current.union(target)
+        if covering != current {
+            panel.setFrame(covering, display: false)
+        }
+        guard covering != target else { return }
+
+        let settle = IslandMotion.settleTime(
+            controller.transition, reduceMotion: motion.reduceMotion)
+        shrinkTask = Task { [weak self] in
+            try? await Task.sleep(for: settle)
+            guard !Task.isCancelled, let self, let panel = self.panel else { return }
+            panel.setFrame(target, display: false)
+            self.shrinkTask = nil
+        }
+    }
+
     private func observeMouseEvents() {
+        // Whatever changes the island's size — a new presentation, a new
+        // activity, a module row appearing on the home surface — refits the
+        // window. Deferred one turn so the island has published its new
+        // state before it is measured.
+        Publishers.Merge3(
+            controller.$state.map { _ in () },
+            controller.$presented.map { _ in () },
+            modules.objectWillChange.map { _ in () }
+        )
+        .receive(on: RunLoop.main)
+        .sink { [weak self] in self?.fitWindowToIsland() }
+        .store(in: &cancellables)
+
         controller.$acceptsMouseEvents
             .removeDuplicates()
             .sink { [weak self] enabled in

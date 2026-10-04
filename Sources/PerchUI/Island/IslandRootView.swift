@@ -150,24 +150,13 @@ public struct IslandRootView: View {
         return false
     }
 
-    /// The home surface sizes to the module rows it is about to draw; every
-    /// other activity knows its own size.
-    private var expandedSize: CGSize {
-        if controller.presented?.id == HomeActivity.identifier {
-            return HomeActivity.expandedSize(rows: modules.homeTiles().count)
-        }
-        return presenting?.expandedSize ?? layout.metrics.collapsedSize
-    }
-
     private var size: CGSize {
-        let requested: CGSize =
-            switch controller.state.presentation {
-            case .idle: layout.metrics.collapsedSize
-            case .peek: presenting?.peekSize ?? layout.metrics.collapsedSize
-            case .expanded: expandedSize
-            }
-
-        return layout.islandFrame(contentSize: requested).size
+        IslandSizing.islandSize(
+            for: controller.state.presentation,
+            presented: controller.presented,
+            modules: modules,
+            layout: layout
+        )
     }
 
     /// No shadow while idle. On a notched Mac the island *is* the cutout when
