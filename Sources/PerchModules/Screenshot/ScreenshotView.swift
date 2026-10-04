@@ -83,7 +83,7 @@ struct ScreenshotTile: View {
     @ObservedObject var service: ScreenshotService
 
     var body: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 5) {
             Image(systemName: "camera.viewfinder")
                 .font(.system(size: 11))
                 .foregroundStyle(.white.opacity(0.55))
@@ -107,14 +107,20 @@ struct ScreenshotTile: View {
         Button {
             service.perform(action)
         } label: {
-            Label(title, systemImage: symbol)
-                .labelStyle(.titleAndIcon)
-                .font(.system(size: 11, weight: .medium))
-                .lineLimit(1)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 3)
-                .background(Capsule().fill(.white.opacity(0.14)))
-                .foregroundStyle(.white)
+            // Five buttons share one row of the home surface. A `Label`
+            // spaces its icon too generously for that, and "Window" and
+            // "Screen" were cut to "Wind…" and "Scre…".
+            HStack(spacing: 3) {
+                Image(systemName: symbol)
+                Text(title)
+            }
+            .font(.system(size: 11, weight: .medium))
+            .lineLimit(1)
+            .fixedSize()
+            .padding(.horizontal, 7)
+            .padding(.vertical, 3)
+            .background(Capsule().fill(.white.opacity(0.14)))
+            .foregroundStyle(.white)
         }
         .buttonStyle(.plain)
         .disabled(service.isCapturing)
