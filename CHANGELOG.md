@@ -8,7 +8,15 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Nothing yet. Next up is the rest of Phase 2.6 — weather and windows.
+### Added
+
+- **Keep distractions out of the way during a focus session.** List apps
+  and sites in Settings ▸ Focus. While a focus session is counting down, a
+  listed app that comes to the front is hidden, and a listed site in the
+  front tab of Safari, Chrome, Edge, Brave, Vivaldi or Opera goes blank. A
+  short note on the island says what was kept away. Never on a break or
+  while paused. Apps are hidden, never quit; Firefox and Arc are not
+  supported, because they do not let any app read their tabs.
 
 ## [0.11.1] — 2026-10-04
 

@@ -147,6 +147,15 @@ rather than the converter.
 | TC-FOC-007 | U | Perch relaunched with a session that was running | Not resumed silently — the timer is started on purpose |
 | TC-FOC-008 | U | Wall clock jumps backwards | No early finish, and the countdown never shows more than a whole phase |
 | TC-FOC-009 | U | Phase ends while asleep **and** the scheduled wake-up fires | Reported exactly once, not twice |
+| TC-FOC-010 | U | A site typed any way — `Reddit.com/`, `https://www.reddit.com/r/all`, `user@reddit.com:443` | Stored as `reddit.com`; garbage and bare words rejected |
+| TC-FOC-011 | U | Site matching | `reddit.com` blocks `old.reddit.com`, never `notreddit.com` or `reddit.com.example.org`; only http and https |
+| TC-FOC-012 | U | App blocking | A listed app is blocked; a browser never is, even when listed — its tabs are the site rule's job; Perch never hides itself |
+| TC-FOC-013 | U | When blocking runs | Only during a running **work** phase with something to block: not paused, not on a break, not idle, not with the module off |
+| TC-FOC-014 | U | Blocklist on, nothing in front | Switching on starts nothing: no observer, no tab check, no Automation prompt — until a session starts |
+| TC-FOC-015 | U | A listed app comes to the front mid-session | Hidden, once; counted; a short note on the island names it |
+| TC-FOC-016 | U | Tab checks | Run only while a scriptable browser is frontmost during a session; a blocked tab goes to `about:blank`; stop the moment the browser leaves the front |
+| TC-FOC-017 | U | The browser scripts | App names come from a fixed table, the destination is a constant; nothing a page or the user typed is put into a script |
+| TC-FOC-018 | E | First blocked tab in a browser | macOS asks for Automation once, naming the browser; refusing it leaves app blocking working |
 
 ## BAT — battery and accessories
 
@@ -479,6 +488,21 @@ these are about what reaches the screen and the disk:
       takes the first click (TC-SCR-010)
 - [ ] Second display: screen captures the display the pointer is on; area
       and window work across both (TC-SCR-012)
+
+Added for distraction blocking. The browsers each need their own
+Automation consent, so most of this is only checkable on a real Mac:
+
+- [ ] Block Discord and reddit.com, start a session: bringing Discord
+      forward hides it, and a reddit tab in Safari and in Chrome goes blank
+      within a few seconds (TC-FOC-015, TC-FOC-016)
+- [ ] Pause, take a break and stop: nothing is hidden or blanked in any of
+      them (TC-FOC-013)
+- [ ] Activity Monitor during a session with Finder in front: Perch idle —
+      the tab check only runs with a browser frontmost (TC-FOC-016)
+- [ ] Refuse Automation for Chrome: apps still hide, Safari still blanks,
+      and the settings pane says Chrome was refused (TC-FOC-018)
+- [ ] Firefox and Arc in front during a session: nothing happens, and the
+      pane names both as not supported
 
 Added for the Focus module:
 

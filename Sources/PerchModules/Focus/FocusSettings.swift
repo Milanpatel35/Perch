@@ -24,6 +24,9 @@ struct FocusSettingsView: View {
     let streakDays: Int
     let onChange: (PomodoroTimer.Configuration) -> Void
 
+    /// For the blocklist sections, which observe it directly.
+    let service: FocusService
+
     private static let workChoices = [15, 20, 25, 30, 45, 50, 60]
     private static let shortBreakChoices = [3, 5, 10, 15]
     private static let longBreakChoices = [10, 15, 20, 30]
@@ -67,6 +70,8 @@ struct FocusSettingsView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+
+            FocusBlocklistSettings(service: service)
 
             Section("Shortcut") {
                 KeyboardShortcuts.Recorder("Start or pause", name: .focusTimer)
