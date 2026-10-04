@@ -50,7 +50,7 @@ notch it draws a floating island instead.
 
 ### Option 1: download the app
 
-<a href="https://github.com/Milanpatel35/Perch/releases/download/build-0.15.0/Perch-0.15.0-unsigned.zip"><img src="https://img.shields.io/badge/Download%20for%20macOS-Perch%200.15.0-black?style=for-the-badge&logo=apple" alt="Download Perch 0.15.0 for macOS" height="44"></a>
+<a href="https://github.com/Milanpatel35/Perch/releases/download/build-0.15.1/Perch-0.15.1-unsigned.zip"><img src="https://img.shields.io/badge/Download%20for%20macOS-Perch%200.15.1-black?style=for-the-badge&logo=apple" alt="Download Perch 0.15.1 for macOS" height="44"></a>
 
 1. Unzip it and **drag Perch into Applications.** Run straight from
    Downloads, macOS starts a temporary copy and Perch cannot open at login.
