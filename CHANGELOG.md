@@ -8,6 +8,12 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
+Nothing yet. Next up: the capture extras — colour, measure, QR and GIF.
+
+## [0.13.0] — 2026-10-04
+
+Perch can update itself.
+
 ### Added
 
 - **Check for updates from Perch.** Settings ▸ About shows whether Perch is
