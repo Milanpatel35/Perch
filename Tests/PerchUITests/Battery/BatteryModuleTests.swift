@@ -70,6 +70,10 @@ final class BatteryModuleTests: XCTestCase {
 
         XCTAssertNil(harness.island.presented)
         XCTAssertTrue(harness.island.state.presentation.isIdle)
+
+        // Switched off before the test ends. Left on, its observer outlived
+        // it and the next real power event crashed the test process.
+        harness.battery.deactivate()
     }
 
     /// An off module must not answer the island's request for a tile, which

@@ -10,6 +10,21 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 Nothing yet. Next up: recording an area as a GIF.
 
+## [0.14.2] — 2026-10-04
+
+### Fixed
+
+- **The island could get stuck open.** If the island closed or shrank while
+  the pointer was over it, Perch kept believing it was being hovered, and
+  every notification after that opened fully and never went away — a black
+  box over the tabs and bookmarks beside the notch. Perch now checks where
+  the pointer really is whenever the island changes, and forgets the hover
+  when the island goes idle.
+- **A rare crash when the battery changed.** The battery, power, Bluetooth,
+  brightness and notification watchers handed macOS a pointer that could
+  outlive them; an event arriving at the wrong moment crashed Perch. Each
+  now checks that what it is calling back still exists.
+
 ## [0.14.1] — 2026-10-04
 
 ### Fixed

@@ -88,6 +88,18 @@ public struct IslandLayout: Equatable, Sendable {
         )
     }
 
+    /// Where an island of `islandSize` is on screen, in screen space — so
+    /// the panel can tell whether the pointer is still over it after the
+    /// island has moved out from under a pointer that did not (TC-ISL-022).
+    public func islandScreenFrame(islandSize: CGSize) -> CGRect {
+        CGRect(
+            x: (panelFrame.midX - islandSize.width / 2).rounded(),
+            y: panelFrame.minY,
+            width: islandSize.width,
+            height: islandSize.height
+        )
+    }
+
     public func islandFrame(contentSize: CGSize) -> CGRect {
         let width = min(
             max(contentSize.width, metrics.collapsedSize.width),

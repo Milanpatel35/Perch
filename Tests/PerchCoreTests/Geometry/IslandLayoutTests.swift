@@ -140,4 +140,22 @@ final class IslandLayoutTests: XCTestCase {
         XCTAssertEqual(window.size, layout.panelFrame.size)
         XCTAssertEqual(window.origin, layout.panelFrame.origin)
     }
+
+    // MARK: - TC-ISL-022
+
+    func test_TC_ISL_022_theIslandIsWhereTheWindowDrawsIt() {
+        let screen = TestScreen.notched16
+        let layout = IslandLayout(metrics: NotchMetrics(screen: screen), screen: screen)
+        let size = CGSize(width: 380, height: 96)
+
+        let island = layout.islandScreenFrame(islandSize: size)
+        let window = layout.windowFrame(islandSize: size)
+
+        XCTAssertEqual(island.size, size)
+        XCTAssertEqual(island.midX, window.midX, accuracy: 1, "centred in its window")
+        XCTAssertEqual(island.minY, window.minY, "both flush with the top")
+        XCTAssertTrue(window.contains(island))
+        XCTAssertFalse(
+            island.contains(CGPoint(x: island.midX, y: island.maxY + 200)), "far below is outside")
+    }
 }

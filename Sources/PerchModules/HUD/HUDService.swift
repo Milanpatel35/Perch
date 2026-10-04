@@ -48,6 +48,9 @@ final class HUDService: ObservableObject, PerchModule {
     private var power: PowerSnapshot = .absent
     private var alerts = BatteryAlerts()
     private var powerSource: CFRunLoopSource?
+
+    /// The weak box the IOKit callbacks carry — see `CallbackContext`.
+    private var callbackContext: UnsafeMutableRawPointer?
     private var notificationPort: IONotificationPortRef?
     private var connectedIterator: io_iterator_t = 0
     private var disconnectedIterator: io_iterator_t = 0
@@ -162,12 +165,12 @@ final class HUDService: ObservableObject, PerchModule {
     /// is TC-BAT-001 wearing a different hat, and it is answered by the same
     /// pure type rather than by a second copy of the logic.
     private func observePower() {
-        let context = Unmanaged.passUnretained(self).toOpaque()
+        let context = CallbackContext.retain(self)
+        callbackContext = context
 
         if let source = IOPSNotificationCreateRunLoopSource(
             { context in
-                guard let context else { return }
-                let service = Unmanaged<HUDService>.fromOpaque(context).takeUnretainedValue()
+                guard let service = CallbackContext<HUDService>.target(of: context) else { return }
                 MainActor.assumeIsolated { service.powerChanged() }
             },
             context
@@ -214,6 +217,10 @@ final class HUDService: ObservableObject, PerchModule {
         }
         notificationPort = nil
 
+        // Only now: nothing can call back any more.
+        CallbackContext<HUDService>.release(callbackContext)
+        callbackContext = nil
+
         alerts.reset()
         power = .absent
     }
@@ -248,15 +255,13 @@ final class HUDService: ObservableObject, PerchModule {
 
     private static let connected: IOServiceMatchingCallback = { context, iterator in
         let names = accessoryNames(draining: iterator)
-        guard let context else { return }
-        let service = Unmanaged<HUDService>.fromOpaque(context).takeUnretainedValue()
+        guard let service = CallbackContext<HUDService>.target(of: context) else { return }
         MainActor.assumeIsolated { service.accessories(names, connected: true) }
     }
 
     private static let disconnected: IOServiceMatchingCallback = { context, iterator in
         let names = accessoryNames(draining: iterator)
-        guard let context else { return }
-        let service = Unmanaged<HUDService>.fromOpaque(context).takeUnretainedValue()
+        guard let service = CallbackContext<HUDService>.target(of: context) else { return }
         MainActor.assumeIsolated { service.accessories(names, connected: false) }
     }
 
@@ -273,7 +278,7 @@ final class HUDService: ObservableObject, PerchModule {
             type,
             matching,
             callback,
-            Unmanaged.passUnretained(self).toOpaque(),
+            callbackContext,
             &iterator
         )
         guard result == KERN_SUCCESS else { return }
