@@ -15,8 +15,11 @@ final class HomeLauncherTests: XCTestCase {
     }
 
     func test_TC_HOM_001_switchingOneOnDoesNotMoveTheOthers() {
-        let before = HomeLauncher.entries(isOn: [.clipboard, .camera].contains)
-        let after = HomeLauncher.entries(isOn: [.clipboard, .camera, .focus].contains)
+        let two: Set<ModuleID> = [.clipboard, .camera]
+        let three: Set<ModuleID> = [.clipboard, .camera, .focus]
+
+        let before = HomeLauncher.entries(isOn: two.contains)
+        let after = HomeLauncher.entries(isOn: three.contains)
 
         XCTAssertEqual(before, [.clipboard, .camera])
         XCTAssertEqual(after, [.clipboard, .focus, .camera])
