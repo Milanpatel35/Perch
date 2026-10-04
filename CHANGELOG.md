@@ -8,6 +8,10 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
+Nothing yet. Next up: recording an area as a GIF.
+
+## [0.15.0] — 2026-10-04
+
 ### Added
 
 - **Every feature is one hover away.** The home surface has a launcher row

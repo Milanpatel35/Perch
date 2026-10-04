@@ -10,8 +10,8 @@ options:
 
 settings:
   base:
-    MARKETING_VERSION: "0.14.2"
-    CURRENT_PROJECT_VERSION: "17"
+    MARKETING_VERSION: "0.15.0"
+    CURRENT_PROJECT_VERSION: "18"
     SWIFT_VERSION: "6.0"
     SWIFT_STRICT_CONCURRENCY: complete
     ARCHS: "$(ARCHS_STANDARD)"        # arm64 + x86_64, universal
