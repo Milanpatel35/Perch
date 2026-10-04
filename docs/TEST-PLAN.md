@@ -66,6 +66,16 @@ Levels:
 | TC-ISL-022 | U | The island shrinks or closes out from under a pointer that does not move | Where the island now is on screen is known, so the panel ends the hover itself — nothing is left open over the app beside the notch |
 | TC-ISL-018 | U | Closing a panel somebody opened — the battery list from its tile, the clipboard picker, the camera preview — by a second click, by moving away, or by a module asking to collapse | It is withdrawn and the island returns to what was under it; it never folds to a peek that nothing will withdraw. The camera's id leaves the island, which is what releases the device (TC-CAM-006) |
 
+## HOM — home surface
+
+| ID | Level | Case | Expected |
+|---|---|---|---|
+| TC-HOM-001 | U | Some modules on | The launcher lists only the ones that are on, in a fixed order, so switching another on never moves a button |
+| TC-HOM-002 | U | Only modules that arrive on their own are on (shelf, HUD, notifications, Now Playing, battery) | No launcher row at all |
+| TC-HOM-003 | U | Focus idle, running, paused | The button says Focus, Pause, Resume — what it will do |
+| TC-HOM-004 | U | The last launcher module is switched off | The row goes, and the island is one row shorter |
+| TC-HOM-005 | E | Hover the notch, press each launcher button and the gear | Clipboard opens the picker, Focus starts a session, Camera opens the mirror (asking for the camera only then), Calendar opens Calendar, the gear opens Settings |
+
 ## MED — Now Playing
 
 | ID | Level | Case | Expected |

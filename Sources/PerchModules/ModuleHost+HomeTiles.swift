@@ -8,7 +8,7 @@ public extension ModuleHost {
     @MainActor
     func homeTiles() -> [AnyView] {
         [
-            batteryTile(), systemStatsTile(), shortcutsTile(),
+            batteryTile(), systemStatsTile(), launcherTile(), shortcutsTile(),
             screenshotTile(), screenshotToolsTile()
         ].compactMap { $0 }
     }

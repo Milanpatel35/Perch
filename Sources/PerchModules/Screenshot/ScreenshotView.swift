@@ -132,7 +132,7 @@ struct ScreenshotTile: View {
         _ title: LocalizedStringKey,
         _ symbol: String
     ) -> some View {
-        CaptureButton(title: title, symbol: symbol, help: Self.help(for: action)) {
+        HomeRowButton(title: title, symbol: symbol, help: Self.help(for: action)) {
             service.perform(action)
         }
         .disabled(service.isCapturing)
@@ -167,20 +167,20 @@ struct ScreenshotToolsTile: View {
                 .foregroundStyle(.white.opacity(0.55))
                 .accessibilityHidden(true)
 
-            CaptureButton(
+            HomeRowButton(
                 title: "Colour", symbol: "eyedropper",
                 help: String(localized: "Copy a colour from the screen")
             ) {
                 service.pickColor()
             }
             .disabled(service.isCapturing)
-            CaptureButton(
+            HomeRowButton(
                 title: "Measure", symbol: "ruler", help: Self.help(.measure)
             ) {
                 service.perform(.measure)
             }
             .disabled(service.isCapturing)
-            CaptureButton(
+            HomeRowButton(
                 title: "Scan", symbol: "qrcode.viewfinder", help: Self.help(.scanCode)
             ) {
                 service.perform(.scanCode)
@@ -189,37 +189,6 @@ struct ScreenshotToolsTile: View {
 
             Spacer(minLength: 0)
         }
-    }
-}
-
-/// One capsule on a home-surface row.
-///
-/// Five share a row, so the icon sits close to its word: a `Label` spaced
-/// it too generously, and "Window" and "Screen" were cut to "Wind…" and
-/// "Scre…".
-private struct CaptureButton: View {
-
-    let title: LocalizedStringKey
-    let symbol: String
-    let help: String
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 3) {
-                Image(systemName: symbol)
-                Text(title)
-            }
-            .font(.system(size: 11, weight: .medium))
-            .lineLimit(1)
-            .fixedSize()
-            .padding(.horizontal, 7)
-            .padding(.vertical, 3)
-            .background(Capsule().fill(.white.opacity(0.14)))
-            .foregroundStyle(.white)
-        }
-        .buttonStyle(.plain)
-        .help(Text(help))
     }
 }
 

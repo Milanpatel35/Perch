@@ -85,6 +85,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // submits has somewhere to land. Only the ones whose switch is on
         // actually start.
         PerchModuleRegistry.registerAll(in: modules, island: island)
+        modules.openSettings = { [unowned self] in settings.show() }
 
         updater.start()
         menuBar = MenuBarController(island: island, settings: settings, updater: updater)

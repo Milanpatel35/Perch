@@ -63,6 +63,18 @@ private struct HomeSurface: View {
                 Text(Date.now, format: .dateTime.weekday(.abbreviated).day().month(.abbreviated))
                     .font(.system(size: 12))
                     .foregroundStyle(.white.opacity(0.6))
+                if let openSettings = modules.openSettings {
+                    // The way to every module that is *off*: the island can
+                    // only show buttons for the ones that are on.
+                    Button(action: openSettings) {
+                        Image(systemName: "gearshape")
+                            .font(.system(size: 12))
+                            .foregroundStyle(.white.opacity(0.6))
+                    }
+                    .buttonStyle(.plain)
+                    .help(Text("Settings — switch modules on and off"))
+                    .accessibilityLabel(Text("Settings"))
+                }
             }
 
             Divider().overlay(Color.white.opacity(0.12))

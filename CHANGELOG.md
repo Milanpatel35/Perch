@@ -10,6 +10,19 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 Nothing yet. Next up: recording an area as a GIF.
 
+## [0.15.0] — 2026-10-04
+
+### Added
+
+- **Every feature is one hover away.** The home surface has a launcher row
+  with a button for each module that is on and has something to open:
+  Clipboard opens your history, Focus starts (then pauses and resumes) a
+  session, Camera opens the mirror, Calendar opens Calendar. Before, the
+  clipboard was behind a shortcut and the camera and focus timer had no way
+  in from the island at all.
+- **A gear on the home surface** opens Settings, where every module —
+  including the ones that are off — can be switched on.
+
 ## [0.14.2] — 2026-10-04
 
 ### Fixed
