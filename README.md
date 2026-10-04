@@ -76,6 +76,15 @@ Or, on any version, from Terminal:
 xattr -dr com.apple.quarantine /Applications/Perch.app
 ```
 
+### Updating
+
+From 0.13.0, Perch updates itself: **menu bar icon → Check for Updates…**,
+or **Settings ▸ About**, shows whether you are up to date and installs a new
+build with its notes. It checks once a day on its own, and you can switch
+that off in the same place. Every update is signed, and one that does not
+match the signature is refused. Copies older than 0.13.0 need this one
+downloaded by hand, once.
+
 Your settings carry over from one build to the next.
 [Every build](https://github.com/Milanpatel35/Perch/releases) is listed with
 what changed and what was checked before it was published.

@@ -26,6 +26,7 @@ public struct PreferencesView: View {
 
     @ObservedObject private var switchboard: ModuleSwitchboard
     private let launchAtLogin: LaunchAtLogin
+    private let updates: SoftwareUpdates?
 
     private let paneProvider: PaneProvider
     private let isBuilt: BuiltCheck
@@ -34,11 +35,13 @@ public struct PreferencesView: View {
     public init(
         switchboard: ModuleSwitchboard,
         launchAtLogin: LaunchAtLogin,
+        updates: SoftwareUpdates? = nil,
         paneProvider: @escaping PaneProvider,
         isBuilt: @escaping BuiltCheck = { _ in true }
     ) {
         self.switchboard = switchboard
         self.launchAtLogin = launchAtLogin
+        self.updates = updates
         self.paneProvider = paneProvider
         self.isBuilt = isBuilt
     }
@@ -103,7 +106,7 @@ public struct PreferencesView: View {
         case .general, .none:
             GeneralSettingsView(launchAtLogin: launchAtLogin)
         case .about:
-            AboutSettingsView()
+            AboutSettingsView(updates: updates)
         case .module(let module):
             ModulePane(
                 module: module,

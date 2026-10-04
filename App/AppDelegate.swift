@@ -31,6 +31,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let launchAtLogin = LaunchAtLogin()
 
+    /// Sparkle. Started after launch, never before the island is up.
+    private let updater = UpdateController()
+
     private var menuBar: MenuBarController?
     private var islandPreferences: IslandPreferences?
 
@@ -38,6 +41,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         PreferencesView(
             switchboard: switchboard,
             launchAtLogin: launchAtLogin,
+            updates: updater.updates,
             paneProvider: { [unowned self] module in
                 PerchModuleRegistry.settingsPane(for: module, in: modules)
             },
@@ -82,7 +86,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // actually start.
         PerchModuleRegistry.registerAll(in: modules, island: island)
 
-        menuBar = MenuBarController(island: island, settings: settings)
+        updater.start()
+        menuBar = MenuBarController(island: island, settings: settings, updater: updater)
 
         // After the modules, so the presets know which ones are built.
         firstRun.showIfNeeded()

@@ -7,6 +7,9 @@ import SwiftUI
 /// changes, all three change — this is the claim the whole project rests on.
 struct AboutSettingsView: View {
 
+    /// `nil` in a build without an updater — a test, a preview.
+    let updates: SoftwareUpdates?
+
     private var version: String {
         let marketing =
             Bundle.main
@@ -52,6 +55,11 @@ struct AboutSettingsView: View {
                 ) ?? URL(fileURLWithPath: "/")
             )
             .font(.callout)
+
+            if let updates {
+                UpdatesSettingsSection(updates: updates)
+                    .padding(.top, 8)
+            }
 
             Spacer()
         }

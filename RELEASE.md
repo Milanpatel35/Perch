@@ -112,7 +112,7 @@ Then:
 
 Everything above step 8 runs today. The tag does not, and will not until
 Phase 3.2 of `docs/PLAN.md` — `Scripts/release.sh` has never been written,
-the repo holds no signing secrets, and Sparkle is not in the app. Pushing a
+and the repo holds no Apple signing secrets. Pushing a
 `v*` tag now fails on the first step of `release.yml` and publishes a Release
 with nothing attached. The full gap is issue #25.
 
@@ -122,6 +122,39 @@ carrying the unsigned universal app from CI's `build` job. That job is
 deliberately not a release — see the comment above it in `ci.yml` — and
 `README.md` says the same thing to users, which is the only reason shipping an
 unsigned build is acceptable at all.
+
+### Signing a build for in-app updates
+
+Since 0.13.0 Perch checks for updates itself (Settings ▸ About, and the
+menu bar's "Check for Updates…"), through Sparkle. Sparkle installs a build
+only if its archive carries an EdDSA signature matching `SUPublicEDKey` in
+`Info.plist` — that is what stops a tampered download, and it is separate
+from Apple's code signing, which is still #25.
+
+For every `build-X.Y.Z`, after downloading CI's zip and ad-hoc signing the
+app, re-zip it and sign the archive:
+
+```bash
+ditto -c -k --keepParent Perch.app Perch-X.Y.Z-unsigned.zip
+Scripts/sign-build.sh Perch-X.Y.Z-unsigned.zip Perch.app
+```
+
+It prints one line — `<!-- sparkle version=… edSignature=… -->` — which goes
+**at the end of the release notes**, verbatim. `Scripts/appcast.sh` reads it
+when `pages.yml` regenerates the feed on publish; a release without it is
+left out of the feed. Sign the exact zip you upload: re-zipping afterwards
+changes the bytes and the signature no longer matches.
+
+**The private key** is in the maintainer's login Keychain (account
+`app.perch.Perch`) and nowhere else — not in the repo, not in CI. Back it up
+once, offline:
+
+```bash
+generate_keys --account app.perch.Perch -x perch-sparkle-key.txt
+```
+
+Lose it and installed copies can no longer be updated in-app; every user
+would have to download the next build by hand, once, after a new key ships.
 
 ## After every release
 
