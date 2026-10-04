@@ -84,5 +84,17 @@
 	<false/>
 	<key>SUAutomaticallyUpdate</key>
 	<false/>
+	<!--
+	  The public half of the signing key. An update whose signature does not
+	  match it is refused (TC-UPD-001). The private half never leaves the
+	  maintainer's Keychain; see RELEASE.md.
+	-->
+	<key>SUPublicEDKey</key>
+	<string>zMUJ2+knzY97n0tD+9mv9ZeMyHTHDSgsNuhmwV/IjBk=</string>
+	<!-- Daily, and the setting is the user's: Settings ▸ About. -->
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUScheduledCheckInterval</key>
+	<integer>86400</integer>
 </dict>
 </plist>

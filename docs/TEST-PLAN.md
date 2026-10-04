@@ -385,6 +385,9 @@ optional and they do not get skipped when the suite is slow.
 | TC-UPD-002 | E | Appcast unreachable | Fails silently, app keeps running |
 | TC-UPD-003 | E | Launch at login enabled | App starts after reboot, island ready, no visible window |
 | TC-UPD-004 | E | Quit from menu bar | Panel torn down, no orphan process |
+| TC-UPD-005 | U | Settings ▸ About, Updates | Check for Updates runs one check at a time; the result (up to date, version available, couldn't check) and the time are shown; automatic checks can be turned off and the updater is told once |
+| TC-UPD-006 | U | The appcast | Lists a build only with its EdDSA signature, build number and version from its notes; unsigned, draft and archive-less releases left out; release notes cannot break the XML |
+| TC-UPD-007 | E | From an installed build, a newer signed build is published | "Check for Updates…" finds it, shows its notes, installs and relaunches; a tampered archive is refused |
 
 ---
 
@@ -488,6 +491,18 @@ these are about what reaches the screen and the disk:
       takes the first click (TC-SCR-010)
 - [ ] Second display: screen captures the display the pointer is on; area
       and window work across both (TC-SCR-012)
+
+Added for in-app updates. Only a second signed build can prove the first
+one updates, so run these on the release *after* the one that added them:
+
+- [ ] From the previous build in `/Applications`, Settings ▸ About ▸ Check
+      for Updates finds the new build and shows its notes (TC-UPD-007)
+- [ ] Install and Relaunch: the new version opens, settings intact, and the
+      menu-bar item and island come back
+- [ ] With Wi-Fi off: "Couldn't check for updates", no alert storm, the app
+      keeps working (TC-UPD-002)
+- [ ] Automatic checks switched off: Little Snitch / `nettop` shows no request
+      to `milanpatel35.github.io` over a day
 
 Added for distraction blocking. The browsers each need their own
 Automation consent, so most of this is only checkable on a real Mac:
