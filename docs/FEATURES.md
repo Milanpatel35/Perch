@@ -176,6 +176,7 @@ collide with something, and the collision will be silent.
 | Pre-empts Now Playing when a session ends | ★ | Priority rule, `CLAUDE.md` §3 |
 | Survives sleep | ★ | Wall-clock accounting on wake |
 | Auto-enable macOS Focus mode during a session | ★ | Optional |
+| Keep listed apps and sites out of the way during a session | ★ | Advisory: apps hidden, tabs blanked — ADR 0009 |
 
 **Status — shipped in 0.5.0, five of the six rows.** Configurable work and
 break lengths (25/5/15 and four sessions to the long break by default), the
@@ -203,6 +204,24 @@ One row is **not** done:
   turn one on. The route that does exist is a user-written Shortcut, which
   belongs to module 13 rather than here. Preferences says so in the pane
   rather than leaving somebody hunting for the switch.
+
+**Distraction blocking — shipped after the rest, in 0.12.0.** During a
+running work phase, a listed app that comes to the front is hidden, and a
+listed site in the front tab of Safari, Chrome, Edge, Brave, Vivaldi or
+Opera is sent to a blank page. A short note on the island names what was
+kept away. Never on a break, never while paused, and nothing at all — no
+observer, no Apple Event — until a session starts.
+
+It is a nudge and says so. Apps are hidden rather than quit, so nothing is
+lost and ⌘-Tab brings one back; browsers are never hidden, because their
+tabs are the site rule's job. Matching is by host with subdomains —
+`reddit.com` covers `old.reddit.com` and never `notreddit.com`. Firefox
+and Arc give no app their front tab, so nothing happens in them, and the
+pane names both. Reading the tab is the one part that has to poll — every
+two seconds, only while a browser is in front during a session —
+and [ADR 0009](adr/0009-checking-the-front-tab-during-focus.md) records why
+and its limits. Ported from a prototype in a Boring Notch fork and
+rewritten for Perch.
 
 Two decisions the table left open:
 

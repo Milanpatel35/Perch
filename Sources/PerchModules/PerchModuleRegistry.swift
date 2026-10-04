@@ -190,7 +190,8 @@ public enum PerchModuleRegistry {
                     sessionsToday: focus.streak.sessions(on: Date()),
                     totalSessions: focus.streak.totalSessions,
                     streakDays: focus.streak.streak(on: Date()),
-                    onChange: { focus.setConfiguration($0) }
+                    onChange: { focus.setConfiguration($0) },
+                    service: focus
                 )
             )
         }

@@ -50,7 +50,7 @@ notch it draws a floating island instead.
 
 ### Option 1: download the app
 
-<a href="https://github.com/Milanpatel35/Perch/releases/download/build-0.11.1/Perch-0.11.1-unsigned.zip"><img src="https://img.shields.io/badge/Download%20for%20macOS-Perch%200.11.1-black?style=for-the-badge&logo=apple" alt="Download Perch 0.11.1 for macOS" height="44"></a>
+<a href="https://github.com/Milanpatel35/Perch/releases/download/build-0.12.0/Perch-0.12.0-unsigned.zip"><img src="https://img.shields.io/badge/Download%20for%20macOS-Perch%200.12.0-black?style=for-the-badge&logo=apple" alt="Download Perch 0.12.0 for macOS" height="44"></a>
 
 1. Unzip it and **drag Perch into Applications.** Run straight from
    Downloads, macOS starts a temporary copy and Perch cannot open at login.
@@ -141,7 +141,7 @@ screenshots` — not a mockup.
 | **Now Playing** | Apple Music and Spotify: artwork, scrubbing, AirPlay target, swipe to skip, a peek on track change. Not browser audio — macOS closed that to other apps | ✅ Live |
 | **Shelf** | Drag files to the notch, hold them, drop them anywhere else. AirDrop and quick format conversion built in | ✅ Live |
 | **Clipboard** | Searchable history with pinning — text, images, colours — and the text read out of anything you screenshot | ✅ Live |
-| **Focus** | Pomodoro that counts down in the notch, and survives the lid being closed because nothing is counting | ✅ Live |
+| **Focus** | Pomodoro that counts down in the notch, survives the lid being closed, and keeps listed apps and sites out of the way while you work | ✅ Live |
 | **Calendar** | Next meeting, countdown, one-click join for six services — then mute, camera and leave without finding the window (Zoom verified) | ✅ Live |
 | **HUDs** | Volume, brightness, charging, Bluetooth, Focus and the camera-in-use dot, with the macOS overlay suspended while it is on | ✅ Live |
 | **Battery** | Mac, AirPods, mouse, keyboard, trackpad — and one low warning per discharge, not one per wobble | ✅ Live |
