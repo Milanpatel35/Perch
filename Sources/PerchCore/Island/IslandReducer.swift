@@ -276,6 +276,10 @@ public struct IslandReducer<Activity: IslandActivity> {
 
         guard let next = queue.front else {
             state.presentation = .idle
+            // An idle island takes no mouse events, so the "left" event that
+            // would clear this can never arrive. Kept, it opened every later
+            // activity fully and stopped each one expiring (TC-ISL-021).
+            state.isHovered = false
             return [
                 .cancelScheduledCollapse,
                 .setMouseEventsEnabled(false),

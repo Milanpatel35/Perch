@@ -40,6 +40,11 @@ final class BatteryService: ObservableObject, PerchModule {
     private var alerts = BatteryAlerts()
 
     private var powerSource: CFRunLoopSource?
+
+    /// What the IOKit callbacks carry back here — a weak box, so an event
+    /// after this service has gone does nothing instead of crashing. One
+    /// per activation, released in `deactivate()`.
+    private var callbackContext: UnsafeMutableRawPointer?
     private var notificationPort: IONotificationPortRef?
     private var connectedIterator: io_iterator_t = 0
     private var disconnectedIterator: io_iterator_t = 0
@@ -64,6 +69,7 @@ final class BatteryService: ObservableObject, PerchModule {
         _ = alerts.ingest(power)
         refreshAccessories()
 
+        callbackContext = CallbackContext.retain(self)
         observePowerSource()
         observeAccessories()
     }
@@ -85,6 +91,10 @@ final class BatteryService: ObservableObject, PerchModule {
         }
         notificationPort = nil
 
+        // Only now: neither source can call back any more.
+        CallbackContext<BatteryService>.release(callbackContext)
+        callbackContext = nil
+
         // Nothing is remembered across a switch-off. Coming back on starts
         // from a fresh baseline instead of replaying a transition nobody was
         // watching for.
@@ -99,19 +109,15 @@ final class BatteryService: ObservableObject, PerchModule {
     // MARK: - The Mac's own battery
 
     private func observePowerSource() {
-        let context = Unmanaged.passUnretained(self).toOpaque()
-
         guard
             let source = IOPSNotificationCreateRunLoopSource(
                 { context in
-                    guard let context else { return }
-                    let service = Unmanaged<BatteryService>
-                        .fromOpaque(context)
-                        .takeUnretainedValue()
-
+                    guard let service = CallbackContext<BatteryService>.target(of: context) else {
+                        return
+                    }
                     MainActor.assumeIsolated { service.powerChanged() }
                 },
-                context
+                callbackContext
             )?.takeRetainedValue()
         else { return }
 
@@ -168,7 +174,7 @@ final class BatteryService: ObservableObject, PerchModule {
         notificationPort = port
         IONotificationPortSetDispatchQueue(port, .main)
 
-        let context = Unmanaged.passUnretained(self).toOpaque()
+        guard let context = callbackContext else { return }
 
         // `IOServiceAddMatchingNotification` consumes a reference to the
         // matching dictionary, so the two registrations need one each.
@@ -189,15 +195,14 @@ final class BatteryService: ObservableObject, PerchModule {
             type,
             matching,
             { context, iterator in
-                guard let context else { return }
                 // The iterator must be drained or the notification never
                 // fires again — this is the one piece of IOKit etiquette
                 // that has no diagnostic when you get it wrong.
                 drain(iterator)
 
-                let service = Unmanaged<BatteryService>
-                    .fromOpaque(context)
-                    .takeUnretainedValue()
+                guard let service = CallbackContext<BatteryService>.target(of: context) else {
+                    return
+                }
                 MainActor.assumeIsolated { service.refreshAccessories() }
             },
             context,
