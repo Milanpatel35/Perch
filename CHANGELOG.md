@@ -10,6 +10,16 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 Nothing yet. Next up: recording an area as a GIF.
 
+## [0.14.1] — 2026-10-04
+
+### Fixed
+
+- **Clicks near the notch did nothing.** Perch's window covered a 568 × 304
+  point block around the notch whenever anything was on the island — which
+  is nearly always — so menus, status icons, browser tabs and address bars
+  under it ignored clicks and looked frozen. The window is now only as big
+  as the island it is drawing, and grows and shrinks with it.
+
 ## [0.14.0] — 2026-10-04
 
 Colour, measure and scan, from the notch.

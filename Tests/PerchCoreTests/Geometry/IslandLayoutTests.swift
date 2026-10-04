@@ -91,4 +91,53 @@ final class IslandLayoutTests: XCTestCase {
         XCTAssertEqual(layout.collapsedIslandFrame.size, metrics.collapsedSize)
         XCTAssertEqual(layout.collapsedIslandFrame.minY, 0)
     }
+
+    // MARK: - TC-GEO-013
+
+    func test_TC_GEO_013_theWindowHoldsTheIslandAndItsShadowCentredOnTheNotch() {
+        let screen = TestScreen.notched16
+        let metrics = NotchMetrics(screen: screen)
+        let layout = IslandLayout(metrics: metrics, screen: screen)
+
+        for size in [
+            metrics.collapsedSize, CGSize(width: 360, height: 34), CGSize(width: 420, height: 120)
+        ] {
+            let window = layout.windowFrame(islandSize: size)
+
+            XCTAssertGreaterThan(window.width, size.width, "room for the shadow beside it")
+            XCTAssertGreaterThan(window.height, size.height, "room for the shadow below it")
+            XCTAssertEqual(window.midX, layout.panelFrame.midX, accuracy: 1, "centred on the notch")
+            XCTAssertEqual(window.minY, layout.panelFrame.minY, "flush with the top of the screen")
+            XCTAssertTrue(layout.panelFrame.contains(window), "never beyond the old maximum")
+        }
+    }
+
+    /// **The bug this exists for.** The resting home surface is the size of
+    /// the notch, and its window must be too — not the 568 × 304 block that
+    /// used to sit over the menu bar and the top of every app beside it.
+    func test_TC_GEO_013_theRestingIslandLeavesTheMenuBarItsClicks() {
+        let screen = TestScreen.notched14
+        let metrics = NotchMetrics(screen: screen)
+        let layout = IslandLayout(metrics: metrics, screen: screen)
+
+        let resting = layout.windowFrame(islandSize: metrics.collapsedSize)
+
+        XCTAssertLessThan(resting.width, metrics.collapsedSize.width + 40)
+        XCTAssertLessThan(resting.height, metrics.collapsedSize.height + 30)
+        XCTAssertLessThan(
+            resting.width * resting.height,
+            layout.panelFrame.width * layout.panelFrame.height * 0.1,
+            "under a tenth of the old block"
+        )
+    }
+
+    func test_TC_GEO_013_theLargestIslandIsClampedToThePanel() {
+        let screen = TestScreen.external
+        let layout = IslandLayout(metrics: NotchMetrics(screen: screen), screen: screen)
+
+        let window = layout.windowFrame(islandSize: CGSize(width: 5_000, height: 5_000))
+
+        XCTAssertEqual(window.size, layout.panelFrame.size)
+        XCTAssertEqual(window.origin, layout.panelFrame.origin)
+    }
 }
