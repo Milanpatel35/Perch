@@ -8,6 +8,12 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
+Nothing yet. Next up: recording an area as a GIF.
+
+## [0.14.0] — 2026-10-04
+
+Colour, measure and scan, from the notch.
+
 ### Added
 
 - **A tools row on the island**, under the screenshot buttons:
