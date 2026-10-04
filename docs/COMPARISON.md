@@ -170,7 +170,7 @@ Rows marked ★ are where nothing in the field competes.
 | Window snapping / app switcher | Yes | — | — | — | — | Yes | — | — |
 | Shortcuts integration | Yes | — | — | — | Yes | — | — | — |
 | Notes / scratchpad | Backlog | — | — | — | Yes | — | — | — |
-| Screenshot capture ★ | Backlog | — | — | — | — | — | — | — |
+| Screenshot capture, text and pin ★ | Yes | — | — | — | — | — | — | — |
 | Voice to text | Backlog | — | Yes | — | — | — | Yes | — |
 | Lock Screen presence | Backlog | — | — | Yes | — | — | — | — |
 | Works without a notch | Yes | Yes | Yes | — | — | Partial | — | n/a |

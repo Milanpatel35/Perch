@@ -28,11 +28,13 @@ public enum PerchModuleRegistry {
         host.register(SystemStatsService(island: island))
         host.register(HideNotchService(island: island))
         host.register(ShortcutsService(island: island))
+        host.register(ScreenshotService(island: island))
 
         wireFocusToNotifications(in: host)
         wireCalendarToCamera(in: host)
         wireCameraToShelf(in: host)
         wireShortcutsToModules(in: host)
+        wireScreenshotToShelf(in: host)
     }
 
     /// Lets the notification module know when a focus session is running.
@@ -139,6 +141,8 @@ public enum PerchModuleRegistry {
             hideNotchPane(in: host)
         case .shortcuts:
             host.service(ShortcutsService.self).map { AnyView(ShortcutsSettingsView(service: $0)) }
+        case .screenshot:
+            screenshotPane(in: host)
         default:
             nil
         }

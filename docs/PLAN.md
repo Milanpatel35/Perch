@@ -360,7 +360,10 @@ The P2 tier from `FEATURES.md`, in rough order of how often people will ask:
 
 - Voice to text, on-device (Seam's and NotchBay's differentiator, and the
   single biggest piece of work left — Whisper via Core ML)
-- Screenshot capture and annotation, straight into the shelf
+- ~~Screenshot capture, straight into the shelf~~ — **done, pulled forward.**
+  Module 16 shipped with area, window and screen, copy the text in an area,
+  and pin an area on top, ported from a prototype in a Boring Notch fork and
+  rewritten for Perch's architecture. Annotation is still to come.
 - Notes / scratchpad pinned to the island
 - Lock Screen presence
 - Developer module: CI status, PR review queue, `perch notify` piped from a
