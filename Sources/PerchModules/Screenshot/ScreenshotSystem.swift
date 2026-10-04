@@ -35,6 +35,9 @@ struct ScreenshotSystem {
     /// Waits for the island to finish closing before the shot is taken.
     var settle: @Sendable (Duration) async -> Void
 
+    /// The capture tools — see `ScreenshotTools.swift`.
+    var tools: ScreenshotTools = .live
+
     static var live: Self {
         Self(
             capturer: ScreenCaptureCommandLine(),

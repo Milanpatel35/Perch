@@ -17,6 +17,7 @@ struct ScreenshotSettingsView: View {
         Form {
             permissionSection
             captureSection
+            toolsSection
         }
         .formStyle(.grouped)
         // Checked when somebody looks, and never polled (`CLAUDE.md` §5.1).
@@ -79,6 +80,41 @@ struct ScreenshotSettingsView: View {
         case .folder:
             String(localized: "The same folder macOS saves its own screenshots to.")
         }
+    }
+
+    @ViewBuilder
+    private var toolsSection: some View {
+        Section {
+            Picker("Copy colours as", selection: colorFormat) {
+                Text("HEX — #1B3A6B").tag(ColorFormat.hex)
+                Text("RGB — rgb(27, 58, 107)").tag(ColorFormat.rgb)
+                Text("HSL — hsl(217, 60%, 26%)").tag(ColorFormat.hsl)
+            }
+        } header: {
+            Text("Tools")
+        } footer: {
+            Text(
+                """
+                Colour uses the system’s loupe and needs no permission. Measure \
+                copies an area’s size in points. Scan reads the largest QR code \
+                or barcode in an area on this Mac: a web address opens, \
+                anything else is copied and never opened.
+                """
+            )
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
+    }
+
+    private var colorFormat: Binding<ColorFormat> {
+        Binding(
+            get: { service.configuration.colorFormat },
+            set: { value in
+                var updated = service.configuration
+                updated.colorFormat = value
+                service.setConfiguration(updated)
+            }
+        )
     }
 
     private var destination: Binding<ScreenshotDestination> {

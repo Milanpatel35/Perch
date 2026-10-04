@@ -23,9 +23,7 @@ private struct ScreenshotPeek: View {
 
     var body: some View {
         NotchFlanks {
-            Image(systemName: symbol)
-                .font(.system(size: 13, weight: .medium))
-                .foregroundStyle(tint)
+            leading
         } trailing: {
             Text(line)
                 .font(.system(size: 11, weight: .medium))
@@ -36,6 +34,21 @@ private struct ScreenshotPeek: View {
         .accessibilityLabel(Text(line))
     }
 
+    /// A picked colour shows the colour itself; everything else an icon.
+    @ViewBuilder
+    private var leading: some View {
+        if case .copiedColor(_, let color) = outcome {
+            RoundedRectangle(cornerRadius: 4)
+                .fill(Color(red: color.red, green: color.green, blue: color.blue))
+                .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(.white.opacity(0.4)))
+                .frame(width: 16, height: 16)
+        } else {
+            Image(systemName: symbol)
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(tint)
+        }
+    }
+
     private var symbol: String {
         switch outcome {
         case .saved: "camera.viewfinder"
@@ -43,13 +56,18 @@ private struct ScreenshotPeek: View {
         case .copiedText: "text.viewfinder"
         case .noText: "text.badge.xmark"
         case .failed, .needsPermission: "exclamationmark.triangle.fill"
+        case .copiedColor: "eyedropper"
+        case .measured: "ruler"
+        case .openedLink: "safari"
+        case .copiedCode: "qrcode"
+        case .noCode: "qrcode.viewfinder"
         }
     }
 
     private var tint: Color {
         switch outcome {
-        case .failed, .needsPermission, .noText: .orange
-        case .saved, .copiedImage, .copiedText: .white
+        case .failed, .needsPermission, .noText, .noCode: .orange
+        default: .white
         }
     }
 
@@ -67,6 +85,16 @@ private struct ScreenshotPeek: View {
             reason
         case .needsPermission:
             String(localized: "Allow Screen Recording for Perch")
+        case .copiedColor(let text, _):
+            String(localized: "\(text) copied")
+        case .measured(let label):
+            String(localized: "\(label) copied")
+        case .openedLink(let host):
+            String(localized: "Opened \(host)")
+        case .copiedCode:
+            String(localized: "Code copied")
+        case .noCode:
+            String(localized: "No code found")
         }
     }
 }
@@ -104,12 +132,80 @@ struct ScreenshotTile: View {
         _ title: LocalizedStringKey,
         _ symbol: String
     ) -> some View {
-        Button {
+        CaptureButton(title: title, symbol: symbol, help: Self.help(for: action)) {
             service.perform(action)
-        } label: {
-            // Five buttons share one row of the home surface. A `Label`
-            // spaces its icon too generously for that, and "Window" and
-            // "Screen" were cut to "Wind…" and "Scre…".
+        }
+        .disabled(service.isCapturing)
+    }
+
+    static func help(for action: ScreenshotAction) -> String {
+        switch action {
+        case .save(.area): String(localized: "Capture an area")
+        case .save(.window): String(localized: "Capture a window")
+        case .save(.screen): String(localized: "Capture this screen")
+        case .copyText: String(localized: "Copy the text in an area")
+        case .pin: String(localized: "Pin an area above everything")
+        case .measure: String(localized: "Copy an area’s size in points")
+        case .scanCode: String(localized: "Read a QR code or barcode")
+        }
+    }
+}
+
+/// The second row: tools that read the screen rather than keep it.
+struct ScreenshotToolsTile: View {
+
+    @ObservedObject var service: ScreenshotService
+
+    private static func help(_ action: ScreenshotAction) -> String {
+        ScreenshotTile.help(for: action)
+    }
+
+    var body: some View {
+        HStack(spacing: 5) {
+            Image(systemName: "wrench.and.screwdriver")
+                .font(.system(size: 11))
+                .foregroundStyle(.white.opacity(0.55))
+                .accessibilityHidden(true)
+
+            CaptureButton(
+                title: "Colour", symbol: "eyedropper",
+                help: String(localized: "Copy a colour from the screen")
+            ) {
+                service.pickColor()
+            }
+            .disabled(service.isCapturing)
+            CaptureButton(
+                title: "Measure", symbol: "ruler", help: Self.help(.measure)
+            ) {
+                service.perform(.measure)
+            }
+            .disabled(service.isCapturing)
+            CaptureButton(
+                title: "Scan", symbol: "qrcode.viewfinder", help: Self.help(.scanCode)
+            ) {
+                service.perform(.scanCode)
+            }
+            .disabled(service.isCapturing)
+
+            Spacer(minLength: 0)
+        }
+    }
+}
+
+/// One capsule on a home-surface row.
+///
+/// Five share a row, so the icon sits close to its word: a `Label` spaced
+/// it too generously, and "Window" and "Screen" were cut to "Wind…" and
+/// "Scre…".
+private struct CaptureButton: View {
+
+    let title: LocalizedStringKey
+    let symbol: String
+    let help: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
             HStack(spacing: 3) {
                 Image(systemName: symbol)
                 Text(title)
@@ -123,22 +219,18 @@ struct ScreenshotTile: View {
             .foregroundStyle(.white)
         }
         .buttonStyle(.plain)
-        .disabled(service.isCapturing)
-        .help(Text(Self.help(for: action)))
-    }
-
-    private static func help(for action: ScreenshotAction) -> String {
-        switch action {
-        case .save(.area): String(localized: "Capture an area")
-        case .save(.window): String(localized: "Capture a window")
-        case .save(.screen): String(localized: "Capture this screen")
-        case .copyText: String(localized: "Copy the text in an area")
-        case .pin: String(localized: "Pin an area above everything")
-        }
+        .help(Text(help))
     }
 }
 
 public extension ModuleHost {
+
+    /// The tools row, or nothing when the module is off.
+    @MainActor
+    func screenshotToolsTile() -> AnyView? {
+        guard let service = service(ScreenshotService.self), service.isActive else { return nil }
+        return AnyView(ScreenshotToolsTile(service: service))
+    }
 
     /// The capture row, or nothing when the module is off.
     @MainActor

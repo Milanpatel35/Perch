@@ -81,6 +81,7 @@ struct ScreenshotHarness {
     let permission: FakeScreenRecordingPermission
     let pins: FakeScreenshotPins
     let clipboard: FakeScreenshotClipboard
+    let tools: FakeCaptureTools
     /// Stands in for the system screenshot folder. The caller deletes it.
     let folder: URL
 
@@ -90,6 +91,7 @@ struct ScreenshotHarness {
         let permission = FakeScreenRecordingPermission()
         let pins = FakeScreenshotPins()
         let clipboard = FakeScreenshotClipboard()
+        let tools = FakeCaptureTools()
 
         let folder = FileManager.default.temporaryDirectory
             .appendingPathComponent("ScreenshotModuleTests-\(UUID().uuidString)", isDirectory: true)
@@ -103,7 +105,8 @@ struct ScreenshotHarness {
             copy: { clipboard.items.append($0) },
             displayUnderPointer: { 2 },
             screenshotFolder: { folder },
-            settle: { _ in }
+            settle: { _ in },
+            tools: tools.system()
         )
 
         return Self(
@@ -113,6 +116,7 @@ struct ScreenshotHarness {
             permission: permission,
             pins: pins,
             clipboard: clipboard,
+            tools: tools,
             folder: folder
         )
     }
@@ -140,5 +144,29 @@ struct ScreenshotHarness {
         for _ in 0..<5 {
             await Task.yield()
         }
+    }
+}
+
+/// The colour loupe, the measurer, the code reader and the browser, faked.
+@MainActor
+final class FakeCaptureTools {
+    /// What the loupe returns; `nil` is Escape.
+    var picked: SampledColor?
+    private(set) var loupesShown = 0
+
+    var size: CGSize? = CGSize(width: 1280, height: 720)
+    var codes: [DetectedCode] = []
+    private(set) var opened: [URL] = []
+
+    func system() -> ScreenshotTools {
+        ScreenshotTools(
+            sampleColor: { [unowned self] done in
+                loupesShown += 1
+                done(picked)
+            },
+            measure: { [unowned self] _ in size },
+            detectCodes: { [unowned self] _ in await MainActor.run { codes } },
+            open: { [unowned self] in opened.append($0) }
+        )
     }
 }
