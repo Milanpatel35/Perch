@@ -10,6 +10,15 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 Nothing yet. Next up: recording an area as a GIF.
 
+## [0.15.1] — 2026-10-04
+
+### Fixed
+
+- **Settings went blank when you opened About.** One line of layout in the
+  Updates box sent SwiftUI round in a loop, and the whole window — the
+  sidebar too — drew nothing until it was closed. Broken since 0.13.0, when
+  the Updates box arrived.
+
 ## [0.15.0] — 2026-10-04
 
 ### Added

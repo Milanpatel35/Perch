@@ -34,7 +34,11 @@ struct UpdatesSettingsSection: View {
             )
             .font(.caption)
             .foregroundStyle(.secondary)
-            .fixedSize(horizontal: false, vertical: true)
+            // No `.fixedSize(horizontal: false, vertical: true)` here. Inside
+            // the About pane's full-height stack, in a NavigationSplitView,
+            // it sent layout round in a loop and the whole Settings window —
+            // sidebar too — drew nothing the moment About was selected
+            // (TC-UPD-008). The text wraps to the box's width without it.
         }
         .padding(14)
         .frame(maxWidth: 420)
