@@ -32,6 +32,13 @@ struct ScreenshotActivity: IslandActivity {
         /// Screen Recording is off. Stays longer, because it asks somebody
         /// to go and do something.
         case needsPermission
+        /// A colour on the clipboard, in the chosen format.
+        case copiedColor(text: String, color: SampledColor)
+        /// An area's size on the clipboard, `W × H`.
+        case measured(String)
+        case openedLink(host: String)
+        case copiedCode
+        case noCode
     }
 
     var timeToLive: Duration? {

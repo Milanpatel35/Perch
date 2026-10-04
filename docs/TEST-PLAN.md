@@ -316,6 +316,13 @@ optional and they do not get skipped when the suite is slow.
 | TC-SCR-011 | U | Module disabled | A capture in progress is ended, every pin closed, nothing left on the island |
 | TC-SCR-012 | E | Second display attached | Area and window pick across both; screen captures the display the pointer is on |
 | TC-SCR-013 | U | The island in the picture | The island closes before the capture starts, so it is never in the shot |
+| TC-SCR-014 | U | A colour written out | HEX upper-case, `rgb()` and `hsl()` exactly as CSS writes them; out-of-range components clamped; greys have no hue |
+| TC-SCR-015 | U | Pick a colour | Needs no Screen Recording; the chosen format lands on the clipboard and the island shows the swatch; Escape copies nothing and says nothing |
+| TC-SCR-016 | U | Measure an area | The area's size in points — pixels over the display's scale — copied as `W × H`; the capture is deleted; Escape copies nothing |
+| TC-SCR-017 | U | Scan a code | The largest code in the area is read on this Mac; an `http`/`https` address is opened, anything else is copied and never opened; nothing found says so; the capture is deleted |
+| TC-SCR-018 | U | A recording turned into a GIF | At most 10 frames a second and 60 seconds, no wider than 640 points, loops forever, a valid GIF; the recording is deleted; a recording with no frames says so |
+| TC-SCR-019 | U | Recording a GIF | The system's own recorder with the area picker, its arguments separate; one recording at a time; stopped or cancelled, nothing is left in staging; module off ends it |
+| TC-SCR-020 | E | The tools on hardware | Colour, measure, scan and GIF each work from the island's tools row, and each says what it did |
 
 ## HID — hide-the-notch mode
 
@@ -491,6 +498,16 @@ these are about what reaches the screen and the disk:
       takes the first click (TC-SCR-010)
 - [ ] Second display: screen captures the display the pointer is on; area
       and window work across both (TC-SCR-012)
+- [ ] Pick a colour from a web page: the loupe appears without a Screen
+      Recording prompt, and the HEX pasted matches Digital Color Meter
+      (TC-SCR-015)
+- [ ] Measure a window you know the size of: the number pasted matches,
+      on the built-in display and on an external one at a different scale
+      (TC-SCR-016)
+- [ ] Scan a QR code for a web page: it opens; scan one for Wi-Fi or plain
+      text: it is copied, nothing opens (TC-SCR-017)
+- [ ] Record a GIF of an area for ten seconds, stop it from the menu bar:
+      a GIF lands in the shelf and plays in Quick Look (TC-SCR-018, 019)
 
 Added for in-app updates. Only a second signed build can prove the first
 one updates, so run these on the release *after* the one that added them:

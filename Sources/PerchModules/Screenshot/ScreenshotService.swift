@@ -30,8 +30,8 @@ final class ScreenshotService: ObservableObject, PerchModule {
     /// off, and the capture goes to the screenshot folder instead.
     var onSave: ((URL) -> Bool)?
 
-    private let island: IslandController
-    private let system: ScreenshotSystem
+    let island: IslandController
+    let system: ScreenshotSystem
     private var captureTask: Task<Void, Never>?
 
     /// Long enough for the island's close to finish, so it is not in a
@@ -178,6 +178,12 @@ final class ScreenshotService: ObservableObject, PerchModule {
             if !system.pins.pin(imageAt: staged) {
                 say(.failed(reason: String(localized: "The capture could not be read")))
             }
+
+        case .measure:
+            measure(staged)
+
+        case .scanCode:
+            await scanCode(in: staged)
         }
     }
 
@@ -210,7 +216,7 @@ final class ScreenshotService: ObservableObject, PerchModule {
         }
     }
 
-    private func say(_ outcome: ScreenshotActivity.Outcome) {
+    func say(_ outcome: ScreenshotActivity.Outcome) {
         island.submit(ScreenshotActivity(outcome: outcome))
     }
 

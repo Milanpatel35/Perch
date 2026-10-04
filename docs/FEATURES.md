@@ -601,6 +601,10 @@ win".
 | Thumbnail lands in the shelf, annotate before sharing | ★ | |
 | Copy the text in an area | NB | On-device Vision, the same promise as the clipboard's OCR |
 | Pin an area above everything | ★ | A reference card, for comparing two things that cannot share a screen |
+| Pick a colour off the screen | ★ | The system's loupe; HEX, RGB or HSL |
+| Measure an area | ★ | Its size in points, `W × H` |
+| Scan a QR code or barcode | ★ | On-device; only web addresses open |
+| Record an area as a GIF | ★ | Not built yet — see the status note |
 
 **Status — shipped, three and a half of the four rows.** Area, window and
 the screen under the pointer from a row of buttons on the home surface; the
@@ -611,6 +615,24 @@ Space until its close button is pressed, and nothing of it is kept on disk.
 
 **Annotation is not done.** A capture reaches the shelf, so it can be
 dragged into Preview or Markup, but Perch draws nothing on it itself.
+
+**The tools row — shipped in 0.14.0.** A second row on the home surface:
+*Colour* opens the system's own colour loupe — which reads the screen
+itself, so it needs no Screen Recording — and copies the colour as HEX, RGB
+or HSL, with the swatch beside the notch. *Measure* takes an area and copies
+its size in points: `screencapture` records the display's density in the
+image, and dividing by it is what makes a Retina built-in and a 1x external
+display agree. *Scan* reads the largest QR code or barcode in an area with
+Vision, with Core Image's CPU QR detector behind it — Vision's accelerated
+model read nothing on a macOS 14 machine without graphics acceleration. A web
+address opens; anything else — a Wi-Fi password, a `mailto:`,
+another app's link — is copied and never opened, because a code is a
+stranger's input. Measure and Scan delete their capture as soon as it is
+read.
+
+**GIF recording is not built yet.** It needs the system recorder's
+interactive mode, and that is confirmed on hardware before it ships rather
+than guessed from a man page.
 
 **The capture is `/usr/sbin/screencapture`, not ScreenCaptureKit.** Its
 pickers are the ones everybody knows from ⌘⇧4, Escape included; they are

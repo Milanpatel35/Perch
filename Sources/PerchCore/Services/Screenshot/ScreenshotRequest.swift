@@ -18,6 +18,10 @@ public enum ScreenshotAction: Equatable, Sendable {
     case copyText
     /// Floated above everything as a reference card; nothing is kept on disk.
     case pin
+    /// The area's size copied as `W × H`; the image is not kept.
+    case measure
+    /// The largest QR code or barcode in the area, read on this Mac.
+    case scanCode
 }
 
 /// Where a saved capture goes.
@@ -36,10 +40,26 @@ public struct ScreenshotConfiguration: Equatable, Sendable, Codable {
 
     public var destination: ScreenshotDestination
     public var playsSound: Bool
+    public var colorFormat: ColorFormat
 
-    public init(destination: ScreenshotDestination = .shelf, playsSound: Bool = true) {
+    public init(
+        destination: ScreenshotDestination = .shelf,
+        playsSound: Bool = true,
+        colorFormat: ColorFormat = .hex
+    ) {
         self.destination = destination
         self.playsSound = playsSound
+        self.colorFormat = colorFormat
+    }
+
+    /// Settings saved by 0.11 to 0.13 have no colour format. Without this
+    /// they would fail to decode and silently reset everything else too.
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        destination =
+            try values.decodeIfPresent(ScreenshotDestination.self, forKey: .destination) ?? .shelf
+        playsSound = try values.decodeIfPresent(Bool.self, forKey: .playsSound) ?? true
+        colorFormat = try values.decodeIfPresent(ColorFormat.self, forKey: .colorFormat) ?? .hex
     }
 }
 

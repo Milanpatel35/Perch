@@ -362,6 +362,8 @@ The P2 tier from `FEATURES.md`, in rough order of how often people will ask:
 
 - Voice to text, on-device (Seam's and NotchBay's differentiator, and the
   single biggest piece of work left — Whisper via Core ML)
+- ~~Capture tools: colour, measure, QR scan~~ — **done.** GIF recording
+  is next, after its recorder flags are confirmed on hardware.
 - ~~Focus distraction blocking~~ — **done.** Apps hidden and front tabs
   blanked during a work phase only; ADR 0009 records the bounded tab check.
 - ~~Screenshot capture, straight into the shelf~~ — **done, pulled forward.**
