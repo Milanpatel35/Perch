@@ -80,9 +80,20 @@ final class IslandSnapshots: XCTestCase {
                 HomeActivity(collapsedSize: layout.metrics.collapsedSize),
                 expanded: true,
                 modulesOn: { host, island in
+                    let scratch = FileManager.default.temporaryDirectory
+                        .appendingPathComponent("perch-snapshot-\(UUID().uuidString)")
+                    let clipboard = ClipboardService(
+                        island: island,
+                        directory: scratch.appendingPathComponent("clipboard"),
+                        pasteboard: NSPasteboard(name: .init("perch-snapshot"))
+                    )
+                    let focus = FocusService(island: island, directory: scratch)
                     let screenshot = ScreenshotService(island: island)
-                    host.register(screenshot)
-                    screenshot.activate()
+                    for module in [clipboard, focus, screenshot] as [any PerchModule] {
+                        host.register(module)
+                        module.activate()
+                    }
+                    host.openSettings = {}
                 }
             )
         )

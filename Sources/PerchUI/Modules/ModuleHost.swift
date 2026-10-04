@@ -17,6 +17,10 @@ public final class ModuleHost: ObservableObject {
     private var modules: [ModuleID: any PerchModule] = [:]
     private var cancellables: Set<AnyCancellable> = []
 
+    /// The home surface's gear. The Settings window belongs to the app
+    /// target, so the app hands in how to open it.
+    public var openSettings: (@MainActor () -> Void)?
+
     public init(switchboard: ModuleSwitchboard, island: IslandController) {
         self.switchboard = switchboard
         self.island = island

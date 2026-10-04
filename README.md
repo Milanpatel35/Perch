@@ -118,8 +118,8 @@ on <http://localhost:8000>.
 | **Menu bar icon → Settings…** | Switch modules on and off, one by one |
 
 <p align="center">
-  <img src="Website/assets/img/shots/island-home-rows.png" alt="The Perch home surface with two rows: Area, Window, Screen, Text and Pin; then Colour, Measure and Scan" width="452">
-  <br><sub>The home surface — what hovering the notch shows, with a row for each module that has one.</sub>
+  <img src="Website/assets/img/shots/island-home-rows.png" alt="The Perch home surface: a launcher row with Clipboard and Focus, then Area, Window, Screen, Text and Pin, then Colour, Measure and Scan, and a settings gear beside the date" width="452">
+  <br><sub>The home surface — what hovering the notch shows. Every module you switch on has a button here; the gear opens Settings for the rest.</sub>
 </p>
 
 ---
