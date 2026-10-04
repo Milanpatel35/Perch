@@ -691,6 +691,8 @@ sit *under* the menu bar, and the island's panel sits over it.
 | Virtual pill on non-notched Macs | BN SE DL | Mac mini, Studio, iMac, externals |
 | Per-display island placement | ★ | Which screen owns the island, or all of them |
 | Lock Screen presence | AL | P2 |
+| Home-surface launcher: a button for every module that is on and has something to open — Clipboard, Focus, Camera, Calendar | ★ | Fixed order, so buttons never move; modules that arrive on their own (shelf, HUD, notifications, Now Playing) get none. TC-HOM-001…004 |
+| Settings gear on the home surface | ★ | The way to modules that are off, which the island cannot show |
 
 ---
 

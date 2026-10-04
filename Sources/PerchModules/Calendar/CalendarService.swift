@@ -163,6 +163,16 @@ final class CalendarService: ObservableObject, PerchModule {
         }
     }
 
+    /// The launcher row's button. The island shows the next event on its
+    /// own; the whole calendar is Calendar's job.
+    func openApp() {
+        guard
+            isActive,
+            let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.apple.iCal")
+        else { return }
+        NSWorkspace.shared.openApplication(at: url, configuration: .init())
+    }
+
     // MARK: - Presenting
 
     private func present() {

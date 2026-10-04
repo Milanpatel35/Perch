@@ -332,6 +332,12 @@ Settings ▸ About and the menu bar, archives EdDSA-signed by `Scripts/sign-buil
 the feed generated from releases; Apple code signing is still the signing work
 in #25.
 
+**The home surface is now the front door to every module.** A
+hands-on look showed four of thirteen switched-on modules reachable from the
+island; the clipboard, focus timer, camera and calendar had no button. A
+launcher row (`HomeLauncher` in Core, TC-HOM-001 … 004) adds one for each
+that is on, and a gear opens Settings for the ones that are off.
+
 ## 3.2 — Release engineering
 
 1. Code sign, notarise, staple. Homebrew cask submission.
