@@ -58,10 +58,44 @@ final class IslandSnapshots: XCTestCase {
         }
     }
 
+    /// The modules added since the first set of shots, opened.
+    func test_capturesTheLaterModules() throws {
+        let shots: [(name: String, activity: any IslandActivity)] = [
+            ("focus", FocusActivity(timer: .demo, sessionsToday: 3, streakDays: 5)),
+            ("battery", BatteryStatusActivity(power: .demo, accessories: .demo))
+        ]
+
+        for shot in shots {
+            let image = try XCTUnwrap(render(shot.activity, expanded: true))
+            XCTAssertGreaterThan(image.drawnPixels, 0, "\(shot.name) is blank")
+            try write(image, named: "island-\(shot.name)")
+        }
+    }
+
+    /// The home surface with module rows on it — the screenshot buttons
+    /// among them — which is what hovering the notch actually shows.
+    func test_capturesTheHomeSurfaceWithItsRows() throws {
+        let image = try XCTUnwrap(
+            render(
+                HomeActivity(collapsedSize: layout.metrics.collapsedSize),
+                expanded: true,
+                modulesOn: { host, island in
+                    let screenshot = ScreenshotService(island: island)
+                    host.register(screenshot)
+                    screenshot.activate()
+                }
+            )
+        )
+        XCTAssertGreaterThan(image.drawnPixels, 0, "home with rows is blank")
+        try write(image, named: "island-home-rows")
+    }
+
     func test_capturesThePeekPresentations() throws {
         let shots: [(name: String, activity: any IslandActivity)] = [
             ("now-playing", NowPlayingActivity(snapshot: .demo)),
-            ("shelf", ShelfActivity(items: .demo))
+            ("shelf", ShelfActivity(items: .demo)),
+            ("volume", HUDActivity(reading: .demo)),
+            ("screenshot-text", ScreenshotActivity(outcome: .copiedText(characters: 1_204)))
         ]
 
         for shot in shots {
@@ -91,10 +125,12 @@ final class IslandSnapshots: XCTestCase {
     /// different UI.
     private func render(
         _ activity: any IslandActivity,
-        expanded: Bool
+        expanded: Bool,
+        modulesOn: (ModuleHost, IslandController) -> Void = { _, _ in }
     ) -> NSBitmapImageRep? {
         let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
         let modules = ModuleHost(switchboard: ModuleSwitchboard(), island: island)
+        modulesOn(modules, island)
 
         island.submit(activity)
         if expanded { island.send(.clicked) }
