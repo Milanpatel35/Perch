@@ -331,3 +331,37 @@ extension PomodoroTimer.Phase {
         }
     }
 }
+
+// MARK: - Something kept out of the way
+
+extension FocusBlockedActivity: IslandActivityPresenting {
+
+    var peekSize: CGSize { CGSize(width: 340, height: 34) }
+
+    func peekView() -> AnyView {
+        AnyView(FocusBlockedPeek(name: name, count: count))
+    }
+
+    func expandedView() -> AnyView { peekView() }
+}
+
+private struct FocusBlockedPeek: View {
+
+    let name: String
+    let count: Int
+
+    var body: some View {
+        NotchFlanks {
+            Image(systemName: "hand.raised.fill")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(.orange)
+        } trailing: {
+            Text("\(name) · focus")
+                .font(.system(size: 11, weight: .medium))
+                .foregroundStyle(.white.opacity(0.9))
+                .truncationMode(.middle)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("\(name) kept away during focus, \(count) this session"))
+    }
+}

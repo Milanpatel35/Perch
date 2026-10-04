@@ -141,7 +141,7 @@ screenshots` — not a mockup.
 | **Now Playing** | Apple Music and Spotify: artwork, scrubbing, AirPlay target, swipe to skip, a peek on track change. Not browser audio — macOS closed that to other apps | ✅ Live |
 | **Shelf** | Drag files to the notch, hold them, drop them anywhere else. AirDrop and quick format conversion built in | ✅ Live |
 | **Clipboard** | Searchable history with pinning — text, images, colours — and the text read out of anything you screenshot | ✅ Live |
-| **Focus** | Pomodoro that counts down in the notch, and survives the lid being closed because nothing is counting | ✅ Live |
+| **Focus** | Pomodoro that counts down in the notch, survives the lid being closed, and keeps listed apps and sites out of the way while you work | ✅ Live |
 | **Calendar** | Next meeting, countdown, one-click join for six services — then mute, camera and leave without finding the window (Zoom verified) | ✅ Live |
 | **HUDs** | Volume, brightness, charging, Bluetooth, Focus and the camera-in-use dot, with the macOS overlay suspended while it is on | ✅ Live |
 | **Battery** | Mac, AirPods, mouse, keyboard, trackpad — and one low warning per discharge, not one per wobble | ✅ Live |

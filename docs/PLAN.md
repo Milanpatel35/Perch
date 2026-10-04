@@ -360,6 +360,8 @@ The P2 tier from `FEATURES.md`, in rough order of how often people will ask:
 
 - Voice to text, on-device (Seam's and NotchBay's differentiator, and the
   single biggest piece of work left — Whisper via Core ML)
+- ~~Focus distraction blocking~~ — **done.** Apps hidden and front tabs
+  blanked during a work phase only; ADR 0009 records the bounded tab check.
 - ~~Screenshot capture, straight into the shelf~~ — **done, pulled forward.**
   Module 16 shipped with area, window and screen, copy the text in an area,
   and pin an area on top, ported from a prototype in a Boring Notch fork and

@@ -30,15 +30,25 @@ final class FocusService: ObservableObject, PerchModule {
     @Published private(set) var timer = PomodoroTimer()
     @Published private(set) var streak = FocusStreak()
 
+    /// What to keep out of the way during a work phase. Kept here rather
+    /// than in the blocker, which only exists while a session needs it.
+    @Published var blocklist: DistractionBlocklist
+
+    /// Apps hidden and tabs blanked since the session started.
+    @Published var blockedThisSession = 0
+
     private(set) var isActive = false
 
-    private let island: IslandController
+    let island: IslandController
     private let directory: URL
 
     /// The single scheduled wake-up: one per running phase, cancelled and
     /// replaced whenever the phase changes.
     private var completion: Task<Void, Never>?
     private var observers: [NSObjectProtocol] = []
+
+    /// Hides apps and blanks tabs. See `FocusService+Blocking.swift`.
+    let blocker: FocusBlocker
 
     /// Called when a work phase finishes.
     ///
@@ -53,11 +63,16 @@ final class FocusService: ObservableObject, PerchModule {
     init(
         island: IslandController,
         directory: URL? = nil,
+        blocking: FocusBlocker.System? = nil,
         now: @escaping @MainActor () -> Date = { Date() }
     ) {
         self.island = island
         self.directory = directory ?? Self.defaultDirectory
         self.now = now
+        self.blocklist = Defaults[.distractionBlocklist]
+        self.blocker = FocusBlocker(system: blocking ?? .live)
+        blocker.onBlocked = { [weak self] name in self?.blocked(name) }
+        blocker.onRefusalsChanged = { [weak self] in self?.objectWillChange.send() }
     }
 
     static var defaultDirectory: URL {
@@ -91,6 +106,7 @@ final class FocusService: ObservableObject, PerchModule {
         // from yesterday would be worse than forgetting it.
         if timer.isRunning { timer.pause(now: now()) }
         present()
+        syncBlocking()
     }
 
     func deactivate() {
@@ -106,6 +122,7 @@ final class FocusService: ObservableObject, PerchModule {
         observers.removeAll()
 
         KeyboardShortcuts.disable(.focusTimer)
+        blocker.stop()
         save()
 
         island.withdraw(FocusActivity.identifier)
@@ -121,6 +138,8 @@ final class FocusService: ObservableObject, PerchModule {
         island.withdraw(FocusFinishedActivity.identifier)
         schedule()
         present()
+        startCountingBlocks()
+        syncBlocking()
     }
 
     func toggle() {
@@ -130,6 +149,7 @@ final class FocusService: ObservableObject, PerchModule {
         island.withdraw(FocusFinishedActivity.identifier)
         schedule()
         present()
+        syncBlocking()
     }
 
     func stop() {
@@ -141,6 +161,7 @@ final class FocusService: ObservableObject, PerchModule {
 
         island.withdraw(FocusActivity.identifier)
         island.withdraw(FocusFinishedActivity.identifier)
+        syncBlocking()
         save()
     }
 
@@ -190,6 +211,7 @@ final class FocusService: ObservableObject, PerchModule {
         save()
 
         onSessionEnded?()
+        syncBlocking()
 
         completion?.cancel()
         completion = nil

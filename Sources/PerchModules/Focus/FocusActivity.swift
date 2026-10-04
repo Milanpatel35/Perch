@@ -54,3 +54,25 @@ struct FocusFinishedActivity: IslandActivity {
     let sessionsToday: Int
     let streakDays: Int
 }
+
+/// A short note that something was kept out of the way.
+///
+/// Said, not silent: an app that vanishes with no explanation reads as a
+/// crash. Said briefly, and below anything that matters — a nudge, not an
+/// alarm — then the countdown comes back.
+struct FocusBlockedActivity: IslandActivity {
+
+    static let identifier = ActivityID("focus.blocked")
+
+    let id = Self.identifier
+    let source: ModuleID = .focus
+    let priority: ActivityPriority = .ambient
+    let timeToLive: Duration? = .seconds(2)
+    let isExpandable = false
+
+    /// The app hidden, or the site's host.
+    let name: String
+
+    /// How many this session, this one included.
+    let count: Int
+}
