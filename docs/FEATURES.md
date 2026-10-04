@@ -580,6 +580,29 @@ win".
 |---|---|---|
 | Capture region / window / screen from the island | ★ | |
 | Thumbnail lands in the shelf, annotate before sharing | ★ | |
+| Copy the text in an area | NB | On-device Vision, the same promise as the clipboard's OCR |
+| Pin an area above everything | ★ | A reference card, for comparing two things that cannot share a screen |
+
+**Status — shipped, three and a half of the four rows.** Area, window and
+the screen under the pointer from a row of buttons on the home surface; the
+capture lands in the shelf when it is on, otherwise on the clipboard or in
+the folder macOS saves its own screenshots to. Copy text reads an area on
+this Mac and keeps the text, not the image. Pin floats an area above every
+Space until its close button is pressed, and nothing of it is kept on disk.
+
+**Annotation is not done.** A capture reaches the shelf, so it can be
+dragged into Preview or Markup, but Perch draws nothing on it itself.
+
+**The capture is `/usr/sbin/screencapture`, not ScreenCaptureKit.** Its
+pickers are the ones everybody knows from ⌘⇧4, Escape included; they are
+correct across displays without Perch converting a coordinate (`CLAUDE.md`
+§5.4); and they work on macOS 13, where ScreenCaptureKit has no screenshot
+call. The arguments are an array, never a shell string (TC-SCR-003). The
+island folds to the notch before every capture so it is never in the shot.
+
+Nothing runs until a button is pressed. Screen Recording is asked for on the
+first capture — the system prompt only ever appears once, so the second
+press opens System Settings instead of appearing to do nothing.
 
 ## 17. Hide-the-notch mode — P1
 

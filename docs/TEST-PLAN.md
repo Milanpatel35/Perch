@@ -290,6 +290,24 @@ optional and they do not get skipped when the suite is slow.
 | TC-VOI-003 | U | Transcription is offline | No network request after the model is present |
 | TC-VOI-004 | U | Module disabled | Audio engine stopped; no microphone indicator |
 
+## SCR — screenshots (P2)
+
+| ID | Level | Case | Expected |
+|---|---|---|---|
+| TC-SCR-001 | U | Module on, nothing pressed | No process, no observer, no permission prompt — switching on costs nothing |
+| TC-SCR-002 | U | Capture pressed without Screen Recording | Asked once, with a reason; nothing captured; the island says how to allow it |
+| TC-SCR-003 | U | Area, window and screen | The right `screencapture` arguments, each one a separate argument, never a shell string; screen means the display under the pointer |
+| TC-SCR-004 | U | Capture cancelled with Escape | Nothing written, nothing on the island |
+| TC-SCR-005 | U | Saved with the shelf on, and off | One file, in the shelf, staging removed; with the shelf off, in the system screenshot location |
+| TC-SCR-006 | U | System screenshot location | Reads the one macOS uses, expands `~`, falls back to the Desktop when unset or gone |
+| TC-SCR-007 | U | File names | macOS's own shape, fixed locale, no colons; two in the same second do not collide |
+| TC-SCR-008 | U | Recognised text assembled | Reading order top to bottom then left to right; paragraphs survive; low-confidence noise dropped |
+| TC-SCR-009 | U | Copy text from an area | Recognised on this Mac; the image is deleted; the text is on the clipboard; no text found says so |
+| TC-SCR-010 | E | Pin an area | Floats above everything on every Space, drags, closes from its button; nothing kept on disk |
+| TC-SCR-011 | U | Module disabled | A capture in progress is ended, every pin closed, nothing left on the island |
+| TC-SCR-012 | E | Second display attached | Area and window pick across both; screen captures the display the pointer is on |
+| TC-SCR-013 | U | The island in the picture | The island closes before the capture starts, so it is never in the shot |
+
 ## HID — hide-the-notch mode
 
 | ID | Level | Case | Expected |
@@ -443,6 +461,24 @@ in response to a key, so most of it can only be judged by eye:
       stops (TC-HUD-008)
 - [ ] Second display attached: a brightness change on the *other* screen does
       not draw a HUD on the island's screen
+
+Added for the Screenshots module. The pickers are the system's own, so
+these are about what reaches the screen and the disk:
+
+- [ ] First press on a Mac that has never allowed it: the system prompt
+      appears once; the second press opens System Settings (TC-SCR-002)
+- [ ] Area, window and screen each land one file in the shelf with the
+      shelf on, and in the screenshot folder with it off (TC-SCR-005)
+- [ ] A full-screen capture with the home surface open: the island is not
+      in the picture (TC-SCR-013)
+- [ ] Escape during an area: nothing on the island, nothing on disk, and
+      `/tmp/…/Perch Screenshots` is empty (TC-SCR-004)
+- [ ] Copy text on a terminal error and a code on a slide: pastes correctly,
+      line breaks kept (TC-SCR-009)
+- [ ] Pin survives a Space switch and full-screen app; the close button
+      takes the first click (TC-SCR-010)
+- [ ] Second display: screen captures the display the pointer is on; area
+      and window work across both (TC-SCR-012)
 
 Added for the Focus module:
 
