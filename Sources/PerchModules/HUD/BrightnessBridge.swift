@@ -63,6 +63,10 @@ final class BrightnessBridge {
     private var unregister: Unregister?
 
     private var registered: Set<CGDirectDisplayID> = []
+
+    /// The weak box the display callback carries — see `CallbackContext`.
+    /// Register and unregister must pass the same pointer, so it is kept.
+    private var callbackContext: UnsafeMutableRawPointer?
     private var onChange: (@MainActor (CGDirectDisplayID) -> Void)?
 
     /// Whether the framework loaded and every symbol resolved. False means
@@ -101,10 +105,20 @@ final class BrightnessBridge {
     }
 
     func stop() {
+        var allUnregistered = true
         for display in registered {
-            _ = unregister?(display, Unmanaged.passUnretained(self).toOpaque(), Self.callback)
+            let result = unregister?(display, callbackContext, Self.callback) ?? -1
+            if result != 0 { allUnregistered = false }
         }
         registered.removeAll()
+
+        // A private framework that refused to unregister may still call
+        // back. Then the box is kept — its target is weak, so a late call
+        // does nothing — rather than freed under a live registration.
+        if allUnregistered {
+            CallbackContext<BrightnessBridge>.release(callbackContext)
+        }
+        callbackContext = nil
 
         NotificationCenter.default.removeObserver(
             self,
@@ -163,7 +177,8 @@ final class BrightnessBridge {
     private func registerForCurrentDisplays() {
         guard let register else { return }
 
-        let context = Unmanaged.passUnretained(self).toOpaque()
+        let context = callbackContext ?? CallbackContext.retain(self)
+        callbackContext = context
         for display in Self.activeDisplays() where !registered.contains(display) {
             guard register(display, context, Self.callback) == 0 else { continue }
             registered.insert(display)
@@ -189,10 +204,9 @@ final class BrightnessBridge {
     private static let callback:
         @convention(c) (UnsafeMutableRawPointer?, CGDirectDisplayID, UnsafeRawPointer?, Double) ->
             Void = { context, display, _, _ in
-                guard let context else { return }
-                let bridge = Unmanaged<BrightnessBridge>.fromOpaque(context)
-                    .takeUnretainedValue()
-
+                guard let bridge = CallbackContext<BrightnessBridge>.target(of: context) else {
+                    return
+                }
                 MainActor.assumeIsolated { bridge.onChange?(display) }
             }
 }

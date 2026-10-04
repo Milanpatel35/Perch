@@ -226,6 +226,26 @@ public final class IslandPanelController {
             guard !Task.isCancelled, let self, let panel = self.panel else { return }
             panel.setFrame(target, display: false)
             self.shrinkTask = nil
+            self.endHoverIfPointerLeft()
+        }
+    }
+
+    /// Ends a hover the pointer is no longer part of (TC-ISL-022).
+    ///
+    /// SwiftUI only reports leaving when the *pointer* crosses the island's
+    /// edge. When the island moves instead — closes, shrinks, or stops
+    /// taking mouse events — under a pointer that stays put, no event
+    /// arrives, the island believes it is still hovered, and everything
+    /// after that opens fully and never expires. Asked after every change
+    /// that could cause it; reading the pointer needs no permission.
+    private func endHoverIfPointerLeft() {
+        guard controller.state.isHovered, let layout else { return }
+
+        let island = CGRect.fromDisplaySpace(
+            layout.islandScreenFrame(islandSize: currentIslandSize(in: layout)))
+        let isOver = controller.acceptsMouseEvents && island.contains(NSEvent.mouseLocation)
+        if !isOver {
+            controller.send(.hoverEnded)
         }
     }
 
@@ -247,6 +267,9 @@ public final class IslandPanelController {
             .removeDuplicates()
             .sink { [weak self] enabled in
                 self?.panel?.ignoresMouseEvents = !enabled
+                // A panel that stops taking mouse events can never hear the
+                // pointer leave.
+                if !enabled { self?.endHoverIfPointerLeft() }
             }
             .store(in: &cancellables)
 

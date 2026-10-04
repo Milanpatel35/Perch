@@ -38,6 +38,11 @@ final class NotificationWatcher {
     var onNotification: ((MirroredNotification) -> Void)?
 
     private var observer: AXObserver?
+
+    /// The weak box the Accessibility callback carries — see
+    /// `CallbackContext`. Kept across a banner-process relaunch, released in
+    /// `stop()` once the callback can no longer fire.
+    private var callbackContext: UnsafeMutableRawPointer?
     private var element: AXUIElement?
     private var launchObserver: NSObjectProtocol?
 
@@ -83,6 +88,9 @@ final class NotificationWatcher {
         element = nil
         lastBanner = nil
 
+        CallbackContext<NotificationWatcher>.release(callbackContext)
+        callbackContext = nil
+
         if let launchObserver {
             NSWorkspace.shared.notificationCenter.removeObserver(launchObserver)
         }
@@ -127,7 +135,8 @@ final class NotificationWatcher {
         let status = AXObserverCreate(app.processIdentifier, Self.callback, &created)
         guard status == .success, let created else { return false }
 
-        let context = Unmanaged.passUnretained(self).toOpaque()
+        let context = callbackContext ?? CallbackContext.retain(self)
+        callbackContext = context
         let added = AXObserverAddNotification(
             created,
             element,
@@ -158,9 +167,9 @@ final class NotificationWatcher {
     /// C callback, so it cannot capture. The watcher comes back through the
     /// refcon pointer handed to `AXObserverAddNotification`.
     private static let callback: AXObserverCallback = { _, window, _, context in
-        guard let context else { return }
-        let watcher = Unmanaged<NotificationWatcher>.fromOpaque(context)
-            .takeUnretainedValue()
+        guard let watcher = CallbackContext<NotificationWatcher>.target(of: context) else {
+            return
+        }
 
         // The callback is delivered on the run loop the source was added
         // to, which is the main one — so this is isolated in fact, and the

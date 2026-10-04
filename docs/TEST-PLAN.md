@@ -62,6 +62,8 @@ Levels:
 | TC-ISL-017 | U | "Expand on hover" or "Click to keep open" switched off | Hover holds a peek but does not open it; a click opens and a second click closes without pinning, and leaving closes it |
 | TC-ISL-019 | U | How long a transition takes to finish | Every spring and every Reduce Motion fade has a settle time; the window waits that long before shrinking, so a collapse is never cut off |
 | TC-ISL-020 | E | Clicking around the island | A menu, a status icon or a browser tab within a few hundred points of the notch takes the click while the island rests; nothing near the notch looks frozen |
+| TC-ISL-021 | U | The island goes idle while the pointer is over it | Hover is forgotten: the next activity peeks rather than opening, and leaves on its time to live |
+| TC-ISL-022 | U | The island shrinks or closes out from under a pointer that does not move | Where the island now is on screen is known, so the panel ends the hover itself — nothing is left open over the app beside the notch |
 | TC-ISL-018 | U | Closing a panel somebody opened — the battery list from its tile, the clipboard picker, the camera preview — by a second click, by moving away, or by a module asking to collapse | It is withdrawn and the island returns to what was under it; it never folds to a peek that nothing will withdraw. The camera's id leaves the island, which is what releases the device (TC-CAM-006) |
 
 ## MED — Now Playing
@@ -358,7 +360,7 @@ optional and they do not get skipped when the suite is slow.
 | TC-PRF-002 | M | One hour idle, all modules off | CPU effectively 0%; no timers scheduled |
 | TC-PRF-003 | M | Memory after eight hours | Under 150MB, no upward drift |
 | TC-PRF-004 | M | Energy impact during music playback | "Low" in Activity Monitor |
-| TC-PRF-005 | U | No retain cycles | Leak check clean on module enable/disable cycles |
+| TC-PRF-005 | U | No retain cycles, no dangling callbacks | Leak check clean on module enable/disable cycles; a system callback arriving after its module is gone does nothing instead of crashing |
 | TC-PRF-006 | M | Cold launch to island ready | Under 500ms |
 | TC-PRF-007 | M | All 18 modules enabled, one hour idle | CPU under 1.5% average; the count of modules must not change the idle cost |
 | TC-PRF-008 | M | Camera preview open for 30 minutes | Energy impact no worse than Photo Booth; thermals unchanged |
