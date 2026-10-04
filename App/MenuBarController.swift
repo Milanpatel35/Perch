@@ -12,11 +12,13 @@ final class MenuBarController: NSObject {
 
     private let island: IslandController
     private let settings: SettingsWindowController
+    private let updater: UpdateController
     private let statusItem: NSStatusItem
 
-    init(island: IslandController, settings: SettingsWindowController) {
+    init(island: IslandController, settings: SettingsWindowController, updater: UpdateController) {
         self.island = island
         self.settings = settings
+        self.updater = updater
         self.statusItem = NSStatusBar.system.statusItem(
             withLength: NSStatusItem.variableLength
         )
@@ -60,6 +62,12 @@ final class MenuBarController: NSObject {
             action: #selector(openSettings),
             keyEquivalent: ","
         ).target = self
+
+        menu.addItem(
+            withTitle: String(localized: "Check for Updates…"),
+            action: #selector(UpdateController.checkForUpdates),
+            keyEquivalent: ""
+        ).target = updater
 
         menu.addItem(.separator())
 

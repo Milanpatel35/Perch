@@ -327,7 +327,9 @@ to switch on for a copy run straight from Downloads — App Translocation runs
 it from a path that is gone after a restart, so the switch would lie. The
 welcome window's hosting view accepts first mouse: macOS 14+ often keeps an
 accessory app in the background, and the preset cards ignored every click
-until it did (TC-ONB-006). Sparkle is still to come, with the signing work
+until it did (TC-ONB-006). **Sparkle is in since 0.13.0** — Check for Updates in
+Settings ▸ About and the menu bar, archives EdDSA-signed by `Scripts/sign-build.sh`,
+the feed generated from releases; Apple code signing is still the signing work
 in #25.
 
 ## 3.2 — Release engineering

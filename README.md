@@ -50,7 +50,7 @@ notch it draws a floating island instead.
 
 ### Option 1: download the app
 
-<a href="https://github.com/Milanpatel35/Perch/releases/download/build-0.12.0/Perch-0.12.0-unsigned.zip"><img src="https://img.shields.io/badge/Download%20for%20macOS-Perch%200.12.0-black?style=for-the-badge&logo=apple" alt="Download Perch 0.12.0 for macOS" height="44"></a>
+<a href="https://github.com/Milanpatel35/Perch/releases/download/build-0.13.0/Perch-0.13.0-unsigned.zip"><img src="https://img.shields.io/badge/Download%20for%20macOS-Perch%200.13.0-black?style=for-the-badge&logo=apple" alt="Download Perch 0.13.0 for macOS" height="44"></a>
 
 1. Unzip it and **drag Perch into Applications.** Run straight from
    Downloads, macOS starts a temporary copy and Perch cannot open at login.
@@ -75,6 +75,15 @@ Or, on any version, from Terminal:
 ```bash
 xattr -dr com.apple.quarantine /Applications/Perch.app
 ```
+
+### Updating
+
+From 0.13.0, Perch updates itself: **menu bar icon → Check for Updates…**,
+or **Settings ▸ About**, shows whether you are up to date and installs a new
+build with its notes. It checks once a day on its own, and you can switch
+that off in the same place. Every update is signed, and one that does not
+match the signature is refused. Copies older than 0.13.0 need this one
+downloaded by hand, once.
 
 Your settings carry over from one build to the next.
 [Every build](https://github.com/Milanpatel35/Perch/releases) is listed with

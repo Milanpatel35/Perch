@@ -10,6 +10,21 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 Nothing yet. Next up: the capture extras — colour, measure, QR and GIF.
 
+## [0.13.0] — 2026-10-04
+
+Perch can update itself.
+
+### Added
+
+- **Check for updates from Perch.** Settings ▸ About shows whether Perch is
+  up to date, with a Check for Updates button, and the menu bar has the same
+  item. When a new build is out, Perch shows what changed and installs it
+  for you, then relaunches. It checks once a day on its own; switch that off
+  in the same place and it asks only when you press the button. Updates are
+  signed, and one whose signature does not match is refused.
+- This works from this version onwards. Copies older than 0.13.0 cannot
+  update themselves — download this one by hand, once.
+
 ## [0.12.0] — 2026-10-04
 
 A focus session that keeps distractions out of the way.
