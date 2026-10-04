@@ -4,9 +4,10 @@ import SwiftUI
 
 /// The floating pill the preview detaches into.
 ///
-/// One of two places in Perch allowed a window of its own rather than
-/// `IslandPanel` (`CLAUDE.md` §9; the other is hide-the-notch's
-/// `MenuBarStripPanel`). The reason is specific: a pinned preview
+/// One of three places in Perch allowed a window of its own rather than
+/// `IslandPanel` (`CLAUDE.md` §9; the others are hide-the-notch's
+/// `MenuBarStripPanel` and the screenshot module's
+/// `ScreenshotPinPanel`). The reason is specific: a pinned preview
 /// has to survive the island collapsing, has to be draggable anywhere on
 /// screen, and has to stay up while you present — three things the island's
 /// own panel is deliberately not (TC-CAM-005).

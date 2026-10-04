@@ -8,7 +8,19 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Nothing yet. Next up is the rest of Phase 2.6 — weather and windows.
+### Added
+
+- **Screenshots, from the island.** A row of buttons on the home surface:
+  an area, a window, or the screen you are looking at. The picture goes into
+  the shelf when it is on — or the clipboard, or the folder macOS saves its
+  own screenshots to. The island folds away first, so it is never in the
+  shot.
+- **Copy the text in an area.** Read on this Mac by the system's own
+  recogniser; the text is kept and the picture is not.
+- **Pin an area above everything**, on every Space, until you close it.
+  Nothing of it is kept on disk.
+- Screen Recording is asked for the first time you press a capture button,
+  never before. Drawing on a capture is not built yet.
 
 ## [0.10.0] — 2026-10-03
 

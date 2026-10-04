@@ -96,6 +96,14 @@ export const STATES = {
         expanded:
             '<div class="l2">Your favourite Shortcuts as buttons, Perch actions in the Shortcuts app, and a CLI for anything a terminal can pipe.</div>',
     },
+    shot: {
+        tint: "linear-gradient(145deg,#43cea2,#185a9d)",
+        title: "1,204 characters copied",
+        subtitle: "Text read from an area, on this Mac",
+        trailing: '<span class="tag g">Text</span>',
+        expanded:
+            '<div class="l2">Area, window or screen into the shelf. Or copy the text out of an area, or pin one above everything.</div>',
+    },
     hide: {
         tint: "#000",
         title: "Notch hidden",
