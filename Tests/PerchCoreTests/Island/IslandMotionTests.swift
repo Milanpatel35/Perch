@@ -102,4 +102,21 @@ final class IslandMotionTests: XCTestCase {
             )
         }
     }
+
+    // MARK: - TC-ISL-019
+
+    func test_TC_ISL_019_everyTransitionHasASettleTimeLongerThanItsCurve() {
+        for token in [IslandMotion.Token.peek, .expand, .content, .collapse] {
+            guard case .spring(let spring) = IslandMotion.resolve(token, reduceMotion: false),
+                case .fade(let fade) = IslandMotion.resolve(token, reduceMotion: true)
+            else { return XCTFail("\(token) did not resolve") }
+
+            let springSettle = IslandMotion.settleTime(token, reduceMotion: false)
+            let fadeSettle = IslandMotion.settleTime(token, reduceMotion: true)
+
+            XCTAssertGreaterThan(springSettle, .milliseconds(Int(spring.response * 1_000)))
+            XCTAssertLessThan(springSettle, .seconds(2), "not so long the window lingers")
+            XCTAssertGreaterThan(fadeSettle, fade.duration)
+        }
+    }
 }

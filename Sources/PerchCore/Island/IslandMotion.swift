@@ -88,6 +88,21 @@ public enum IslandMotion {
         reduceMotion ? .fade(fade(for: token)) : .spring(spring(for: token))
     }
 
+    /// How long a transition takes to come to rest, so the window around the
+    /// island can wait for it before shrinking (TC-ISL-019).
+    ///
+    /// A spring's `response` is roughly one swing, and an underdamped one
+    /// takes about two to settle within a point; the extra tenth covers a
+    /// frame or two of lag. A fade is exactly its duration.
+    public static func settleTime(_ token: Token, reduceMotion: Bool) -> Duration {
+        switch resolve(token, reduceMotion: reduceMotion) {
+        case .spring(let spring):
+            .milliseconds(Int((spring.response * 2 + 0.1) * 1_000))
+        case .fade(let fade):
+            fade.duration + .milliseconds(50)
+        }
+    }
+
     /// The token for a transition between two presentations.
     public static func token(
         from old: IslandPresentation,

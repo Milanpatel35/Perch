@@ -37,6 +37,7 @@ Levels:
 | TC-GEO-010 | E | Sidecar / iPad as second display | No island drawn on the Sidecar screen unless enabled |
 | TC-GEO-011 | U | Panel on a display narrower than the island's maximum | Panel frame never exceeds the screen; nothing hangs off either edge |
 | TC-GEO-012 | U | Island inside the panel | Centred on the notch and flush with the top edge at every presentation size |
+| TC-GEO-013 | U | The window around the island | Holds the island and its shadow, centred on the notch, never larger than the panel's maximum — and for the resting home surface, a small fraction of it, so the menu bar and the apps beside the notch take their own clicks |
 
 ## ISL — island state machine
 
@@ -59,6 +60,8 @@ Levels:
 | TC-ISL-015 | U | Runtime applies the reducer's effects | Exactly one collapse is ever pending; a new activity replaces it rather than adding a second |
 | TC-ISL-016 | U | Closing something that owns its lifetime — a second click on the home surface, a module asking to collapse | It folds back to its peek and stays queued; only an activity with a time to live is thrown away. Hover still opens it afterwards |
 | TC-ISL-017 | U | "Expand on hover" or "Click to keep open" switched off | Hover holds a peek but does not open it; a click opens and a second click closes without pinning, and leaving closes it |
+| TC-ISL-019 | U | How long a transition takes to finish | Every spring and every Reduce Motion fade has a settle time; the window waits that long before shrinking, so a collapse is never cut off |
+| TC-ISL-020 | E | Clicking around the island | A menu, a status icon or a browser tab within a few hundred points of the notch takes the click while the island rests; nothing near the notch looks frozen |
 | TC-ISL-018 | U | Closing a panel somebody opened — the battery list from its tile, the clipboard picker, the camera preview — by a second click, by moving away, or by a module asking to collapse | It is withdrawn and the island returns to what was under it; it never folds to a peek that nothing will withdraw. The camera's id leaves the island, which is what releases the device (TC-CAM-006) |
 
 ## MED — Now Playing
@@ -480,6 +483,18 @@ in response to a key, so most of it can only be judged by eye:
       stops (TC-HUD-008)
 - [ ] Second display attached: a brightness change on the *other* screen does
       not draw a HUD on the island's screen
+
+Added when the window started following the island (TC-GEO-013,
+TC-ISL-020) — every row on a real screen:
+
+- [ ] Island resting: the menus left of the notch, the status icons right
+      of it, and a browser's tabs and address bar beside it all take clicks
+- [ ] Hover open the home surface, then move away: it closes smoothly, with
+      nothing cut off at the end of the animation (TC-ISL-019)
+- [ ] Drag a file onto the notch with the island resting: the shelf still
+      catches it (TC-SHF-001)
+- [ ] Reduce Motion on: the same three, with the fades
+- [ ] Second display: the window follows the island there and stays small
 
 Added for the Screenshots module. The pickers are the system's own, so
 these are about what reaches the screen and the disk:
