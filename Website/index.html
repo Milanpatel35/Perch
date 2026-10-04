@@ -114,6 +114,26 @@
     <p class="eyebrow">Everything, one glance up</p>
     <h2>Live activities that<span class="soft">actually live.</span></h2>
     <p class="body" style="margin-top:20px">Music, the shelf, your clipboard, the next meeting, a timer. One island becomes whatever matters right now, then gets out of the way.</p>
+    <div class="modules" role="list" aria-label="Every module and whether it is in the download today">
+      <div role="listitem" class="module"><span class="ico" aria-hidden="true">🎵</span>Now Playing<span class="st live">Live</span></div>
+      <div role="listitem" class="module"><span class="ico" aria-hidden="true">📥</span>Shelf<span class="st live">Live</span></div>
+      <div role="listitem" class="module"><span class="ico" aria-hidden="true">📋</span>Clipboard<span class="st live">Live</span></div>
+      <div role="listitem" class="module"><span class="ico" aria-hidden="true">⏱</span>Focus timer<span class="st live">Live</span></div>
+      <div role="listitem" class="module"><span class="ico" aria-hidden="true">📅</span>Calendar<span class="st live">Live</span></div>
+      <div role="listitem" class="module"><span class="ico" aria-hidden="true">🔊</span>HUD replacement<span class="st live">Live</span></div>
+      <div role="listitem" class="module"><span class="ico" aria-hidden="true">🔋</span>Battery<span class="st live">Live</span></div>
+      <div role="listitem" class="module"><span class="ico" aria-hidden="true">🔔</span>Notifications<span class="st live">Live</span></div>
+      <div role="listitem" class="module"><span class="ico" aria-hidden="true">📷</span>Camera<span class="st live">Live</span></div>
+      <div role="listitem" class="module"><span class="ico" aria-hidden="true">📈</span>System stats<span class="st live">Live</span></div>
+      <div role="listitem" class="module"><span class="ico" aria-hidden="true">⌘</span>Shortcuts<span class="st live">Live</span></div>
+      <div role="listitem" class="module"><span class="ico" aria-hidden="true">📸</span>Screenshots<span class="st live">Live</span></div>
+      <div role="listitem" class="module"><span class="ico" aria-hidden="true">⬛️</span>Hide the notch<span class="st live">Live</span></div>
+      <div role="listitem" class="module soon"><span class="ico" aria-hidden="true">🌤</span>Weather<span class="st soon">Coming soon</span></div>
+      <div role="listitem" class="module soon"><span class="ico" aria-hidden="true">🪟</span>Windows<span class="st soon">Coming soon</span></div>
+      <div role="listitem" class="module soon"><span class="ico" aria-hidden="true">📝</span>Notes<span class="st soon">Coming soon</span></div>
+      <div role="listitem" class="module soon"><span class="ico" aria-hidden="true">🎙</span>Voice typing<span class="st soon">Coming soon</span></div>
+    </div>
+    <p class="body" style="margin-top:16px;font-size:.9rem;color:var(--sub)"><strong>Live</strong> is in the build you can download today and has been tested. <strong>Coming soon</strong> is specified and not built — <a href="#notyet">what is not done yet</a>.</p>
   </div>
 </section>
 
@@ -190,11 +210,10 @@
         <h3>The timer counts down<span class="soft">where you already look.</span></h3>
         <p class="body">A Pomodoro in the notch, not in a window and not as a string in the menu bar. Close the lid for forty minutes and it is finished when you open it &mdash; nothing was counting, so there is nothing to catch up. When a session ends it takes the island from whatever is playing, and the streak counts days, not sessions: four on Tuesday is one day.</p>
       </div>
-      <div class="visual" style="min-height:200px">
-        <div class="clip"><span>⏱</span><div>Focus<div style="font-size:.78rem;color:var(--sub)">Session 3 of 4 · long break next</div></div><em style="font-weight:600">18:42</em></div>
-        <div class="clip"><span>✅</span><div>Today<div style="font-size:.78rem;color:var(--sub)">Finished focus sessions</div></div><em style="font-weight:600">3</em></div>
-        <div class="clip"><span>🔥</span><div>Streak<div style="font-size:.78rem;color:var(--sub)">Days in a row, not sessions</div></div><em style="font-weight:600">5 days</em></div>
-      </div>
+      <figure class="visual shot">
+        <img src="assets/img/shots/island-focus.png" alt="A Perch focus session under the notch: 19 minutes left, three sessions today, a five-day streak" loading="lazy" width="372" height="200">
+        <figcaption>A focus session, rendered from the app’s own view.</figcaption>
+      </figure>
     </div>
 
     <div class="block">
@@ -230,11 +249,10 @@
         <h3>The Mac, and<span class="soft">everything on it.</span></h3>
         <p class="body">Charge, power source and time remaining for the Mac; left, right and case for AirPods; every mouse, keyboard and trackpad that reports a level. One low warning per discharge cycle &mdash; not one every time the number wobbles back across the line. There is no timer in it: macOS pushes the changes, and the accessories are re-read when you open the island.</p>
       </div>
-      <div class="visual" style="min-height:200px">
-        <div class="clip"><span>🔋</span><div>This Mac<div style="font-size:.78rem;color:var(--sub)">On the wall · holding at 80% for battery health</div></div><em style="font-weight:600">80%</em></div>
-        <div class="clip"><span>🎧</span><div>AirPods Pro<div style="font-size:.78rem;color:var(--sub)">Left 82% · Right 79% · Case 44%</div></div><em style="font-weight:600">44%</em></div>
-        <div class="clip"><span>🖱️</span><div>Magic Mouse<div style="font-size:.78rem;color:var(--sub)">Reporting one level</div></div><em style="font-weight:600">14%</em></div>
-      </div>
+      <figure class="visual shot">
+        <img src="assets/img/shots/island-battery.png" alt="The Perch battery list: this Mac at 84%, AirPods Pro left, right and case, and a Magic Mouse" loading="lazy" width="412" height="168">
+        <figcaption>The battery list, rendered from the app’s own view.</figcaption>
+      </figure>
     </div>
 
     <div class="block flip">
@@ -288,12 +306,10 @@
         <p class="body">A row of buttons on the island: an area, a window, or the whole screen you are looking at. The picture goes into the shelf, ready to drag into a message, or onto the clipboard, or into the folder your Mac already saves screenshots to. The island folds away first, so it is never in the shot.</p>
         <p class="body" style="font-size:.9rem;color:var(--sub)">Two more buttons. <strong>Text</strong> reads the words in an area and copies them &mdash; an error message, a code on a slide &mdash; and keeps the text, not the picture. <strong>Pin</strong> floats an area above every window, for checking a design against the build. Text is read by your Mac&rsquo;s own recogniser and goes nowhere else. Screen Recording is asked for the first time you press a button, not before. Drawing on a capture is not built yet.</p>
       </div>
-      <div class="visual" style="min-height:200px;justify-content:flex-start">
-        <div class="clip"><span>⬚</span><span style="font-size:.9rem">Area, window or screen</span><em>into the shelf</em></div>
-        <div class="clip"><span>🔤</span><span style="font-size:.9rem">Copy the text in an area</span><em>on this Mac</em></div>
-        <div class="clip"><span>📌</span><span style="font-size:.9rem">Pin an area on top</span><em>every Space</em></div>
-        <div class="clip"><span>🖥</span><span style="font-size:.9rem">The screen you are on</span><em>second display too</em></div>
-      </div>
+      <figure class="visual shot">
+        <img src="assets/img/shots/island-home-rows.png" alt="The Perch home surface with five capture buttons: Area, Window, Screen, Text and Pin" loading="lazy" width="452" height="103">
+        <figcaption>The capture row on the home surface, rendered from the app’s own view.</figcaption>
+      </figure>
     </div>
 
     <div class="block flip">
@@ -553,7 +569,7 @@
     </div>
 
     <p class="srcmeta">
-      MIT licence · version <span data-gh="version">0.11.0</span> ·
+      MIT licence · version <span data-gh="version">0.11.1</span> ·
       <span data-gh="issuesPhrase">3 open issues</span> ·
       <a href="https://github.com/Milanpatel35/Perch/blob/dev/LICENSE">Read the licence</a>
     </p>
@@ -569,7 +585,7 @@
       <div class="tier">Everything, always</div>
       <div class="fig">$0</div>
       <div class="per">MIT licensed · every feature · unlimited Macs</div>
-      <a class="btn" href="https://github.com/Milanpatel35/Perch/releases/download/build-0.11.0/Perch-0.11.0-unsigned.zip" style="width:100%;justify-content:center">Download for macOS</a>
+      <a class="btn" href="https://github.com/Milanpatel35/Perch/releases/download/build-0.11.1/Perch-0.11.1-unsigned.zip" style="width:100%;justify-content:center">Download for macOS</a>
       <p class="prerelease">
         <strong>A pre-release, and not yet signed.</strong> Universal — Apple
         Silicon and Intel. Drag Perch into Applications first, so it can open

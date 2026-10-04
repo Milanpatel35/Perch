@@ -89,3 +89,50 @@ extension [ClipboardEntry] {
         ]
     }
 }
+
+extension PomodoroTimer {
+    /// A work session well under way.
+    static var demo: Self {
+        var timer = PomodoroTimer()
+        timer.start(.work, now: .now.addingTimeInterval(-6 * 60))
+        return timer
+    }
+}
+
+extension PowerSnapshot {
+    static var demo: Self {
+        Self(
+            isPresent: true,
+            percentage: 84,
+            source: .battery,
+            isCharging: false,
+            isCharged: false,
+            timeRemaining: .seconds(5 * 3_600 + 40 * 60)
+        )
+    }
+}
+
+extension [AccessoryBattery] {
+    static var demo: Self {
+        [
+            AccessoryBattery(
+                id: "airpods",
+                name: "AirPods Pro",
+                kind: .earbuds,
+                levels: .init(left: 82, right: 79, caseLevel: 44)
+            ),
+            AccessoryBattery(
+                id: "mouse",
+                name: "Magic Mouse",
+                kind: .mouse,
+                levels: .init(single: 61)
+            )
+        ]
+    }
+}
+
+extension HUDReading {
+    static var demo: Self {
+        Self(kind: .volume, level: 0.62, title: "Volume", detail: "MacBook Pro Speakers")
+    }
+}

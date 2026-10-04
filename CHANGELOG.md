@@ -10,6 +10,13 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 Nothing yet. Next up is the rest of Phase 2.6 — weather and windows.
 
+## [0.11.1] — 2026-10-04
+
+### Fixed
+
+- **"Window" and "Screen" were cut short** on the island's capture row, to
+  "Wind…" and "Scre…". All five buttons now fit.
+
 ## [0.11.0] — 2026-10-04
 
 Screenshots, from the notch.
