@@ -58,6 +58,16 @@ final class CaptureToolsLiveTests: XCTestCase {
         XCTAssertGreaterThan(codes.first?.area ?? 0, 0)
     }
 
+    /// The CPU fallback on its own. It is what reads codes where Vision's
+    /// accelerated model returns nothing — the macOS 14 CI machine — so it
+    /// is tested directly rather than only when Vision happens to fail.
+    func test_TC_SCR_017_theFallbackReaderFindsAGeneratedCode() throws {
+        let url = try write(qrCode("WIFI:S:Home;P:secret;;"), dpi: 144, named: "qr-wifi.png")
+
+        XCTAssertEqual(CodeReader.coreImageQR(url).map(\.payload), ["WIFI:S:Home;P:secret;;"])
+        XCTAssertTrue(CodeReader.coreImageQR(directory.appendingPathComponent("none.png")).isEmpty)
+    }
+
     func test_TC_SCR_017_theRealReaderFindsNothingInABlankArea() async throws {
         let blank = CIImage(color: .white).cropped(to: CGRect(x: 0, y: 0, width: 200, height: 200))
         let image = try XCTUnwrap(CIContext().createCGImage(blank, from: blank.extent))

@@ -623,7 +623,9 @@ or HSL, with the swatch beside the notch. *Measure* takes an area and copies
 its size in points: `screencapture` records the display's density in the
 image, and dividing by it is what makes a Retina built-in and a 1x external
 display agree. *Scan* reads the largest QR code or barcode in an area with
-Vision. A web address opens; anything else — a Wi-Fi password, a `mailto:`,
+Vision, with Core Image's CPU QR detector behind it — Vision's accelerated
+model read nothing on a macOS 14 machine without graphics acceleration. A web
+address opens; anything else — a Wi-Fi password, a `mailto:`,
 another app's link — is copied and never opened, because a code is a
 stranger's input. Measure and Scan delete their capture as soon as it is
 read.

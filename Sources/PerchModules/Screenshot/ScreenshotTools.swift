@@ -1,4 +1,5 @@
 import AppKit
+import CoreImage
 import ImageIO
 import PerchCore
 import Vision
@@ -60,11 +61,17 @@ struct ScreenshotTools {
     }
 }
 
-/// Finds QR codes and barcodes with Vision — on this Mac, with no network
-/// path, like the text recogniser.
-private enum CodeReader {
+/// Finds QR codes and barcodes — on this Mac, with no network path, like
+/// the text recogniser.
+enum CodeReader {
 
     static func codes(in url: URL) -> [DetectedCode] {
+        let found = vision(url)
+        return found.isEmpty ? coreImageQR(url) : found
+    }
+
+    /// Vision reads every symbology, QR and barcodes alike.
+    private static func vision(_ url: URL) -> [DetectedCode] {
         let request = VNDetectBarcodesRequest()
         do {
             try VNImageRequestHandler(url: url, options: [:]).perform([request])
@@ -75,6 +82,34 @@ private enum CodeReader {
             guard let payload = observation.payloadStringValue else { return nil }
             let box = observation.boundingBox
             return DetectedCode(payload: payload, area: Double(box.width * box.height))
+        }
+    }
+
+    /// Core Image's QR detector, when Vision found nothing.
+    ///
+    /// Vision's current barcode model leans on graphics or Neural Engine
+    /// acceleration, and where that is missing it returns nothing rather
+    /// than an error — the macOS 14 CI machine read no code at all from an
+    /// image macOS 15 read at once. This detector runs on the CPU. QR only,
+    /// so Vision stays first for barcodes.
+    static func coreImageQR(_ url: URL) -> [DetectedCode] {
+        guard
+            let image = CIImage(contentsOf: url),
+            let detector = CIDetector(
+                ofType: CIDetectorTypeQRCode,
+                context: CIContext(options: [.useSoftwareRenderer: true]),
+                options: [CIDetectorAccuracy: CIDetectorAccuracyHigh]
+            )
+        else { return [] }
+
+        let extent = image.extent
+        guard extent.width > 0, extent.height > 0 else { return [] }
+        return detector.features(in: image).compactMap { feature in
+            guard let code = feature as? CIQRCodeFeature, let payload = code.messageString else {
+                return nil
+            }
+            let share = (code.bounds.width * code.bounds.height) / (extent.width * extent.height)
+            return DetectedCode(payload: payload, area: Double(share))
         }
     }
 }
