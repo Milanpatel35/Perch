@@ -410,6 +410,7 @@ optional and they do not get skipped when the suite is slow.
 | TC-UPD-005 | U | Settings ▸ About, Updates | Check for Updates runs one check at a time; the result (up to date, version available, couldn't check) and the time are shown; automatic checks can be turned off and the updater is told once |
 | TC-UPD-006 | U | The appcast | Lists a build only with its EdDSA signature, build number and version from its notes; unsigned, draft and archive-less releases left out; release notes cannot break the XML |
 | TC-UPD-007 | E | From an installed build, a newer signed build is published | "Check for Updates…" finds it, shows its notes, installs and relaunches; a tampered archive is refused |
+| TC-UPD-008 | U | Settings ▸ About selected in the sidebar, in a real window | The pane draws — icon, version, the promise and the Updates box — rather than blanking the whole window, sidebar included |
 
 ---
 
