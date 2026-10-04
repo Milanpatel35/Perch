@@ -8,6 +8,12 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
+Nothing yet. Next up: the capture extras — colour, measure, QR and GIF.
+
+## [0.12.0] — 2026-10-04
+
+A focus session that keeps distractions out of the way.
+
 ### Added
 
 - **Keep distractions out of the way during a focus session.** List apps
