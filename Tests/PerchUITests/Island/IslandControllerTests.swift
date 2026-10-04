@@ -130,12 +130,22 @@ final class IslandControllerTests: XCTestCase {
         let first = expectation(description: "first collapse scheduled")
         let second = expectation(description: "second collapse scheduled")
         let cancelled = expectation(description: "first collapse cancelled")
+        let lastCancelled = expectation(description: "second collapse cancelled")
 
         recorder.onBegin = { count in
             if count == 1 { first.fulfill() }
             if count == 2 { second.fulfill() }
         }
-        recorder.onCancel = { _ in cancelled.fulfill() }
+        // By count, like `onBegin`. Fulfilling `cancelled` for every
+        // cancellation meant the second one — the collapse below — fulfilled
+        // it again, from a sleep that unwinds on another thread and can read
+        // this handler before the `defer` clears it. That `fulfill()` landed
+        // after the test had finished and aborted the process in whichever
+        // suite ran next: NowPlaying, usually (#57).
+        recorder.onCancel = { count in
+            if count == 1 { cancelled.fulfill() }
+            if count == 2 { lastCancelled.fulfill() }
+        }
 
         let controller = IslandController(sleep: { duration in
             try await recorder.sleep(duration)
@@ -151,9 +161,10 @@ final class IslandControllerTests: XCTestCase {
         XCTAssertEqual(recorder.cancellations, 1)
 
         // Collapse the island so the last pending sleep is cancelled here,
-        // while the callbacks above are still the ones listening, rather
-        // than at some unpredictable moment after the test has gone.
+        // and wait for it to finish unwinding, so nothing from this test is
+        // still running when the next one starts.
         controller.send(.collapseRequested)
+        await fulfillment(of: [lastCancelled], timeout: 2)
     }
 
     func test_TC_ISL_015_anActivityWithNoTimeToLiveSchedulesNothing() {
