@@ -61,7 +61,12 @@ island; the visualiser; expanded transport and a working seek scrubber;
 the output-device picker; per-app source switching; fullscreen presentation;
 the two-second sneak peek on track change; and swipe to skip.
 
-**Since 0.9.0: Apple Music and Spotify only.** 0.2.0 read every app through
+**Since 0.18.0: every app again, browsers included**, through a helper that
+Apple's own `/usr/bin/perl` loads ([ADR 0010](adr/0010-a-perl-helper-for-now-playing.md)).
+If it cannot run, or macOS refuses it, the module falls back to Music and
+Spotify as below on its own; a switch in its pane turns the helper off.
+
+**0.9.0 – 0.17.0: Apple Music and Spotify only.** 0.2.0 read every app through
 the private `MediaRemote` framework. From macOS 15.4 that refuses third-party
 apps, and the island showed nothing whatever was playing — which no test
 caught, because the tests use a fake source. Perch now reads each player's

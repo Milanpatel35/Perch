@@ -8,7 +8,16 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Nothing yet. Next up: music from any app — browsers included.
+### Added
+
+- **Music from any app.** Chrome, Safari, Prime Video, YouTube, Podcasts —
+  anything that tells macOS it is playing appears on the island, with the
+  browser named as the source, and play, pause, skip and seek work. Since
+  macOS 15.4 only Apple's own programs may ask what is playing, so Perch
+  asks through Apple's perl with a small helper of its own (ADR 0010). It
+  makes no network request and ends when Perch does. If macOS refuses it,
+  Perch goes back to Music and Spotify on its own; a switch in the Now
+  Playing pane turns it off.
 
 ## [0.17.0] — 2026-10-05
 

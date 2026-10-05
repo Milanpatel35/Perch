@@ -116,7 +116,7 @@ private struct NothingPlaying: View {
                 Text("Nothing playing")
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(.white.opacity(0.8))
-                Text("Play something in Music or Spotify.")
+                Text("Play something in any app.")
                     .font(.system(size: 10))
                     .foregroundStyle(.white.opacity(0.45))
                     .lineLimit(2)

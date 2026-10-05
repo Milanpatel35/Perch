@@ -57,9 +57,19 @@ targets:
         excludes:
           - Info.plist
           - Perch.entitlements
+      # The Now Playing helper's script (ADR 0010). Its library is the
+      # PerchMediaRemote target, copied into Frameworks below.
+      - path: Helpers/MediaRemote/perch-mediaremote.pl
+        buildPhase: resources
     dependencies:
       - target: PerchUI
       - target: PerchCore
+      - target: PerchMediaRemote
+        embed: true
+        codeSign: true
+        link: false
+        copy:
+          destination: frameworks
       - package: Sparkle
       - package: KeyboardShortcuts
       - package: Defaults
@@ -86,6 +96,23 @@ targets:
         # cannot be code-signed. Xcode synthesises one from these.
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_NSHumanReadableCopyright: "MIT licensed. Free forever."
+
+  # ------------------------------------------------------------- helper ---
+  # Loaded by /usr/bin/perl, never linked into Perch: since macOS 15.4 only
+  # Apple's own programs may ask MediaRemote what is playing (ADR 0010).
+  PerchMediaRemote:
+    type: library.dynamic
+    platform: macOS
+    sources:
+      - path: Helpers/MediaRemote/PerchMediaRemote.m
+    settings:
+      base:
+        PRODUCT_NAME: PerchMediaRemote
+        EXECUTABLE_PREFIX: ""
+        CLANG_ENABLE_OBJC_ARC: YES
+        GCC_TREAT_WARNINGS_AS_ERRORS: YES
+        OTHER_LDFLAGS: "-framework Foundation"
+        SKIP_INSTALL: YES
 
   # ----------------------------------------------------------------- ui ---
   PerchUI:

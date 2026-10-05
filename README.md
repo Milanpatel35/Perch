@@ -157,7 +157,7 @@ screenshots` — not a mockup.
 
 | Module | What it does | Status |
 |---|---|---|
-| **Now Playing** | Apple Music and Spotify: artwork, scrubbing, AirPlay target, swipe to skip, a peek on track change. Not browser audio — macOS closed that to other apps | ✅ Live |
+| **Now Playing** | Any app — Chrome, Safari, Prime Video, YouTube, Music, Spotify: artwork, scrubbing, AirPlay target, swipe to skip, a peek on track change. Through a small helper Apple's perl loads ([ADR 0010](docs/adr/0010-a-perl-helper-for-now-playing.md)); falls back to Music and Spotify | ✅ Live |
 | **Shelf** | Drag files to the notch, hold them, drop them anywhere else. AirDrop and quick format conversion built in | ✅ Live |
 | **Clipboard** | Searchable history with pinning — text, images, colours — and the text read out of anything you screenshot | ✅ Live |
 | **Focus** | Pomodoro that counts down in the notch, survives the lid being closed, and keeps listed apps and sites out of the way while you work | ✅ Live |
