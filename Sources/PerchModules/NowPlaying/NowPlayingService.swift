@@ -6,7 +6,7 @@ import PerchCore
 
 /// Module 1 — Now Playing.
 ///
-/// Owns the player source (Apple Music and Spotify — ADR 0008), turns what
+/// Owns the player source (any app — ADR 0010 — or Music and Spotify), turns what
 /// it reports into a `NowPlayingSnapshot`, and decides — through `NowPlayingTransition`, which
 /// is pure and tested — whether that warrants a peek, an in-place update, or
 /// taking the island back.
@@ -38,7 +38,7 @@ final class NowPlayingService: ObservableObject, PerchModule {
     /// real player in the loop — see `NowPlayingSourcing`.
     init(island: IslandController, source: (any NowPlayingSourcing)? = nil) {
         self.island = island
-        self.source = source ?? PlayerScriptingSource()
+        self.source = source ?? AnyAppNowPlayingSource()
     }
 
     // MARK: - PerchModule

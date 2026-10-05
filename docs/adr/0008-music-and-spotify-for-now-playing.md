@@ -4,7 +4,7 @@ Date: 2026-09-29
 
 ## Status
 
-Accepted. Supersedes [ADR 0002](0002-mediaremote-for-now-playing.md).
+Superseded by [ADR 0010](0010-a-perl-helper-for-now-playing.md), which keeps this as the fallback. Supersedes [ADR 0002](0002-mediaremote-for-now-playing.md).
 
 ## Context
 
