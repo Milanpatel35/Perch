@@ -1,4 +1,5 @@
 import AppKit
+import Defaults
 import KeyboardShortcuts
 import PerchCore
 import SwiftUI
@@ -117,6 +118,31 @@ final class IslandSnapshots: XCTestCase {
             try write(image, named: "island-tab-\(tab.rawValue)")
             service?.deactivate()
         }
+    }
+
+    /// Home with the month chosen instead of the week — the tightest fit.
+    func test_capturesHomeWithTheMonth() throws {
+        HomeCalendarPreview.events = Self.demoWeek
+        let saved = Defaults[.homeCalendarMode]
+        Defaults[.homeCalendarMode] = .month
+        defer {
+            HomeCalendarPreview.events = nil
+            Defaults[.homeCalendarMode] = saved
+        }
+
+        var service: NowPlayingService?
+        let image = try XCTUnwrap(
+            render(
+                HomeActivity(collapsedSize: layout.metrics.collapsedSize),
+                expanded: true,
+                modulesOn: { host, island in
+                    service = Self.switchOnTheDemoModules(in: host, island: island)
+                },
+                settles: true
+            )
+        )
+        XCTAssertGreaterThan(image.drawnPixels, 0, "Home with the month is blank")
+        service?.deactivate()
     }
 
     /// Music playing, a calendar, the button modules, and a shelf holding

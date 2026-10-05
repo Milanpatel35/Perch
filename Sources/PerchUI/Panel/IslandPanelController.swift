@@ -215,7 +215,7 @@ public final class IslandPanelController {
 
         let covering = current.union(target)
         if covering != current {
-            panel.setFrame(covering, display: false)
+            resize(panel, to: covering)
         }
         guard covering != target else { return }
 
@@ -224,10 +224,23 @@ public final class IslandPanelController {
         shrinkTask = Task { [weak self] in
             try? await Task.sleep(for: settle)
             guard !Task.isCancelled, let self, let panel = self.panel else { return }
-            panel.setFrame(target, display: false)
+            self.resize(panel, to: target)
             self.shrinkTask = nil
             self.endHoverIfPointerLeft()
         }
+    }
+
+    /// Moves the window and redraws what is in it in the same step.
+    ///
+    /// With `display: false` the window took its new frame at once but
+    /// SwiftUI laid the island out again only on the next pass, so for a
+    /// frame the island was drawn at its old place in the new window — off
+    /// to one side — and then jumped to the centre. Seen on the user's Mac
+    /// as "it opens to the right, then moves left" (TC-GEO-014).
+    private func resize(_ panel: IslandPanel, to frame: CGRect) {
+        panel.setFrame(frame, display: false)
+        panel.contentView?.layoutSubtreeIfNeeded()
+        panel.displayIfNeeded()
     }
 
     /// Ends a hover the pointer is no longer part of (TC-ISL-022).

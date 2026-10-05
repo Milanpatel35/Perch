@@ -37,4 +37,29 @@ final class HomeLauncherTileTests: XCTestCase {
         focus.deactivate()
         XCTAssertNil(modules.launcherTile())
     }
+
+    // MARK: - TC-HOM-013
+
+    func test_TC_HOM_013_homeOffersEveryActionWhoseModuleIsOn() {
+        let island = IslandController(sleep: { _ in try await Task.sleep(for: .seconds(86_400)) })
+        let modules = ModuleHost(switchboard: ModuleSwitchboard(), island: island)
+        XCTAssertTrue(modules.quickActions().isEmpty, "a button for a module that is off")
+
+        let focus = FocusService(island: island, directory: directory)
+        let screenshot = ScreenshotService(island: island)
+        modules.register(focus)
+        modules.register(screenshot)
+        focus.activate()
+        screenshot.activate()
+        defer {
+            focus.deactivate()
+            screenshot.deactivate()
+        }
+
+        let expected: [HomeAction] = [
+            .focus, .captureArea, .captureWindow, .captureScreen, .copyText, .pin, .colour,
+            .measure, .scan
+        ]
+        XCTAssertEqual(modules.quickActions(), expected)
+    }
 }

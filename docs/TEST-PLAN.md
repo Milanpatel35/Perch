@@ -38,6 +38,7 @@ Levels:
 | TC-GEO-011 | U | Panel on a display narrower than the island's maximum | Panel frame never exceeds the screen; nothing hangs off either edge |
 | TC-GEO-012 | U | Island inside the panel | Centred on the notch and flush with the top edge at every presentation size |
 | TC-GEO-013 | U | The window around the island | Holds the island and its shadow, centred on the notch, never larger than the panel's maximum — and for the resting home surface, a small fraction of it, so the menu bar and the apps beside the notch take their own clicks |
+| TC-GEO-014 | E | Hover the notch, from idle and while music plays | The island opens straight down from the notch, centred — it never appears off to one side and then jumps (the window is laid out and drawn in the same step it is resized) |
 
 ## ISL — island state machine
 
@@ -82,6 +83,7 @@ Levels:
 | TC-HOM-010 | U | Settings ▸ Keyboard Shortcuts selected, in a real window | The pane draws (the shape that blanked About, TC-UPD-008) |
 | TC-HOM-011 | U | Tabs and their keys | Home first; each tab has its own number, none collides with a letter; 1–5 switch tabs and keep the keyboard; ⌃⌥P opens the tabs while music plays |
 | TC-HOM-012 | E | Hover with music playing, then each tab | Home shows the track and the week; Media the player; Calendar the month; Shelf the drop area or the files; Tools the buttons; a module that is off offers its switch; the island reopens on Home |
+| TC-HOM-013 | U | Home's action row | One button for every action whose module is on, in keymap order; none for a module that is off; Calendar left out because Home shows it |
 
 ## MED — Now Playing
 

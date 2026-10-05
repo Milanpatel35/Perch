@@ -8,11 +8,12 @@ extension HomeActivity: IslandActivityPresenting {
     public var peekSize: CGSize { collapsedSize }
 
     /// One size for every tab, so switching tabs never resizes the island
-    /// — and the window around it — under the pointer. Big enough for
-    /// Home's music and week side by side and a month grid with its day.
+    /// — and the window around it — under the pointer. As small as Home's
+    /// music, week, readouts and actions allow, and a month grid fits: the
+    /// first tabbed surface, 620 × 290, was mostly empty black.
     public var expandedSize: CGSize { Self.surfaceSize }
 
-    public static let surfaceSize = CGSize(width: 620, height: 290)
+    public static let surfaceSize = CGSize(width: 560, height: 252)
 
     public func peekView() -> AnyView {
         // Nothing. On a notched Mac the home peek *is* the cutout.
