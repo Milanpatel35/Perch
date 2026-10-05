@@ -278,7 +278,7 @@ extension NSBitmapImageRep {
 extension IslandSnapshots {
 
     /// A Monday-to-Friday week of plausible events around today.
-    fileprivate static func demoWeek(_ interval: DateInterval) -> [CalendarEvent] {
+    nonisolated fileprivate static func demoWeek(_ interval: DateInterval) -> [CalendarEvent] {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         func at(_ dayOffset: Int, _ hour: Int, _ minute: Int = 0) -> Date {
