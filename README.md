@@ -138,7 +138,7 @@ screenshots` — not a mockup.
 
 <table>
   <tr>
-    <td align="center" width="50%"><img src="Website/assets/img/shots/island-shelf.png" alt="The shelf holding three files" width="100%"><br><b>Shelf</b><br><sub>Drag files up, drop them anywhere</sub></td>
+    <td align="center" width="50%"><img src="Website/assets/img/shots/island-tab-shelf.png" alt="The Shelf tab, holding three files with their sizes" width="100%"><br><b>Shelf</b><br><sub>Drag files to the notch; they wait on the Shelf tab</sub></td>
     <td align="center" width="50%"><img src="Website/assets/img/shots/island-clipboard.png" alt="Clipboard history with a pinned command, a colour and text read from an image" width="100%"><br><b>Clipboard</b><br><sub>Searchable history, pinning, OCR on images</sub></td>
   </tr>
   <tr>
