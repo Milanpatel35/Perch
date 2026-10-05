@@ -135,6 +135,19 @@ final class EventKitBridge {
         return store.events(matching: predicate).map(CalendarEvent.init(_:))
     }
 
+    /// Every event in an exact interval — the island's week or month view.
+    /// Empty without access, like `events(from:)`.
+    func events(in interval: DateInterval) -> [CalendarEvent] {
+        guard access == .granted, let store else { return [] }
+
+        let predicate = store.predicateForEvents(
+            withStart: interval.start,
+            end: interval.end,
+            calendars: nil
+        )
+        return store.events(matching: predicate).map(CalendarEvent.init(_:))
+    }
+
     /// Incomplete reminders due within the window, soonest first.
     ///
     /// `fetchReminders` is callback-based and has no async form, so it is

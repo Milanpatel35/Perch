@@ -58,12 +58,13 @@ public final class HomeKeyboard {
     }
 
     public func open() {
-        guard island.presented?.id == HomeActivity.identifier else { return }
+        // Home, or Now Playing — which opens into the same tabbed surface.
+        guard let id = island.presented?.id, Self.opensTabs.contains(id) else { return }
 
-        if island.state.presentation != .expanded(HomeActivity.identifier) {
+        if island.state.presentation != .expanded(id) {
             island.send(.clicked)
         }
-        guard island.state.presentation == .expanded(HomeActivity.identifier) else { return }
+        guard island.state.presentation == .expanded(id) else { return }
 
         isListening = true
         island.setRequiresKeyFocus(true, owner: Self.focusOwner)
@@ -73,7 +74,7 @@ public final class HomeKeyboard {
         presentation = island.$state
             .map(\.presentation)
             .removeDuplicates()
-            .filter { $0 != .expanded(HomeActivity.identifier) }
+            .filter { $0 != .expanded(id) }
             .sink { [weak self] _ in self?.endListening() }
 
         monitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
@@ -108,6 +109,13 @@ public final class HomeKeyboard {
             return true
         }
 
+        // A number switches tab and keeps listening.
+        let plain = modifiers.isDisjoint(with: [.command, .control, .option])
+        if plain, let tab = HomeTab.tab(for: key) {
+            modules.homeTab = tab
+            return true
+        }
+
         // ⌘W, ⌃A and the rest belong to whoever defined them.
         guard modifiers.isDisjoint(with: [.command, .control, .option]),
             let action = HomeKeymap.action(for: key),
@@ -129,6 +137,11 @@ public final class HomeKeyboard {
     }
 
     private static let focusOwner = "home.keyboard"
+
+    /// The activities whose opened view is the tabbed home surface.
+    private static let opensTabs: Set<ActivityID> = [
+        HomeActivity.identifier, NowPlayingActivity.identifier
+    ]
     private static let escape: UInt16 = 53
 }
 

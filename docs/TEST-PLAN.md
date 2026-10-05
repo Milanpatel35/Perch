@@ -80,6 +80,8 @@ Levels:
 | TC-HOM-008 | U | A letter while open | Its action runs after the keyboard is handed back; a module that is off, or a ⌘/⌃/⌥ key, is left alone; the clipboard's own focus survives the hand-over |
 | TC-HOM-009 | U | Use suggested shortcuts | Fills only unset shortcuts, never replaces one the user set; pressing again changes nothing |
 | TC-HOM-010 | U | Settings ▸ Keyboard Shortcuts selected, in a real window | The pane draws (the shape that blanked About, TC-UPD-008) |
+| TC-HOM-011 | U | Tabs and their keys | Home first; each tab has its own number, none collides with a letter; 1–5 switch tabs and keep the keyboard; ⌃⌥P opens the tabs while music plays |
+| TC-HOM-012 | E | Hover with music playing, then each tab | Home shows the track and the week; Media the player; Calendar the month; Shelf the drop area or the files; Tools the buttons; a module that is off offers its switch; the island reopens on Home |
 
 ## MED — Now Playing
 
@@ -208,6 +210,9 @@ rather than the converter.
 | TC-CAL-012 | E | Accessibility permission revoked mid-call | Controls disabled with an explanation, rest of the app unaffected |
 | TC-CAL-013 | U | Module disabled mid-countdown | Store released, wake-up cancelled, control poll stopped, island cleared |
 | TC-CAL-014 | E | Reminder completed from the island | Marked done in Reminders; the row leaves the list |
+| TC-CAL-020 | U | A week | Seven days from the user's first weekday, Sunday- or Monday-first |
+| TC-CAL-021 | U | A month | Whole weeks covering every day of it, lead-in days marked; paging moves a week or a month |
+| TC-CAL-022 | U | Events on a day | All-day first, then by start; a multi-day event on each day; cancelled ones on none |
 
 ## NTF — notification mirroring
 

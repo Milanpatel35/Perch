@@ -27,7 +27,7 @@ No Pro tier, no licence key, no account, no telemetry. On a Mac without a
 notch it draws a floating island instead.
 
 <p align="center">
-  <img src="Website/assets/img/shots/island-now-playing.png" alt="Perch showing Now Playing under the notch, with artwork, track and a scrubber" width="520">
+  <img src="Website/assets/img/shots/island-tab-home.png" alt="The Perch island open on its Home tab: tabs for Home, Media, Calendar, Shelf and Tools across the top; the track playing with its controls on the left; this week with today highlighted and today’s events on the right" width="620">
 </p>
 
 <p align="center">
@@ -112,15 +112,15 @@ on <http://localhost:8000>.
 
 | | |
 |---|---|
-| **Hover** the notch | The island opens. Move away and it closes |
+| **Hover** the notch | The island opens on **Home**: what is playing and your week. Tabs across the top — Home, Media, Calendar, Shelf, Tools |
 | **Click** it | Keeps it open while you use it; click again to close |
 | **Drag a file** onto it | The shelf catches it |
 | **Menu bar icon → Settings…** | Switch modules on and off, one by one |
 | **⌃⌥P**, then a letter | Opens Perch from any app; C clipboard, F focus, A area… Escape closes. Set it up in Settings ▸ Keyboard Shortcuts |
 
 <p align="center">
-  <img src="Website/assets/img/shots/island-home-rows.png" alt="The Perch home surface in three labelled groups — Quick access: Clipboard C, Focus F; Capture: Area A, Window W, Screen S, Text T, Pin P; Tools: Colour O, Measure R, Scan Q — each button showing its key, and a settings gear beside the date" width="492">
-  <br><sub>The home surface — hover the notch, or press your Open Perch shortcut and then the letter on any button. The gear opens Settings.</sub>
+  <img src="Website/assets/img/shots/island-tab-tools.png" alt="The Tools tab: Quick access — Clipboard C, Focus F; Capture — Area A, Window W, Screen S, Text T, Pin P; Tools — Colour O, Measure R, Scan Q — each button showing its key" width="620">
+  <br><sub>The Tools tab — press your Open Perch shortcut, then the letter on any button. Keys 1–5 switch tabs.</sub>
 </p>
 
 <p align="center">
@@ -148,6 +148,10 @@ screenshots` — not a mockup.
   <tr>
     <td align="center"><img src="Website/assets/img/shots/peek-screenshot-text.png" alt="1,204 characters copied, beside the notch" width="100%"><br><b>Screenshots</b><br><sub>Area, window, screen — or copy the text in an area</sub></td>
     <td align="center"><img src="Website/assets/img/shots/peek-volume.png" alt="The volume HUD beside the notch at 62%" width="100%"><br><b>HUDs</b><br><sub>Volume and brightness, in the notch</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="Website/assets/img/shots/island-tab-calendar.png" alt="The Calendar tab: the month grid with today highlighted and dots on days with events, and the chosen day’s events beside it" width="100%"><br><b>Calendar</b><br><sub>Your week on Home, the month on its own tab</sub></td>
+    <td align="center"><img src="Website/assets/img/shots/island-tab-media.png" alt="The Media tab: artwork, track, a scrubber and the transport buttons" width="100%"><br><b>Media</b><br><sub>The full player, one tab over</sub></td>
   </tr>
 </table>
 
