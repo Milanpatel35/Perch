@@ -23,40 +23,45 @@ public extension ModuleHost {
 
 // MARK: - Home
 
-/// Music on the left, the week on the right, the readouts under the music.
+/// Everything at a glance, and every action one click away: the music
+/// beside the week, the readouts under them, then a row with a button for
+/// each thing Perch can do.
 private struct HomeTabView: View {
 
     let modules: ModuleHost
 
     var body: some View {
-        HStack(alignment: .top, spacing: 16) {
-            VStack(alignment: .leading, spacing: 10) {
-                if let nowPlaying = modules.service(NowPlayingService.self), nowPlaying.isActive {
-                    NowPlayingCard(service: nowPlaying)
-                } else {
-                    SwitchOn(module: .nowPlaying, modules: modules)
-                        .frame(height: 96)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .top, spacing: 14) {
+                Group {
+                    if let nowPlaying = modules.activeNowPlaying {
+                        NowPlayingCard(service: nowPlaying)
+                    } else {
+                        SwitchOn(module: .nowPlaying, modules: modules)
+                    }
                 }
-                if let battery = modules.batteryTile() {
-                    battery.frame(height: HomeTile.readoutHeight)
-                }
-                if let stats = modules.systemStatsTile() {
-                    stats.frame(height: HomeTile.readoutHeight)
-                }
-                Spacer(minLength: 0)
-            }
-            .frame(width: 250)
+                .frame(width: 236, height: 118)
 
-            Divider().overlay(Color.white.opacity(0.1))
-
-            Group {
-                if let calendar = modules.showableCalendar {
-                    CalendarAccessReader(service: calendar, layout: .card)
-                } else {
-                    SwitchOn(module: .calendar, modules: modules)
+                Group {
+                    if let calendar = modules.showableCalendar {
+                        CalendarAccessReader(service: calendar, layout: .card)
+                    } else {
+                        SwitchOn(module: .calendar, modules: modules)
+                    }
                 }
+                .frame(maxWidth: .infinity, maxHeight: 118, alignment: .topLeading)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+
+            let readouts = [modules.batteryTile(), modules.systemStatsTile()].compactMap { $0 }
+            if !readouts.isEmpty {
+                HStack(spacing: 18) {
+                    ForEach(readouts.indices, id: \.self) { readouts[$0] }
+                    Spacer(minLength: 0)
+                }
+                .frame(height: HomeTile.readoutHeight)
+            }
+
+            QuickActionsRow(modules: modules)
         }
     }
 }
@@ -68,9 +73,9 @@ private struct NowPlayingCard: View {
 
     var body: some View {
         if let snapshot = service.snapshot {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 10) {
-                    Artwork(data: snapshot.artwork, size: 48)
+                    Artwork(data: snapshot.artwork, size: 40)
                     VStack(alignment: .leading, spacing: 2) {
                         MarqueeText(snapshot.title, weight: .semibold)
                         MarqueeText(
@@ -80,11 +85,11 @@ private struct NowPlayingCard: View {
                         .foregroundStyle(.white.opacity(0.6))
                     }
                 }
-                HStack(spacing: 18) {
+                HStack(spacing: 14) {
                     TransportButton(symbol: "backward.fill") { service.previousTrack() }
                     TransportButton(
                         symbol: snapshot.isPlaying ? "pause.fill" : "play.fill",
-                        size: 18
+                        size: 16
                     ) {
                         service.togglePlayPause()
                     }
@@ -92,13 +97,14 @@ private struct NowPlayingCard: View {
                 }
                 .frame(maxWidth: .infinity)
             }
-            .padding(10)
-            .frame(height: 96)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
+            .frame(height: 118)
             .background(RoundedRectangle(cornerRadius: 12).fill(.white.opacity(0.06)))
         } else {
             NothingPlaying()
                 .padding(10)
-                .frame(height: 96)
+                .frame(height: 118)
                 .background(RoundedRectangle(cornerRadius: 12).fill(.white.opacity(0.06)))
         }
     }
@@ -110,7 +116,7 @@ private struct NothingPlaying: View {
             Image(systemName: "music.note")
                 .font(.system(size: 18))
                 .foregroundStyle(.white.opacity(0.4))
-                .frame(width: 48, height: 48)
+                .frame(width: 40, height: 40)
                 .background(RoundedRectangle(cornerRadius: 10).fill(.white.opacity(0.08)))
             VStack(alignment: .leading, spacing: 2) {
                 Text("Nothing playing")
@@ -191,6 +197,13 @@ private struct CalendarAccessReader: View {
 }
 
 extension ModuleHost {
+
+    /// Now Playing, if it is on.
+    @MainActor
+    fileprivate var activeNowPlaying: NowPlayingService? {
+        guard let service = service(NowPlayingService.self), service.isActive else { return nil }
+        return service
+    }
 
     /// The calendar module, if it is on — or if a demo week stands in for it.
     @MainActor

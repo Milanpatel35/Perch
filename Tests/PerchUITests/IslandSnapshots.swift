@@ -1,4 +1,5 @@
 import AppKit
+import Defaults
 import KeyboardShortcuts
 import PerchCore
 import SwiftUI
@@ -101,36 +102,13 @@ final class IslandSnapshots: XCTestCase {
         defer { HomeCalendarPreview.events = nil }
 
         for tab in HomeTab.allCases {
-            let source = FakeNowPlayingSource()
-            source.snapshot = NowPlayingSnapshot.demo
             var service: NowPlayingService?
-
             let image = try XCTUnwrap(
                 render(
                     HomeActivity(collapsedSize: layout.metrics.collapsedSize),
                     expanded: true,
                     modulesOn: { host, island in
-                        let nowPlaying = NowPlayingService(island: island, source: source)
-                        host.register(nowPlaying)
-                        nowPlaying.activate()
-                        service = nowPlaying
-                        host.register(CalendarService(island: island))
-                        let scratch = FileManager.default.temporaryDirectory
-                            .appendingPathComponent("perch-tabs-\(UUID().uuidString)")
-                        let clipboard = ClipboardService(
-                            island: island,
-                            directory: scratch.appendingPathComponent("clipboard"),
-                            pasteboard: NSPasteboard(name: .init("perch-tabs"))
-                        )
-                        let focus = FocusService(island: island, directory: scratch)
-                        let shelf = ShelfService(
-                            island: island, directory: scratch.appendingPathComponent("shelf"))
-                        let screenshot = ScreenshotService(island: island)
-                        for module in [clipboard, focus, shelf, screenshot] as [any PerchModule] {
-                            host.register(module)
-                            module.activate()
-                        }
-                        host.openSettings = {}
+                        service = Self.switchOnTheDemoModules(in: host, island: island)
                         host.homeTab = tab
                     },
                     settles: true
@@ -140,6 +118,74 @@ final class IslandSnapshots: XCTestCase {
             try write(image, named: "island-tab-\(tab.rawValue)")
             service?.deactivate()
         }
+    }
+
+    /// Home with the month chosen instead of the week — the tightest fit.
+    func test_capturesHomeWithTheMonth() throws {
+        HomeCalendarPreview.events = Self.demoWeek
+        let saved = Defaults[.homeCalendarMode]
+        Defaults[.homeCalendarMode] = .month
+        defer {
+            HomeCalendarPreview.events = nil
+            Defaults[.homeCalendarMode] = saved
+        }
+
+        var service: NowPlayingService?
+        let image = try XCTUnwrap(
+            render(
+                HomeActivity(collapsedSize: layout.metrics.collapsedSize),
+                expanded: true,
+                modulesOn: { host, island in
+                    service = Self.switchOnTheDemoModules(in: host, island: island)
+                },
+                settles: true
+            )
+        )
+        XCTAssertGreaterThan(image.drawnPixels, 0, "Home with the month is blank")
+        service?.deactivate()
+    }
+
+    /// Music playing, a calendar, the button modules, and a shelf holding
+    /// three real files — what the tabs look like on a Mac in use. Returns
+    /// Now Playing, which the caller switches off again.
+    private static func switchOnTheDemoModules(
+        in host: ModuleHost,
+        island: IslandController
+    ) -> NowPlayingService {
+        let source = FakeNowPlayingSource()
+        source.snapshot = NowPlayingSnapshot.demo
+        let nowPlaying = NowPlayingService(island: island, source: source)
+        host.register(nowPlaying)
+        nowPlaying.activate()
+        host.register(CalendarService(island: island))
+
+        let scratch = FileManager.default.temporaryDirectory
+            .appendingPathComponent("perch-tabs-\(UUID().uuidString)")
+        let clipboard = ClipboardService(
+            island: island,
+            directory: scratch.appendingPathComponent("clipboard"),
+            pasteboard: NSPasteboard(name: .init("perch-tabs"))
+        )
+        let focus = FocusService(island: island, directory: scratch)
+        let shelf = ShelfService(island: island, directory: scratch.appendingPathComponent("shelf"))
+        let screenshot = ScreenshotService(island: island)
+        for module in [clipboard, focus, shelf, screenshot] as [any PerchModule] {
+            host.register(module)
+            module.activate()
+        }
+
+        let desk = scratch.appendingPathComponent("desk")
+        try? FileManager.default.createDirectory(at: desk, withIntermediateDirectories: true)
+        let files = [
+            ("Q3-contract.pdf", 2_411_000), ("logo-mark.svg", 18_400), ("meeting-notes.md", 6_200)
+        ]
+        for (name, size) in files {
+            let file = desk.appendingPathComponent(name)
+            try? Data(count: size).write(to: file)
+            _ = shelf.add(fileAt: file)
+        }
+        host.openSettings = {}
+        return nowPlaying
     }
 
     // MARK: - Rendering

@@ -27,7 +27,7 @@ No Pro tier, no licence key, no account, no telemetry. On a Mac without a
 notch it draws a floating island instead.
 
 <p align="center">
-  <img src="Website/assets/img/shots/island-tab-home.png" alt="The Perch island open on its Home tab: tabs for Home, Media, Calendar, Shelf and Tools across the top; the track playing with its controls on the left; this week with today highlighted and today’s events on the right" width="620">
+  <img src="Website/assets/img/shots/island-tab-home.png" alt="The Perch island open on its Home tab: tabs across the top; the track playing beside this week and today’s events; a row of buttons for every action underneath" width="560">
 </p>
 
 <p align="center">
@@ -50,7 +50,7 @@ notch it draws a floating island instead.
 
 ### Option 1: download the app
 
-<a href="https://github.com/Milanpatel35/Perch/releases/download/build-0.18.0/Perch-0.18.0-unsigned.zip"><img src="https://img.shields.io/badge/Download%20for%20macOS-Perch%200.18.0-black?style=for-the-badge&logo=apple" alt="Download Perch 0.18.0 for macOS" height="44"></a>
+<a href="https://github.com/Milanpatel35/Perch/releases/download/build-0.19.0/Perch-0.19.0-unsigned.zip"><img src="https://img.shields.io/badge/Download%20for%20macOS-Perch%200.19.0-black?style=for-the-badge&logo=apple" alt="Download Perch 0.19.0 for macOS" height="44"></a>
 
 1. Unzip it and **drag Perch into Applications.** Run straight from
    Downloads, macOS starts a temporary copy and Perch cannot open at login.
@@ -119,8 +119,8 @@ on <http://localhost:8000>.
 | **⌃⌥P**, then a letter | Opens Perch from any app; C clipboard, F focus, A area… Escape closes. Set it up in Settings ▸ Keyboard Shortcuts |
 
 <p align="center">
-  <img src="Website/assets/img/shots/island-tab-tools.png" alt="The Tools tab: Quick access — Clipboard C, Focus F; Capture — Area A, Window W, Screen S, Text T, Pin P; Tools — Colour O, Measure R, Scan Q — each button showing its key" width="620">
-  <br><sub>The Tools tab — press your Open Perch shortcut, then the letter on any button. Keys 1–5 switch tabs.</sub>
+  <img src="Website/assets/img/shots/island-tab-tools.png" alt="The Tools tab: Quick access — Clipboard C, Focus F; Capture — Area A, Window W, Screen S, Text T, Pin P; Tools — Colour O, Measure R, Scan Q — each button showing its key" width="560">
+  <br><sub>The Tools tab — press your Open Perch shortcut, then the letter on any button. Keys 1–5 switch tabs. Every action is also one click away on Home.</sub>
 </p>
 
 <p align="center">
@@ -138,7 +138,7 @@ screenshots` — not a mockup.
 
 <table>
   <tr>
-    <td align="center" width="50%"><img src="Website/assets/img/shots/island-shelf.png" alt="The shelf holding three files" width="100%"><br><b>Shelf</b><br><sub>Drag files up, drop them anywhere</sub></td>
+    <td align="center" width="50%"><img src="Website/assets/img/shots/island-tab-shelf.png" alt="The Shelf tab, holding three files with their sizes" width="100%"><br><b>Shelf</b><br><sub>Drag files to the notch; they wait on the Shelf tab</sub></td>
     <td align="center" width="50%"><img src="Website/assets/img/shots/island-clipboard.png" alt="Clipboard history with a pinned command, a colour and text read from an image" width="100%"><br><b>Clipboard</b><br><sub>Searchable history, pinning, OCR on images</sub></td>
   </tr>
   <tr>
