@@ -8,6 +8,10 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
+Nothing yet. Next up: music from any app — browsers included.
+
+## [0.17.0] — 2026-10-05
+
 ### Added
 
 - **Tabs on the island** — Home, Media, Calendar, Shelf, Tools — and the
