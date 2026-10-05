@@ -94,7 +94,8 @@ final class AboutPaneTests: XCTestCase {
         table.selectRowIndexes([row(table)], byExtendingSelection: false)
         RunLoop.main.run(until: Date().addingTimeInterval(1.5))
 
-        // Blank measured 58; the About pane drawn measured over 2,000.
-        XCTAssertGreaterThan(try brightPoints(in: window, name: name), 1_000, message)
+        // Blank measured 58. Drawn, About measured over 2,000 here and the
+        // sparser Keyboard Shortcuts pane about 900 on CI's runners.
+        XCTAssertGreaterThan(try brightPoints(in: window, name: name), 300, message)
     }
 }
