@@ -174,7 +174,7 @@ final class MediaRemoteHelperSource: NowPlayingSourcing {
         try? process.run()
     }
 
-    private static func appName(for bundleID: String) -> String? {
+    nonisolated private static func appName(for bundleID: String) -> String? {
         guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID)
         else { return nil }
         return FileManager.default.displayName(atPath: url.path)
