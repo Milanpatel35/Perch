@@ -130,6 +130,8 @@ targets:
       # Module tests set and reset preferences, so the test bundle links the
       # same defaults library the modules do.
       - package: Defaults
+      # And keyboard shortcuts, for the suggested-shortcuts test.
+      - package: KeyboardShortcuts
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES

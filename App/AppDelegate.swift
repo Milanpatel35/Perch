@@ -35,6 +35,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let updater = UpdateController()
 
     private var menuBar: MenuBarController?
+    private var keyboard: HomeKeyboard?
     private var islandPreferences: IslandPreferences?
 
     private(set) lazy var settings = SettingsWindowController { [unowned self] in
@@ -87,6 +88,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         PerchModuleRegistry.registerAll(in: modules, island: island)
         modules.openSettings = { [unowned self] in settings.show() }
 
+        keyboard = HomeKeyboard(modules: modules, island: island)
+        keyboard?.start()
+
         updater.start()
         menuBar = MenuBarController(island: island, settings: settings, updater: updater)
 
@@ -99,6 +103,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // (TC-UPD-004).
         menuBar?.teardown()
         menuBar = nil
+        keyboard?.stop()
+        keyboard = nil
         islandPreferences?.stop()
         modules.deactivateAll()
         panel.teardown()

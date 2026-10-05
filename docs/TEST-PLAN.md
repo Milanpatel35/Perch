@@ -74,7 +74,12 @@ Levels:
 | TC-HOM-002 | U | Only modules that arrive on their own are on (shelf, HUD, notifications, Now Playing, battery) | No launcher row at all |
 | TC-HOM-003 | U | Focus idle, running, paused | The button says Focus, Pause, Resume — what it will do |
 | TC-HOM-004 | U | The last launcher module is switched off | The row goes, and the island is one row shorter |
-| TC-HOM-005 | E | Hover the notch, press each launcher button and the gear | Clipboard opens the picker, Focus starts a session, Camera opens the mirror (asking for the camera only then), Calendar opens Calendar, the gear opens Settings |
+| TC-HOM-005 | E | Hover the notch, press each launcher button and the gear | Clipboard opens the picker, Focus starts a session, Camera opens the mirror (asking for the camera only then), Calendar opens Calendar, the gear opens Settings. Then with ⌃⌥P set: the island opens from another app, each letter does what its button does, Escape closes it and typing goes back to that app |
+| TC-HOM-006 | U | Every home action's key | Unique; found in either case; anything off the map does nothing |
+| TC-HOM-007 | U | Open Perch from the keyboard, then Escape — or the island closes any other way | The home surface opens with key focus; focus goes back however it closes |
+| TC-HOM-008 | U | A letter while open | Its action runs after the keyboard is handed back; a module that is off, or a ⌘/⌃/⌥ key, is left alone; the clipboard's own focus survives the hand-over |
+| TC-HOM-009 | U | Use suggested shortcuts | Fills only unset shortcuts, never replaces one the user set; pressing again changes nothing |
+| TC-HOM-010 | U | Settings ▸ Keyboard Shortcuts selected, in a real window | The pane draws (the shape that blanked About, TC-UPD-008) |
 
 ## MED — Now Playing
 

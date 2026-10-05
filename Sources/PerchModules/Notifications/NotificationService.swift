@@ -79,7 +79,7 @@ final class NotificationService: ObservableObject, PerchModule {
         isWatching = false
 
         policy.reset()
-        island.setRequiresKeyFocus(false)
+        island.setRequiresKeyFocus(false, owner: "notifications")
         island.withdrawAll(from: .notifications)
     }
 
@@ -170,12 +170,12 @@ final class NotificationService: ObservableObject, PerchModule {
     /// it the moment the picker closes.
     func setReplyFieldActive(_ isActive: Bool) {
         guard self.isActive else { return }
-        island.setRequiresKeyFocus(isActive)
+        island.setRequiresKeyFocus(isActive, owner: "notifications")
     }
 
     func dismiss() {
         guard let burst = policy.current else { return }
-        island.setRequiresKeyFocus(false)
+        island.setRequiresKeyFocus(false, owner: "notifications")
         island.withdraw(
             NotificationActivity(burst: burst, canReplyNow: false).id
         )

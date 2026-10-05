@@ -693,6 +693,9 @@ sit *under* the menu bar, and the island's panel sits over it.
 | Lock Screen presence | AL | P2 |
 | Home-surface launcher: a button for every module that is on and has something to open — Clipboard, Focus, Camera, Calendar | ★ | Fixed order, so buttons never move; modules that arrive on their own (shelf, HUD, notifications, Now Playing) get none. TC-HOM-001…004 |
 | Settings gear on the home surface | ★ | The way to modules that are off, which the island cannot show |
+| Open Perch shortcut, then one letter per action (`HomeKeymap`), Escape to close | ★ | Every button shows its letter. Key focus only while open from the keyboard, held per owner so the clipboard's search field keeps it. TC-HOM-006…008 |
+| Settings ▸ Keyboard Shortcuts: every global shortcut in one list, "Use suggested shortcuts" | ★ | Fills only unset shortcuts (⌃⌥P/V/F/M/J); nothing is set until the user asks. TC-HOM-009, 010 |
+| Home surface grouped under headings — Quick access, Capture, Tools | ★ | Row heights stated by `HomeTile`, so island and window size exactly |
 
 ---
 

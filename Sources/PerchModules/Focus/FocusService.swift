@@ -142,6 +142,16 @@ final class FocusService: ObservableObject, PerchModule {
         syncBlocking()
     }
 
+    /// The home surface's Focus button and its F key: start when idle,
+    /// otherwise pause or resume — what the button says (`HomeLauncher`).
+    func launch() {
+        if HomeLauncher.FocusAction(timer) == .start {
+            start()
+        } else {
+            toggle()
+        }
+    }
+
     func toggle() {
         guard isActive else { return }
 
