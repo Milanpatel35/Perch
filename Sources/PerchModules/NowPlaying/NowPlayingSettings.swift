@@ -32,8 +32,9 @@ struct NowPlayingSettingsView: View {
     @Default(.nowPlayingVisualiser) private var visualiser
     @Default(.nowPlayingSneakPeek) private var sneakPeek
     @Default(.nowPlayingPreferredSource) private var preferredSource
+    @Default(.nowPlayingAllApps) private var allApps
 
-    /// Players seen this session — Music and Spotify (ADR 0008).
+    /// Apps seen playing this session.
     let knownSources: [NowPlayingSource]
 
     var body: some View {
@@ -58,19 +59,33 @@ struct NowPlayingSettingsView: View {
             }
 
             Section {
+                Toggle("Show music from every app, browsers included", isOn: $allApps)
                 Text(
-                    """
-                    Perch shows Apple Music and Spotify. Since macOS 15.4 only \
-                    Apple's own apps may read what any app is playing, so audio \
-                    in a browser tab does not appear. The first time a song \
-                    plays, macOS asks whether Perch may talk to the player — \
-                    that is for the position and the play and skip buttons.
-                    """
+                    allApps
+                        ? """
+                        Chrome, Safari, Prime Video, YouTube, Podcasts — anything \
+                        that tells macOS it is playing. Since macOS 15.4 only \
+                        Apple's own programs may ask what is playing, so Perch \
+                        asks through Apple's perl, with a small helper of its own \
+                        that runs while this module is on. It reads, and sends \
+                        play, pause and skip; it makes no network request. If \
+                        macOS refuses it, Perch goes back to Music and Spotify.
+                        """
+                        : """
+                        Apple Music and Spotify only, asked directly. The first \
+                        time a song plays, macOS asks whether Perch may talk to \
+                        the player — that is for the position and the buttons.
+                        """
                 )
                 .font(.caption)
                 .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
             } header: {
                 Text("Which apps")
+            } footer: {
+                Text("Takes effect the next time Now Playing is switched on.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
         }
         .formStyle(.grouped)

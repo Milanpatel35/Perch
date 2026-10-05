@@ -359,8 +359,9 @@
       <div class="copy">
         <p class="eyebrow">Home</p>
         <h3>Your music and your week.<span class="soft">One hover away.</span></h3>
-        <p class="body">Open the island and Home shows what is playing beside the week ahead &mdash; today circled, a dot on every day with something in it, and today&rsquo;s events underneath. Flip it to the month in one click, or go to the Calendar tab for the whole month and any day&rsquo;s plans.</p>
+        <p class="body">Open the island and Home shows what is playing &mdash; in any app, a Chrome or Safari tab included &mdash; beside the week ahead &mdash; today circled, a dot on every day with something in it, and today&rsquo;s events underneath. Flip it to the month in one click, or go to the Calendar tab for the whole month and any day&rsquo;s plans.</p>
         <p class="body" style="font-size:.9rem;color:var(--sub)">Five tabs across the top &mdash; Home, Media, Calendar, Shelf, Tools &mdash; and the keys 1 to 5 switch between them. Your calendars are read on your Mac, when the island opens and when they change, and go nowhere else. A tab whose module is off offers to switch it on, rather than sitting empty.</p>
+        <p class="body" style="font-size:.9rem;color:var(--sub)">How music from any app works, plainly: since macOS 15.4 only Apple&rsquo;s own programs may ask what is playing, so Perch asks through Apple&rsquo;s own perl, with a small helper of its own that runs while Now Playing is on. Other notch apps do the same. It reads and sends play, pause and skip, and makes no network request. A future macOS may close it; if it does, Perch goes back to Apple Music and Spotify on its own, and one switch in Settings turns it off today.</p>
       </div>
       <figure class="visual shot">
         <img src="assets/img/shots/island-tab-home.png" alt="The Perch island open on its Home tab: tabs for Home, Media, Calendar, Shelf and Tools across the top; the track playing with its controls on the left; this week with today highlighted and today’s events on the right" loading="lazy" width="620" height="290">
@@ -392,10 +393,6 @@
       <div class="card">
         <h3>Voice typing</h3>
         <p>On-device dictation is the hardest thing on the roadmap and it is not in 1.0. Two of the paid apps have it and Perch does not, yet.</p>
-      </div>
-      <div class="card">
-        <h3>Music from a browser tab</h3>
-        <p>Since macOS 15.4, Apple lets only its own apps read what any app is playing. Perch shows Apple Music and Spotify, which announce their tracks publicly, and not YouTube or other web players. The workaround other apps use leans on a private framework through a system tool; we would rather say no than ship something the next update breaks.</p>
       </div>
       <div class="card">
         <h3>Up Next and synced lyrics</h3>
@@ -596,7 +593,7 @@
     </div>
 
     <p class="srcmeta">
-      MIT licence · version <span data-gh="version">0.17.0</span> ·
+      MIT licence · version <span data-gh="version">0.18.0</span> ·
       <span data-gh="issuesPhrase">3 open issues</span> ·
       <a href="https://github.com/Milanpatel35/Perch/blob/dev/LICENSE">Read the licence</a>
     </p>
@@ -612,7 +609,7 @@
       <div class="tier">Everything, always</div>
       <div class="fig">$0</div>
       <div class="per">MIT licensed · every feature · unlimited Macs</div>
-      <a class="btn" href="https://github.com/Milanpatel35/Perch/releases/download/build-0.17.0/Perch-0.17.0-unsigned.zip" style="width:100%;justify-content:center">Download for macOS</a>
+      <a class="btn" href="https://github.com/Milanpatel35/Perch/releases/download/build-0.18.0/Perch-0.18.0-unsigned.zip" style="width:100%;justify-content:center">Download for macOS</a>
       <p class="prerelease">
         <strong>A pre-release, and not yet signed.</strong> Universal — Apple
         Silicon and Intel. Drag Perch into Applications first, so it can open

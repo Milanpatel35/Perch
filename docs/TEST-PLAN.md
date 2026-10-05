@@ -99,6 +99,10 @@ Levels:
 | TC-MED-010 | U | Music or Spotify announces a change | The player's own notification is read: title, artist, album, state, length, and Spotify's position; a stop or an untitled track clears the island |
 | TC-MED-010 | U | Module switched on and off four times | Source started and stopped the same number of times; nothing left watching |
 | TC-MED-011 | M | The real MediaRemote path, on a Mac that is playing something | Live playback appears, survives repeated enable/disable and repeated play/pause, and the app quits with no orphan process |
+| TC-MED-012 | U | A line from the helper | A track becomes a snapshot with the browser as source and position as of MediaRemote's timestamp; paused does not advance; missing fields are empty; artwork decoded; empty, error and rubbish lines understood |
+| TC-MED-013 | U | The helper prints a track, then nothing | The island gets the track, then clears |
+| TC-MED-014 | U | Module switched off | The helper process ends; stopping is never taken as a failure |
+| TC-MED-015 | U | Helper missing, switched off, exits, or reports MediaRemote refused | Music and Spotify take over by themselves |
 
 **On TC-MED-011 being manual.** The module takes its source as a parameter
 (`NowPlayingSourcing`), and every case above it runs against a fake. That is

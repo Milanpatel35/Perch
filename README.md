@@ -50,7 +50,7 @@ notch it draws a floating island instead.
 
 ### Option 1: download the app
 
-<a href="https://github.com/Milanpatel35/Perch/releases/download/build-0.17.0/Perch-0.17.0-unsigned.zip"><img src="https://img.shields.io/badge/Download%20for%20macOS-Perch%200.17.0-black?style=for-the-badge&logo=apple" alt="Download Perch 0.17.0 for macOS" height="44"></a>
+<a href="https://github.com/Milanpatel35/Perch/releases/download/build-0.18.0/Perch-0.18.0-unsigned.zip"><img src="https://img.shields.io/badge/Download%20for%20macOS-Perch%200.18.0-black?style=for-the-badge&logo=apple" alt="Download Perch 0.18.0 for macOS" height="44"></a>
 
 1. Unzip it and **drag Perch into Applications.** Run straight from
    Downloads, macOS starts a temporary copy and Perch cannot open at login.
@@ -157,7 +157,7 @@ screenshots` — not a mockup.
 
 | Module | What it does | Status |
 |---|---|---|
-| **Now Playing** | Apple Music and Spotify: artwork, scrubbing, AirPlay target, swipe to skip, a peek on track change. Not browser audio — macOS closed that to other apps | ✅ Live |
+| **Now Playing** | Any app — Chrome, Safari, Prime Video, YouTube, Music, Spotify: artwork, scrubbing, AirPlay target, swipe to skip, a peek on track change. Through a small helper Apple's perl loads ([ADR 0010](docs/adr/0010-a-perl-helper-for-now-playing.md)); falls back to Music and Spotify | ✅ Live |
 | **Shelf** | Drag files to the notch, hold them, drop them anywhere else. AirDrop and quick format conversion built in | ✅ Live |
 | **Clipboard** | Searchable history with pinning — text, images, colours — and the text read out of anything you screenshot | ✅ Live |
 | **Focus** | Pomodoro that counts down in the notch, survives the lid being closed, and keeps listed apps and sites out of the way while you work | ✅ Live |
