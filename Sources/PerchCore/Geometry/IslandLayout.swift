@@ -22,7 +22,11 @@ public struct IslandLayout: Equatable, Sendable {
     /// inside this; nothing may exceed it, because the panel is sized from
     /// it and a module that overflows would be clipped by the window rather
     /// than by the layout.
-    public static let maximumContentSize = CGSize(width: 520, height: 280)
+    ///
+    /// 640 × 300 since the tabbed home surface (620 × 290). Only a bound:
+    /// the window is sized to the island actually on screen
+    /// (`windowFrame(islandSize:)`), so a bigger bound takes no more clicks.
+    public static let maximumContentSize = CGSize(width: 640, height: 300)
 
     /// Breathing room around the island inside the panel. The island casts a
     /// shadow and scales slightly on press; both need room that is inside the

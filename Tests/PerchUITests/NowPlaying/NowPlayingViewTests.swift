@@ -73,13 +73,22 @@ final class NowPlayingViewTests: XCTestCase {
         )
     }
 
+    /// The player the Media tab shows. The activity itself opens into the
+    /// tabbed home surface, which needs the island around it; what these
+    /// cases are about is the player.
+    private func player(_ activity: NowPlayingActivity) -> AnyView {
+        AnyView(NowPlayingExpanded(snapshot: activity.snapshot))
+    }
+
+    private static let playerSize = CGSize(width: 420, height: 196)
+
     // MARK: - TC-MED-004
 
     func test_TC_MED_004_expandedViewRendersWithNoArtwork() {
         let activity = NowPlayingActivity(snapshot: snapshot(artwork: nil))
 
         XCTAssertGreaterThan(
-            drawnPixels(activity.expandedView(), size: activity.expandedSize),
+            drawnPixels(player(activity), size: Self.playerSize),
             0,
             "the island drew nothing at all"
         )
@@ -93,7 +102,7 @@ final class NowPlayingViewTests: XCTestCase {
         let activity = NowPlayingActivity(snapshot: snapshot(artwork: rubbish))
 
         XCTAssertGreaterThan(
-            drawnPixels(activity.expandedView(), size: activity.expandedSize),
+            drawnPixels(player(activity), size: Self.playerSize),
             0
         )
     }
@@ -111,7 +120,7 @@ final class NowPlayingViewTests: XCTestCase {
         let activity = NowPlayingActivity(snapshot: snapshot(duration: nil))
 
         XCTAssertGreaterThan(
-            drawnPixels(activity.expandedView(), size: activity.expandedSize),
+            drawnPixels(player(activity), size: Self.playerSize),
             0
         )
     }
@@ -121,15 +130,15 @@ final class NowPlayingViewTests: XCTestCase {
     func test_TC_MED_006_aLongTitleDoesNotOverflowTheIsland() {
         let long = String(repeating: "A Love Supreme, Pt. I — Acknowledgement ", count: 6)
         let activity = NowPlayingActivity(snapshot: snapshot(title: long, artist: long))
-        let host = render(activity.expandedView(), size: activity.expandedSize)
+        let host = render(player(activity), size: Self.playerSize)
 
         // The marquee scrolls inside a clipped frame; it must never widen the
         // island to fit the text.
-        XCTAssertEqual(host.frame.width, activity.expandedSize.width)
+        XCTAssertEqual(host.frame.width, Self.playerSize.width)
         for subview in host.subviews {
             XCTAssertLessThanOrEqual(
                 subview.frame.width.rounded(),
-                activity.expandedSize.width.rounded()
+                Self.playerSize.width.rounded()
             )
         }
     }

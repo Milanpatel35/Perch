@@ -8,7 +8,23 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Nothing yet. Next up: recording an area as a GIF.
+### Added
+
+- **Tabs on the island** — Home, Media, Calendar, Shelf, Tools — and the
+  keys 1 to 5 to switch between them. The island opens on Home every time.
+- **Your week on Home**, beside what is playing: today circled, a dot on
+  every day with an event, and today's events underneath. One click flips
+  it to the month; the **Calendar tab** shows the whole month and any
+  day's plans. Read from your Mac's calendars when the island opens and
+  when they change — never on a timer, never sent anywhere.
+- A tab whose module is off offers to switch it on, instead of sitting
+  empty.
+
+### Changed
+
+- **Opening the island while music plays shows the tabs**, with the track
+  on Home, instead of a music-only panel. The full player is the Media tab.
+- ⌃⌥P now opens the island while music is playing, too.
 
 ## [0.16.0] — 2026-10-05
 

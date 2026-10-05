@@ -9,14 +9,16 @@ extension NowPlayingActivity: IslandActivityPresenting {
     /// notch's own width, read from the environment — never a constant.
     var peekSize: CGSize { CGSize(width: 320, height: 34) }
 
-    var expandedSize: CGSize { CGSize(width: 420, height: 196) }
+    /// Opens into the tabbed home surface, at its size: the music is the
+    /// first thing on Home, and the full player is the Media tab.
+    var expandedSize: CGSize { HomeActivity.surfaceSize }
 
     func peekView() -> AnyView {
         AnyView(NowPlayingPeek(snapshot: snapshot))
     }
 
     func expandedView() -> AnyView {
-        AnyView(NowPlayingExpanded(snapshot: snapshot))
+        tabbedHomeSurface()
     }
 }
 
@@ -58,7 +60,7 @@ private struct NowPlayingPeek: View {
 
 // MARK: - Expanded
 
-private struct NowPlayingExpanded: View {
+struct NowPlayingExpanded: View {
 
     let snapshot: NowPlayingSnapshot
 
@@ -140,7 +142,7 @@ private struct NowPlayingExpanded: View {
 
 // MARK: - Pieces
 
-private struct TransportButton: View {
+struct TransportButton: View {
 
     let symbol: String
     var size: CGFloat = 15
@@ -168,7 +170,7 @@ private struct TransportButton: View {
     }
 }
 
-private struct Artwork: View {
+struct Artwork: View {
 
     let data: Data?
     let size: CGFloat

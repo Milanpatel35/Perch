@@ -59,7 +59,7 @@ private struct ShelfPeek: View {
 
 // MARK: - Expanded
 
-private struct ShelfExpanded: View {
+struct ShelfExpanded: View {
 
     let items: [ShelfItem]
     let isDropTarget: Bool
