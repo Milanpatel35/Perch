@@ -33,14 +33,8 @@ final class HomeLauncherTileTests: XCTestCase {
 
         focus.activate()
         XCTAssertNotNil(modules.launcherTile())
-        let withRow = modules.homeTiles()
 
         focus.deactivate()
         XCTAssertNil(modules.launcherTile())
-        XCTAssertEqual(modules.homeTiles().count, withRow.count - 1)
-        XCTAssertLessThan(
-            HomeActivity.expandedSize(tiles: modules.homeTiles()).height,
-            HomeActivity.expandedSize(tiles: withRow).height
-        )
     }
 }

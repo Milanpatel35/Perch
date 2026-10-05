@@ -163,6 +163,16 @@ final class CalendarService: ObservableObject, PerchModule {
         }
     }
 
+    /// The events in a week or month, for the island's calendar. Read when
+    /// the view asks — on opening, on paging, and when EventKit says the
+    /// store changed (`agenda` republishes then) — never on a timer.
+    /// Calendars switched off in Settings are left out here too.
+    func events(in interval: DateInterval) -> [CalendarEvent] {
+        guard isActive else { return [] }
+        let excluded = agenda.configuration.excludedCalendars
+        return bridge.events(in: interval).filter { !excluded.contains($0.calendarTitle) }
+    }
+
     /// The launcher row's button. The island shows the next event on its
     /// own; the whole calendar is Calendar's job.
     func openApp() {

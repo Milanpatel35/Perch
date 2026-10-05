@@ -21,6 +21,21 @@ public final class ModuleHost: ObservableObject {
     /// target, so the app hands in how to open it.
     public var openSettings: (@MainActor () -> Void)?
 
+    /// The tab the opened island shows. Home whenever the island opens.
+    @Published public var homeTab: HomeTab = .home
+
+    /// Whether a module's switch is on.
+    public func isEnabled(_ id: ModuleID) -> Bool {
+        switchboard.isEnabled(id)
+    }
+
+    /// Switches a module on from the island — a tab whose module is off
+    /// offers this rather than an empty page. Exactly what the switch in
+    /// Settings does, permission prompt and all.
+    public func enable(_ id: ModuleID) {
+        switchboard.setEnabled(id, true)
+    }
+
     public init(switchboard: ModuleSwitchboard, island: IslandController) {
         self.switchboard = switchboard
         self.island = island

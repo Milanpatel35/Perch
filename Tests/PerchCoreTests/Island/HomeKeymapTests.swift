@@ -28,3 +28,18 @@ final class HomeKeymapTests: XCTestCase {
         XCTAssertNil(HomeKeymap.action(for: "CA"))
     }
 }
+
+/// Covers `TEST-PLAN.md` TC-HOM-011 — the tabs and their number keys.
+final class HomeTabTests: XCTestCase {
+
+    func test_TC_HOM_011_homeIsFirstAndEveryTabHasItsOwnNumber() {
+        XCTAssertEqual(HomeTab.allCases.first, .home)
+        let keys = HomeTab.allCases.map(\.key)
+        XCTAssertEqual(Set(keys).count, keys.count)
+        for tab in HomeTab.allCases {
+            XCTAssertEqual(HomeTab.tab(for: String(tab.key)), tab)
+            XCTAssertNil(HomeKeymap.action(for: String(tab.key)), "a tab key is also an action")
+        }
+        XCTAssertNil(HomeTab.tab(for: "9"))
+    }
+}

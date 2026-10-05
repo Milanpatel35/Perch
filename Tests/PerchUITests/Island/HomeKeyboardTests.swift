@@ -75,6 +75,23 @@ final class HomeKeyboardTests: XCTestCase {
         XCTAssertFalse(harness.island.requiresKeyFocus)
     }
 
+    func test_TC_HOM_007_itOpensWhileMusicIsPlayingToo() {
+        let harness = makeHarness()
+        defer { harness.focus.deactivate() }
+        harness.island.submit(NowPlayingActivity(snapshot: .demo))
+        XCTAssertEqual(harness.island.presented?.id, NowPlayingActivity.identifier)
+
+        harness.keyboard.open()
+
+        XCTAssertEqual(harness.island.state.presentation, .expanded(NowPlayingActivity.identifier))
+        XCTAssertTrue(harness.keyboard.isListening)
+        XCTAssertTrue(harness.keyboard.handle(key: "3", keyCode: 20, modifiers: []))
+        XCTAssertEqual(harness.modules.homeTab, .calendar)
+        XCTAssertTrue(harness.keyboard.isListening, "a tab key closed the island")
+
+        harness.keyboard.close()
+    }
+
     // MARK: - TC-HOM-008
 
     func test_TC_HOM_008_aLetterRunsItsActionAndHandsTheKeyboardBack() {

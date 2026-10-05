@@ -25,11 +25,7 @@ enum IslandSizing {
             case .peek:
                 presenting?.peekSize ?? layout.metrics.collapsedSize
             case .expanded:
-                // The home surface sizes to the module rows it is about to
-                // draw; every other activity knows its own size.
-                presented?.id == HomeActivity.identifier
-                    ? HomeActivity.expandedSize(tiles: modules.homeTiles())
-                    : presenting?.expandedSize ?? layout.metrics.collapsedSize
+                presenting?.expandedSize ?? layout.metrics.collapsedSize
             }
 
         return layout.islandFrame(contentSize: requested).size
