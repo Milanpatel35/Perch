@@ -1,4 +1,5 @@
 import AppKit
+import KeyboardShortcuts
 import PerchCore
 import SwiftUI
 import XCTest
@@ -99,6 +100,43 @@ final class IslandSnapshots: XCTestCase {
         )
         XCTAssertGreaterThan(image.drawnPixels, 0, "home with rows is blank")
         try write(image, named: "island-home-rows")
+    }
+
+    /// Settings ▸ Keyboard Shortcuts, with the suggested keys filled in so
+    /// the picture shows what pressing the button does. Whatever was set
+    /// before is put back.
+    func test_capturesTheKeyboardShortcutsPane() throws {
+        let names = SuggestedShortcuts.all.map(\.name)
+        let saved = names.map { KeyboardShortcuts.getShortcut(for: $0) }
+        defer {
+            for (name, shortcut) in zip(names, saved) {
+                KeyboardShortcuts.setShortcut(shortcut, for: name)
+            }
+        }
+        for name in names { KeyboardShortcuts.setShortcut(nil, for: name) }
+        SuggestedShortcuts.apply()
+
+        let host = NSHostingView(rootView: KeyboardShortcutsSettings())
+        host.frame = CGRect(x: 0, y: 0, width: 520, height: 510)
+        let window = NSWindow(
+            contentRect: host.frame,
+            styleMask: [.borderless],
+            backing: .buffered,
+            defer: false
+        )
+        window.appearance = NSAppearance(named: .darkAqua)
+        window.contentView = host
+        host.layoutSubtreeIfNeeded()
+        host.displayIfNeeded()
+
+        let rep = try XCTUnwrap(host.bitmapImageRepForCachingDisplay(in: host.bounds))
+        host.cacheDisplay(in: host.bounds, to: rep)
+        XCTAssertGreaterThan(rep.drawnPixels, 0, "keyboard shortcuts pane is blank")
+
+        guard let directory = captureDirectory else { return }
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let data = try XCTUnwrap(rep.representation(using: .png, properties: [:]))
+        try data.write(to: directory.appendingPathComponent("settings-keyboard.png"))
     }
 
     func test_capturesThePeekPresentations() throws {

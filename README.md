@@ -116,10 +116,16 @@ on <http://localhost:8000>.
 | **Click** it | Keeps it open while you use it; click again to close |
 | **Drag a file** onto it | The shelf catches it |
 | **Menu bar icon → Settings…** | Switch modules on and off, one by one |
+| **⌃⌥P**, then a letter | Opens Perch from any app; C clipboard, F focus, A area… Escape closes. Set it up in Settings ▸ Keyboard Shortcuts |
 
 <p align="center">
   <img src="Website/assets/img/shots/island-home-rows.png" alt="The Perch home surface in three labelled groups — Quick access: Clipboard C, Focus F; Capture: Area A, Window W, Screen S, Text T, Pin P; Tools: Colour O, Measure R, Scan Q — each button showing its key, and a settings gear beside the date" width="492">
   <br><sub>The home surface — hover the notch, or press your Open Perch shortcut and then the letter on any button. The gear opens Settings.</sub>
+</p>
+
+<p align="center">
+  <img src="Website/assets/img/shots/settings-keyboard.png" alt="Settings, Keyboard Shortcuts: Open Perch ⌃⌥P, Clipboard history ⌃⌥V, Start or pause focus ⌃⌥F, Show the camera ⌃⌥M, Join the current meeting ⌃⌥J, and a Use suggested shortcuts button" width="420">
+  <br><sub>Settings ▸ Keyboard Shortcuts — press <b>Use suggested shortcuts</b>, then ⌃⌥P opens Perch from any app.</sub>
 </p>
 
 ---
