@@ -8,7 +8,22 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Nothing yet. Next up: recording an area as a GIF.
+### Added
+
+- **Perch from the keyboard.** An Open Perch shortcut opens the island
+  from anywhere; then one letter runs one thing — C the clipboard, F focus,
+  A an area, S the screen, and so on — and Escape closes it. Every button
+  shows its letter, so the keys are learnt by looking. The keyboard goes
+  back to the app you were in the moment the island closes.
+- **Settings ▸ Keyboard Shortcuts**: every Perch shortcut in one list,
+  instead of one per module pane, and a **Use suggested shortcuts** button
+  that fills in ⌃⌥P, ⌃⌥V, ⌃⌥F, ⌃⌥M and ⌃⌥J — only where you have not set
+  your own. Perch still sets no shortcut until you ask.
+
+### Changed
+
+- **The home surface is grouped** — Quick access, Capture, Tools — with
+  bigger buttons, and the island is a little wider to fit them.
 
 ## [0.15.1] — 2026-10-04
 

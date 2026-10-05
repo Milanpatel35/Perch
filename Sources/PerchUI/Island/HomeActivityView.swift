@@ -1,4 +1,5 @@
 import AppKit
+import KeyboardShortcuts
 import PerchCore
 import SwiftUI
 
@@ -7,18 +8,25 @@ extension HomeActivity: IslandActivityPresenting {
     public var peekSize: CGSize { collapsedSize }
 
     /// The size with no module rows. The island root view asks
-    /// `expandedSize(rows:)` instead, because only it can see which modules
+    /// `expandedSize(tiles:)` instead, because only it can see which modules
     /// are on; this answers the protocol for anything that cannot.
-    public var expandedSize: CGSize { Self.expandedSize(rows: 1) }
+    public var expandedSize: CGSize { Self.expandedSize(tiles: []) }
 
-    /// Tall enough for the header and `rows` module rows, and no taller.
-    /// A fixed 180pt left a band of empty black under one or two rows.
-    public static func expandedSize(rows: Int) -> CGSize {
-        let rows = max(rows, 1)
+    /// Tall enough for the header and the rows, and no taller. A fixed
+    /// 180pt left a band of empty black under one or two rows.
+    ///
+    /// 460 wide since every button shows its key: the capture row's five
+    /// buttons did not fit in 420 with a key cap each.
+    public static func expandedSize(tiles: [HomeTile]) -> CGSize {
         let chrome: CGFloat = 14 + 18 + 10 + 1 + 10 + 12
-        let height = chrome + CGFloat(rows) * 18 + CGFloat(rows - 1) * 10
-        return CGSize(width: 420, height: height)
+        let rows =
+            tiles.isEmpty
+            ? HomeTile.readoutHeight
+            : tiles.map(\.totalHeight).reduce(0, +) + CGFloat(tiles.count - 1) * rowSpacing
+        return CGSize(width: 460, height: chrome + rows)
     }
+
+    static let rowSpacing: CGFloat = 10
 
     public func peekView() -> AnyView {
         // Nothing. On a notched Mac the home peek *is* the cutout.
@@ -50,7 +58,7 @@ private struct HomeSurface: View {
     }()
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: HomeActivity.rowSpacing) {
             HStack(spacing: 8) {
                 Image(nsImage: Self.mark)
                     .resizable()
@@ -60,6 +68,13 @@ private struct HomeSurface: View {
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(.white)
                 Spacer()
+                if let shortcut = KeyboardShortcuts.getShortcut(for: .openPerch) {
+                    // How to get back here without the mouse.
+                    Text(shortcut.description)
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.45))
+                        .help(Text("Opens Perch from anywhere"))
+                }
                 Text(Date.now, format: .dateTime.weekday(.abbreviated).day().month(.abbreviated))
                     .font(.system(size: 12))
                     .foregroundStyle(.white.opacity(0.6))
@@ -88,7 +103,7 @@ private struct HomeSurface: View {
                     .fixedSize(horizontal: false, vertical: true)
             } else {
                 ForEach(tiles.indices, id: \.self) { index in
-                    tiles[index]
+                    row(tiles[index])
                 }
             }
 
@@ -100,5 +115,21 @@ private struct HomeSurface: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .accessibilityElement(children: .contain)
         .accessibilityLabel(Text("Perch home"))
+    }
+
+    /// Drawn at exactly the height the island sized for (`HomeTile`).
+    private func row(_ tile: HomeTile) -> some View {
+        VStack(alignment: .leading, spacing: HomeTile.headingGap) {
+            if let heading = tile.heading {
+                Text(heading)
+                    .font(.system(size: 10, weight: .semibold))
+                    .textCase(.uppercase)
+                    .foregroundStyle(.white.opacity(0.45))
+                    .frame(height: HomeTile.headingHeight)
+                    .accessibilityAddTraits(.isHeader)
+            }
+            tile.view
+                .frame(height: tile.height, alignment: .leading)
+        }
     }
 }

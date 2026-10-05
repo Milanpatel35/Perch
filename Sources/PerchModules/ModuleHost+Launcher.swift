@@ -10,11 +10,6 @@ struct LauncherTile: View {
 
     var body: some View {
         HStack(spacing: 5) {
-            Image(systemName: "square.grid.2x2")
-                .font(.system(size: 11))
-                .foregroundStyle(.white.opacity(0.55))
-                .accessibilityHidden(true)
-
             ForEach(entries, id: \.self) { entry in
                 button(for: entry)
             }
@@ -30,7 +25,8 @@ struct LauncherTile: View {
             if let clipboard = modules.service(ClipboardService.self) {
                 HomeRowButton(
                     title: "Clipboard", symbol: "doc.on.clipboard",
-                    help: String(localized: "Search everything you copied")
+                    help: String(localized: "Search everything you copied"),
+                    key: HomeKeymap.key(for: .clipboard)
                 ) {
                     clipboard.openPicker()
                 }
@@ -43,7 +39,8 @@ struct LauncherTile: View {
             if let camera = modules.service(CameraService.self) {
                 HomeRowButton(
                     title: "Camera", symbol: "camera",
-                    help: String(localized: "Check how you look before a call")
+                    help: String(localized: "Check how you look before a call"),
+                    key: HomeKeymap.key(for: .camera)
                 ) {
                     camera.openPreview()
                 }
@@ -52,7 +49,8 @@ struct LauncherTile: View {
             if let calendar = modules.service(CalendarService.self) {
                 HomeRowButton(
                     title: "Calendar", symbol: "calendar",
-                    help: String(localized: "Open Calendar")
+                    help: String(localized: "Open Calendar"),
+                    key: HomeKeymap.key(for: .calendar)
                 ) {
                     calendar.openApp()
                 }
@@ -70,28 +68,36 @@ private struct FocusLaunchButton: View {
     @ObservedObject var focus: FocusService
 
     var body: some View {
-        switch HomeLauncher.FocusAction(focus.timer) {
-        case .start:
-            HomeRowButton(
-                title: "Focus", symbol: "timer",
-                help: String(localized: "Start a focus session")
-            ) {
-                focus.start()
-            }
-        case .pause:
-            HomeRowButton(
-                title: "Pause", symbol: "pause.fill",
-                help: String(localized: "Pause the focus session")
-            ) {
-                focus.toggle()
-            }
-        case .resume:
-            HomeRowButton(
-                title: "Resume", symbol: "play.fill",
-                help: String(localized: "Resume the focus session")
-            ) {
-                focus.toggle()
-            }
+        HomeRowButton(
+            title: title, symbol: symbol, help: help, key: HomeKeymap.key(for: .focus)
+        ) {
+            focus.launch()
+        }
+    }
+
+    private var action: HomeLauncher.FocusAction { HomeLauncher.FocusAction(focus.timer) }
+
+    private var title: LocalizedStringKey {
+        switch action {
+        case .start: "Focus"
+        case .pause: "Pause"
+        case .resume: "Resume"
+        }
+    }
+
+    private var symbol: String {
+        switch action {
+        case .start: "timer"
+        case .pause: "pause.fill"
+        case .resume: "play.fill"
+        }
+    }
+
+    private var help: String {
+        switch action {
+        case .start: String(localized: "Start a focus session")
+        case .pause: String(localized: "Pause the focus session")
+        case .resume: String(localized: "Resume the focus session")
         }
     }
 }

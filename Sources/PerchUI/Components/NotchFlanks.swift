@@ -1,3 +1,4 @@
+import PerchCore
 import SwiftUI
 
 /// A peek laid out around the cutout: one thing either side, the notch
