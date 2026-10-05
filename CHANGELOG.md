@@ -8,6 +8,10 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
+Nothing yet. Next up: recording an area as a GIF.
+
+## [0.16.0] — 2026-10-05
+
 ### Added
 
 - **Perch from the keyboard.** An Open Perch shortcut opens the island
