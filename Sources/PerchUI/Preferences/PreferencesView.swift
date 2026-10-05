@@ -20,6 +20,7 @@ public struct PreferencesView: View {
 
     private enum Section: Hashable {
         case general
+        case keyboard
         case module(ModuleID)
         case about
     }
@@ -58,6 +59,7 @@ public struct PreferencesView: View {
     private var sidebar: some View {
         List(selection: $selection) {
             Label("General", systemImage: "gearshape").tag(Section.general)
+            Label("Keyboard Shortcuts", systemImage: "keyboard").tag(Section.keyboard)
 
             SwiftUI.Section("Modules") {
                 ForEach(listedModules.filter { isBuilt($0) }, id: \.self) { module in
@@ -105,6 +107,8 @@ public struct PreferencesView: View {
         switch selection {
         case .general, .none:
             GeneralSettingsView(launchAtLogin: launchAtLogin)
+        case .keyboard:
+            KeyboardShortcutsSettings()
         case .about:
             AboutSettingsView(updates: updates)
         case .module(let module):

@@ -28,7 +28,7 @@ enum IslandSizing {
                 // The home surface sizes to the module rows it is about to
                 // draw; every other activity knows its own size.
                 presented?.id == HomeActivity.identifier
-                    ? HomeActivity.expandedSize(rows: modules.homeTiles().count)
+                    ? HomeActivity.expandedSize(tiles: modules.homeTiles())
                     : presenting?.expandedSize ?? layout.metrics.collapsedSize
             }
 

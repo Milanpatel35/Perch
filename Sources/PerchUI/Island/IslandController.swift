@@ -101,10 +101,23 @@ public final class IslandController: ObservableObject {
 
     /// Asks the panel for key focus, for as long as a module genuinely needs
     /// it. Modules lower this themselves; nothing does it for them.
-    public func setRequiresKeyFocus(_ required: Bool) {
-        guard requiresKeyFocus != required else { return }
-        requiresKeyFocus = required
+    ///
+    /// Held per owner. The island opened from the keyboard holds focus, and
+    /// pressing C hands straight on to the clipboard picker, which raises
+    /// its own. With one shared flag, whichever let go first took the
+    /// other's keyboard with it.
+    public func setRequiresKeyFocus(_ required: Bool, owner: String = "module") {
+        if required {
+            keyFocusOwners.insert(owner)
+        } else {
+            keyFocusOwners.remove(owner)
+        }
+        let needed = !keyFocusOwners.isEmpty
+        guard requiresKeyFocus != needed else { return }
+        requiresKeyFocus = needed
     }
+
+    private var keyFocusOwners: Set<String> = []
 
     public func setHidesIdleIsland(_ hides: Bool) {
         guard hidesIdleIsland != hides else { return }

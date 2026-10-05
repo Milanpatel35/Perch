@@ -270,7 +270,7 @@ final class ClipboardService: ObservableObject, PerchModule {
         isPickerOpen = true
         // The picker has a search field in it, so it is the one thing in
         // Perch that asks the panel for the keyboard.
-        island.setRequiresKeyFocus(true)
+        island.setRequiresKeyFocus(true, owner: "clipboard")
         island.submit(ClipboardPickerActivity(entries: history.entries))
         observePickerClosing()
     }
@@ -290,7 +290,7 @@ final class ClipboardService: ObservableObject, PerchModule {
         guard isPickerOpen else { return }
         isPickerOpen = false
         pickerObservation = nil
-        island.setRequiresKeyFocus(false)
+        island.setRequiresKeyFocus(false, owner: "clipboard")
         island.withdraw(ClipboardPickerActivity.identifier)
     }
 

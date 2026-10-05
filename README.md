@@ -50,7 +50,7 @@ notch it draws a floating island instead.
 
 ### Option 1: download the app
 
-<a href="https://github.com/Milanpatel35/Perch/releases/download/build-0.15.1/Perch-0.15.1-unsigned.zip"><img src="https://img.shields.io/badge/Download%20for%20macOS-Perch%200.15.1-black?style=for-the-badge&logo=apple" alt="Download Perch 0.15.1 for macOS" height="44"></a>
+<a href="https://github.com/Milanpatel35/Perch/releases/download/build-0.16.0/Perch-0.16.0-unsigned.zip"><img src="https://img.shields.io/badge/Download%20for%20macOS-Perch%200.16.0-black?style=for-the-badge&logo=apple" alt="Download Perch 0.16.0 for macOS" height="44"></a>
 
 1. Unzip it and **drag Perch into Applications.** Run straight from
    Downloads, macOS starts a temporary copy and Perch cannot open at login.
@@ -118,8 +118,8 @@ on <http://localhost:8000>.
 | **Menu bar icon → Settings…** | Switch modules on and off, one by one |
 
 <p align="center">
-  <img src="Website/assets/img/shots/island-home-rows.png" alt="The Perch home surface: a launcher row with Clipboard and Focus, then Area, Window, Screen, Text and Pin, then Colour, Measure and Scan, and a settings gear beside the date" width="452">
-  <br><sub>The home surface — what hovering the notch shows. Every module you switch on has a button here; the gear opens Settings for the rest.</sub>
+  <img src="Website/assets/img/shots/island-home-rows.png" alt="The Perch home surface in three labelled groups — Quick access: Clipboard C, Focus F; Capture: Area A, Window W, Screen S, Text T, Pin P; Tools: Colour O, Measure R, Scan Q — each button showing its key, and a settings gear beside the date" width="492">
+  <br><sub>The home surface — hover the notch, or press your Open Perch shortcut and then the letter on any button. The gear opens Settings.</sub>
 </p>
 
 ---

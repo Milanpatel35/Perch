@@ -112,11 +112,6 @@ struct ScreenshotTile: View {
 
     var body: some View {
         HStack(spacing: 5) {
-            Image(systemName: "camera.viewfinder")
-                .font(.system(size: 11))
-                .foregroundStyle(.white.opacity(0.55))
-                .accessibilityHidden(true)
-
             button(.save(.area), "Area", "rectangle.dashed")
             button(.save(.window), "Window", "macwindow")
             button(.save(.screen), "Screen", "display")
@@ -132,10 +127,26 @@ struct ScreenshotTile: View {
         _ title: LocalizedStringKey,
         _ symbol: String
     ) -> some View {
-        HomeRowButton(title: title, symbol: symbol, help: Self.help(for: action)) {
+        HomeRowButton(
+            title: title, symbol: symbol, help: Self.help(for: action), key: Self.key(for: action)
+        ) {
             service.perform(action)
         }
         .disabled(service.isCapturing)
+    }
+
+    static func key(for action: ScreenshotAction) -> Character {
+        let home: HomeAction =
+            switch action {
+            case .save(.area): .captureArea
+            case .save(.window): .captureWindow
+            case .save(.screen): .captureScreen
+            case .copyText: .copyText
+            case .pin: .pin
+            case .measure: .measure
+            case .scanCode: .scan
+            }
+        return HomeKeymap.key(for: home)
     }
 
     static func help(for action: ScreenshotAction) -> String {
@@ -162,26 +173,24 @@ struct ScreenshotToolsTile: View {
 
     var body: some View {
         HStack(spacing: 5) {
-            Image(systemName: "wrench.and.screwdriver")
-                .font(.system(size: 11))
-                .foregroundStyle(.white.opacity(0.55))
-                .accessibilityHidden(true)
-
             HomeRowButton(
                 title: "Colour", symbol: "eyedropper",
-                help: String(localized: "Copy a colour from the screen")
+                help: String(localized: "Copy a colour from the screen"),
+                key: HomeKeymap.key(for: .colour)
             ) {
                 service.pickColor()
             }
             .disabled(service.isCapturing)
             HomeRowButton(
-                title: "Measure", symbol: "ruler", help: Self.help(.measure)
+                title: "Measure", symbol: "ruler", help: Self.help(.measure),
+                key: ScreenshotTile.key(for: .measure)
             ) {
                 service.perform(.measure)
             }
             .disabled(service.isCapturing)
             HomeRowButton(
-                title: "Scan", symbol: "qrcode.viewfinder", help: Self.help(.scanCode)
+                title: "Scan", symbol: "qrcode.viewfinder", help: Self.help(.scanCode),
+                key: ScreenshotTile.key(for: .scanCode)
             ) {
                 service.perform(.scanCode)
             }
