@@ -27,7 +27,7 @@ No Pro tier, no licence key, no account, no telemetry. On a Mac without a
 notch it draws a floating island instead.
 
 <p align="center">
-  <img src="Website/assets/img/shots/island-tab-home.png" alt="The Perch island open on its Home tab: tabs for Home, Media, Calendar, Shelf and Tools across the top; the track playing with its controls on the left; this week with today highlighted and today’s events on the right" width="620">
+  <img src="Website/assets/img/shots/island-tab-home.png" alt="The Perch island open on its Home tab: tabs across the top; the track playing beside this week and today’s events; a row of buttons for every action underneath" width="560">
 </p>
 
 <p align="center">
@@ -119,8 +119,8 @@ on <http://localhost:8000>.
 | **⌃⌥P**, then a letter | Opens Perch from any app; C clipboard, F focus, A area… Escape closes. Set it up in Settings ▸ Keyboard Shortcuts |
 
 <p align="center">
-  <img src="Website/assets/img/shots/island-tab-tools.png" alt="The Tools tab: Quick access — Clipboard C, Focus F; Capture — Area A, Window W, Screen S, Text T, Pin P; Tools — Colour O, Measure R, Scan Q — each button showing its key" width="620">
-  <br><sub>The Tools tab — press your Open Perch shortcut, then the letter on any button. Keys 1–5 switch tabs.</sub>
+  <img src="Website/assets/img/shots/island-tab-tools.png" alt="The Tools tab: Quick access — Clipboard C, Focus F; Capture — Area A, Window W, Screen S, Text T, Pin P; Tools — Colour O, Measure R, Scan Q — each button showing its key" width="560">
+  <br><sub>The Tools tab — press your Open Perch shortcut, then the letter on any button. Keys 1–5 switch tabs. Every action is also one click away on Home.</sub>
 </p>
 
 <p align="center">

@@ -85,10 +85,12 @@ struct HomeCalendar: View {
     private var content: some View {
         switch layout {
         case .card:
-            VStack(alignment: .leading, spacing: 6) {
+            // Home's corner: the week and today's first three events, or the
+            // month alone in small cells — it is the grid that matters there.
+            VStack(alignment: .leading, spacing: 4) {
                 header
                 days
-                dayEvents(limit: mode == .week ? 4 : 2)
+                if mode == .week { dayEvents(limit: 3) }
             }
         case .full:
             HStack(alignment: .top, spacing: 18) {
@@ -157,8 +159,10 @@ struct HomeCalendar: View {
     private var days: some View {
         let grid = grid
         let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 7)
+        let size: DayCell.Size =
+            mode == .week ? .large : layout == .card ? .small : .medium
 
-        return LazyVGrid(columns: columns, spacing: 2) {
+        return LazyVGrid(columns: columns, spacing: size == .small ? 0 : 2) {
             ForEach(Array(weekdaySymbols.enumerated()), id: \.offset) { _, symbol in
                 Text(symbol)
                     .font(.system(size: 9, weight: .medium))
@@ -171,7 +175,7 @@ struct HomeCalendar: View {
                     isSelected: calendar.isDate(day.date, inSameDayAs: selected),
                     hasEvents: !CalendarGrid.events(shown, on: day.date, calendar: calendar)
                         .isEmpty,
-                    tall: mode == .week
+                    size: size
                 ) {
                     selected = day.date
                 }
@@ -276,23 +280,32 @@ private struct DayCell: View {
     let isToday: Bool
     let isSelected: Bool
     let hasEvents: Bool
-    let tall: Bool
+    let size: Size
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             VStack(spacing: 1) {
                 Text(day.date, format: .dateTime.day())
-                    .font(.system(size: tall ? 12 : 10, weight: isToday ? .bold : .regular))
+                    .font(.system(size: size.font, weight: isToday ? .bold : .regular))
                     .foregroundStyle(foreground)
-                    .frame(width: tall ? 22 : 17, height: tall ? 22 : 17)
+                    .frame(width: size.circle, height: size.circle)
                     .background(Circle().fill(isToday ? Color.accentColor : .clear))
                     .overlay(
                         Circle().strokeBorder(.white.opacity(isSelected && !isToday ? 0.7 : 0))
                     )
-                Circle()
-                    .fill(.white.opacity(hasEvents ? 0.6 : 0))
-                    .frame(width: 3, height: 3)
+                    // The small grid has no room under a day for its dot, so
+                    // the dot sits in the corner instead.
+                    .overlay(alignment: .bottomTrailing) {
+                        if size == .small, hasEvents {
+                            Circle().fill(.white.opacity(0.7)).frame(width: 3, height: 3)
+                        }
+                    }
+                if size != .small {
+                    Circle()
+                        .fill(.white.opacity(hasEvents ? 0.6 : 0))
+                        .frame(width: 3, height: 3)
+                }
             }
             .frame(maxWidth: .infinity)
             .contentShape(Rectangle())
@@ -300,6 +313,27 @@ private struct DayCell: View {
         .buttonStyle(.plain)
         .accessibilityLabel(Text(day.date, format: .dateTime.weekday(.wide).day().month(.wide)))
         .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+
+    /// Week, the Calendar tab's month, and Home's month.
+    enum Size {
+        case large, medium, small
+
+        var font: CGFloat {
+            switch self {
+            case .large: 12
+            case .medium: 10
+            case .small: 9
+            }
+        }
+
+        var circle: CGFloat {
+            switch self {
+            case .large: 22
+            case .medium: 17
+            case .small: 13
+            }
+        }
     }
 
     private var foreground: Color {

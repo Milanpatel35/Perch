@@ -8,7 +8,20 @@ The release process that moves `Unreleased` into a version is in RELEASE.md.
 
 ## [Unreleased]
 
-Nothing yet. Next up: recording an area as a GIF.
+### Changed
+
+- **A smaller island with every action on Home.** The tabbed surface is
+  560 × 252 instead of 620 × 290, with far less empty black. Home shows
+  the music beside your week, battery and stats under them, and a row of
+  buttons for every action — clipboard, focus, camera, area, window,
+  screen, text, pin, colour, measure, scan — each naming itself and its
+  key on hover. The month fits on Home too.
+
+### Fixed
+
+- **The island no longer jumps sideways as it opens.** The window was
+  resized a moment before the island inside it was laid out again, so for
+  a frame it was drawn off-centre and then snapped into place.
 
 ## [0.18.0] — 2026-10-05
 

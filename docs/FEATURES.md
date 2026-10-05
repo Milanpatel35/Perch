@@ -701,8 +701,8 @@ sit *under* the menu bar, and the island's panel sits over it.
 | Open Perch shortcut, then one letter per action (`HomeKeymap`), Escape to close | ★ | Every button shows its letter. Key focus only while open from the keyboard, held per owner so the clipboard's search field keeps it. TC-HOM-006…008 |
 | Settings ▸ Keyboard Shortcuts: every global shortcut in one list, "Use suggested shortcuts" | ★ | Fills only unset shortcuts (⌃⌥P/V/F/M/J); nothing is set until the user asks. TC-HOM-009, 010 |
 | Home surface grouped under headings — Quick access, Capture, Tools | ★ | Now the Tools tab |
-| Tabs across the opened island — Home, Media, Calendar, Shelf, Tools (`HomeTab`); keys 1–5; back to Home on close | NN BN AL | One fixed 620 × 290 surface, so switching tabs never resizes the window. Now Playing opens into it. TC-HOM-011 |
-| Home: the track beside a Week/Month calendar (`CalendarGrid`) with the day's events; Calendar tab: month grid and the chosen day | NN BN | Events read on open, on paging and on EventKit's change notice — no timer. A tab whose module is off offers its switch. TC-CAL-020…022, TC-HOM-012 |
+| Tabs across the opened island — Home, Media, Calendar, Shelf, Tools (`HomeTab`); keys 1–5; back to Home on close | NN BN AL | One fixed 560 × 252 surface, so switching tabs never resizes the window. Now Playing opens into it. TC-HOM-011 |
+| Home: the track beside a Week/Month calendar (`CalendarGrid`) with the day's events, the readouts, and a row of icon buttons for every action whose module is on (`quickActions`); Calendar tab: month grid and the chosen day | NN BN | Events read on open, on paging and on EventKit's change notice — no timer. A tab whose module is off offers its switch. TC-CAL-020…022, TC-HOM-012 |
 
 ---
 
